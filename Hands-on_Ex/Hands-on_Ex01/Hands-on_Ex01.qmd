@@ -17,7 +17,7 @@ pacman::p_load(tidyverse)
 
 ## Importing the data
 
-To load the data *"Exam_data"* into the R environment, `read_csv()` is used, as seen in the code chunk below.
+To import the data *"Exam_data.csv"* into the R environment, `read_csv()` of the `readr` package is used, as seen in the code chunk below.
 
 ```{r}
 #| code-fold: show
@@ -25,7 +25,9 @@ To load the data *"Exam_data"* into the R environment, `read_csv()` is used, as 
 exam_data <- read_csv("data/Exam_data.csv")
 ```
 
-# Plotting a simple bar chart
+# Exploring ggplot2
+
+## Bar chart
 
 ```{r}
 #| code-fold: show
@@ -33,4 +35,64 @@ exam_data <- read_csv("data/Exam_data.csv")
 ggplot(data = exam_data, 
        aes(x = RACE, fill=RACE)) +
   geom_bar()
+```
+
+## Dot plot
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = MATHS)) + 
+  geom_dotplot(binwidth = 2.5, dotsize = 0.5) +
+  scale_y_continuous(NULL, breaks = NULL)
+```
+
+-   `scale_y_continuous` is used to remove the y-axis.
+
+## Histogram
+
+```{R}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = MATHS)) +
+  geom_histogram()
+```
+
+-   By default, the bin width is 30.
+
+### Modifying the histogram by changing `geom()`
+
+In the code chunk below:
+
+-   *bins* argument is used to change the number of bins to 20
+
+-   *color* argument is used to change the outline color of the histogram to black
+
+-   *fill* argument is used to change the fill color of the histogram to violet
+
+```{R}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = MATHS)) +
+  geom_histogram(bins = 20, color = "black", fill = "violet")
+```
+
+### Modifying the histogram by changing `aes()`
+
+The code chunk below changes the fill color of the histogram using the subgroup of `aes()`, which in this case, is the gender of the students.
+
+```{R}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = MATHS, fill = GENDER)) +
+  geom_histogram(bins = 20, color = "grey30")
+```
+
+## Kernel density estimate
+
+```{R}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = MATHS)) +
+  geom_density()
 ```

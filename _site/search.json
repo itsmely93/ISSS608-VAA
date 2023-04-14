@@ -11,7 +11,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html",
     "title": "Hands-on Exercise 1",
     "section": "",
-    "text": "The code chunk below uses p_load() of the pacman package to check if the tidyverse packages are installed on the computer. If they are, they will then be loaded into the R environment.\n\n\nClick to show/hide the code\npacman::p_load(tidyverse)\n\n\n\n\n\nTo load the data “Exam_data” into the R environment, read_csv() is used, as seen in the code chunk below.\n\n\nClick to show/hide the code\nexam_data <- read_csv(\"data/Exam_data.csv\")\n\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+    "text": "The code chunk below uses p_load() of the pacman package to check if the tidyverse packages are installed on the computer. If they are, they will then be loaded into the R environment.\n\n\nClick to show/hide the code\npacman::p_load(tidyverse)\n\n\n\n\n\nTo import the data “Exam_data.csv” into the R environment, read_csv() of the readr package is used, as seen in the code chunk below.\n\n\nClick to show/hide the code\nexam_data <- read_csv(\"data/Exam_data.csv\")\n\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
   },
   {
     "objectID": "index.html",
@@ -19,5 +19,33 @@
     "title": "LY’s Visual Analytics Adventure 💯",
     "section": "",
     "text": "Hello there! Welcome to my exciting voyage into the captivating realm that is ISSS608 Visual Analytics and Applications! This website serves as a compass for navigating through the coursework that I have prepared for this course.\nJoin me as we journey into the depths of data visualization, delving into its intricate details and unearthing priceless nuggets of insights and revelations."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#bar-chart",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#bar-chart",
+    "title": "Hands-on Exercise 1",
+    "section": "Bar chart",
+    "text": "Bar chart\n\n\nClick to show/hide the code\nggplot(data = exam_data, \n       aes(x = RACE, fill=RACE)) +\n  geom_bar()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#dot-plot",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#dot-plot",
+    "title": "Hands-on Exercise 1",
+    "section": "Dot plot",
+    "text": "Dot plot\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) + \n  geom_dotplot(binwidth = 2.5, dotsize = 0.5) +\n  scale_y_continuous(NULL, breaks = NULL)\n\n\n\n\n\n\nscale_y_continuous is used to remove the y-axis."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#histogram",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#histogram",
+    "title": "Hands-on Exercise 1",
+    "section": "Histogram",
+    "text": "Histogram\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram()\n\n\n`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.\n\n\n\n\n\n\nBy default, the bin width is 30.\n\n\nModifying the histogram by changing geom()\nIn the code chunk below:\n\nbins argument is used to change the number of bins to 20\ncolor argument is used to change the outline color of the histogram to black\nfill argument is used to change the fill color of the histogram to violet\n\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram(bins = 20, color = \"black\", fill = \"violet\")\n\n\n\n\n\n\n\nModifying the histogram by changing aes()\nThe code chunk below changes the fill color of the histogram using the subgroup of aes(), which in this case, is the gender of the students.\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS, fill = GENDER)) +\n  geom_histogram(bins = 20, color = \"grey30\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#kernel-density-estimate",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#kernel-density-estimate",
+    "title": "Hands-on Exercise 1",
+    "section": "Kernel density estimate",
+    "text": "Kernel density estimate\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_density()"
   }
 ]
