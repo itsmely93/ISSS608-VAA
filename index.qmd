@@ -1,5 +1,7 @@
 ---
-title: "ISSS608-VAA"
+title: "LY's Visual Analytics Adventure 💯"
 ---
 
-Welcome to **ISSS608 Visual Analytics and Applications**. In this website, you will find my coursework prepared for this course.
+Hello there! Welcome to my exciting voyage into the captivating realm that is **ISSS608 Visual Analytics and Applications!** This website serves as a compass for navigating through the coursework that I have prepared for this course.
+
+Join me as we journey into the depths of data visualization, delving into its intricate details and unearthing priceless nuggets of insights and revelations.

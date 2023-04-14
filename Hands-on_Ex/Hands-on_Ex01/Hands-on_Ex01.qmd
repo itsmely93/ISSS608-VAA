@@ -7,21 +7,29 @@ author: "Lim Li Ying"
 
 ## Installing and launching R packages
 
-The code chunk below uses p_load() of the "pacman" package to check if the "tidyverse" packages are installed on the computer. If they are, they will then be launched into R.
+The code chunk below uses `p_load()` of the `pacman` package to check if the `tidyverse` packages are installed on the computer. If they are, they will then be loaded into the R environment.
 
 ```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
 pacman::p_load(tidyverse)
 ```
 
 ## Importing the data
 
+To load the data *"Exam_data"* into the R environment, `read_csv()` is used, as seen in the code chunk below.
+
 ```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
 exam_data <- read_csv("data/Exam_data.csv")
 ```
 
 # Plotting a simple bar chart
 
 ```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
 ggplot(data = exam_data, 
        aes(x = RACE, fill=RACE)) +
   geom_bar()
