@@ -25,7 +25,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#bar-chart",
     "title": "Hands-on Exercise 1",
     "section": "Bar chart",
-    "text": "Bar chart\n\n\nClick to show/hide the code\nggplot(data = exam_data, \n       aes(x = RACE, fill=RACE)) +\n  geom_bar()"
+    "text": "Bar chart\n\n\nClick to show/hide the code\nggplot(data = exam_data, \n       aes(x = RACE)) +\n  geom_bar()"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#dot-plot",
