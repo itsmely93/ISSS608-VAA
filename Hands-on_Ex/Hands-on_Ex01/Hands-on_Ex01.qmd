@@ -206,7 +206,7 @@ ggplot(data = exam_data, aes(x = MATHS)) +
   facet_grid(GENDER ~ .)
 ```
 
-#### Vertical split
+#### Horizontal split
 
 ```{r}
 #| code-fold: show
