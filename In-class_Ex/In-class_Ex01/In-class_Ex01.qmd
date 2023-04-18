@@ -1,0 +1,157 @@
+---
+title: "In-class Exercise 1"
+author: "Lim Li Ying"
+---
+
+# Getting Started
+
+## Installing and loading R packages
+
+The code chunk below uses `p_load()` of the `pacman` package to check if the `tidyverse` packages are installed on the computer. If they are, they will then be loaded into the R environment.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+pacman::p_load(tidyverse)
+```
+
+## Importing the data
+
+To import the data *"Exam_data.csv"* into the R environment, `read_csv()` of the `readr` package is used, as seen in the code chunk below.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+exam_data <- read_csv("data/Exam_data.csv")
+```
+
+# Working with themes
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data=exam_data, aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_minimal() +
+  theme(
+    panel.background = element_rect(fill = "lightblue", colour = "lightblue", linewidth = 0.5, linetype = "solid"),
+    panel.grid.major = element_line(linewidth = 0.5, linetype = 'solid', colour = "white"), 
+    panel.grid.minor = element_line(linewidth = 0.25, linetype = 'solid', colour = "white"))
+```
+
+::: callout-note
+-   `coord_flip()` is used to flip the cartesian coordinates in order to create a horizontal bar chart.
+
+-   The functions `theme()` and `element_rect()` are used for changing the plot panel background color.
+
+-   `element_line()` is used to change the appearance of the major and minor grid lines.
+:::
+
+# Designing data-driven graphics for analysis I
+
+## The original design
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = RACE)) +
+  geom_bar()
+```
+
+#### Criticisms:
+
+1\. y-axis label is not clear
+
+2\. For effective comparison, the bars should be sorted according to their respective frequencies
+
+3\. For static charts, frequency values should be included for additional information
+
+------------------------------------------------------------------------
+
+## Modifying the design
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = reorder(RACE, RACE, function(x)-length(x)))) +
+  geom_bar() +
+  geom_text(stat="count", 
+      aes(label=paste0(after_stat(count), ", ", 
+      round(after_stat(count)/sum(after_stat(count))*100, 1), "%")),
+      vjust=-1) +
+  xlab("Race") +
+  ylab("No. of pupils") +
+  ylim(0,220) +
+  theme(axis.title.y=element_text(angle = 0))
+```
+
+# Designing data-driven graphics for analysis II
+
+## The original design
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = MATHS)) +
+  geom_histogram(bins = 20)
+```
+
+## Modifying the design
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = MATHS)) +
+  geom_histogram(bins = 20, color = "black", fill = "lightblue") +
+  geom_vline(aes(xintercept = mean(MATHS, na.rm = T)), color = "red", linetype = "dashed", linewidth = 1) +
+  geom_vline(aes(xintercept = median(MATHS, na.rm = T)), color = "grey30", linetype = "dashed", linewidth = 1)
+```
+
+# Designing data-driven graphics for analysis III
+
+## The original design
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = ENGLISH)) +
+  geom_histogram() +
+  facet_wrap (~ GENDER)
+```
+
+## Modifying the design
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+data_bg <- exam_data[,-3]
+
+ggplot(data = exam_data, aes(x = ENGLISH, fill = GENDER)) +
+  geom_histogram(data = data_bg, fill = "grey", alpha = 0.5) +
+  geom_histogram(color = "black") +
+  facet_wrap (~ GENDER) +
+  theme_bw()
+```
+
+# Designing data-driven graphics for analysis IV
+
+## The original design
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = MATHS, y = ENGLISH)) +
+  geom_point()
+```
+
+## Modifying the design
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = MATHS, y = ENGLISH)) +
+  geom_point() +
+  coord_cartesian(xlim = c(0,100), ylim = c(0,100)) +
+  geom_vline(xintercept = 50, color = "grey60", linetype = "dashed", linewidth = 1) +
+  geom_hline(yintercept = 50, color = "grey60", linetype = "dashed", linewidth = 1)
+```
+

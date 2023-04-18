@@ -27,7 +27,35 @@ exam_data <- read_csv("data/Exam_data.csv")
 
 # Exploring ggplot2
 
-## Bar chart
+## A layered grammar of graphics
+
+![](images/image4.jpg){fig-align="center"}
+
+## Step 1: Data
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data)
+```
+
+`ggplot()` initializes a ggplot object, and the *data* argument defines the data set to be used. However, since the *aesthetics* and *geometries* are not defined yet, the canvas will be blank.
+
+## Step 2: Aesthetics
+
+The code chunk below adds the aesthetic element into the plot:
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = MATHS))
+```
+
+As seen from the plot, the x-axis and the axis's label are added. To add the charts, we need to proceed to Step 3.
+
+## Step 3: Geometries
+
+### 1. Bar chart (`geom_bar()`)
 
 ```{r}
 #| code-fold: show
@@ -37,7 +65,7 @@ ggplot(data = exam_data,
   geom_bar()
 ```
 
-## Dot plot
+### 2. Dot plot (`geom_dotplot()`)
 
 ```{r}
 #| code-fold: show
@@ -47,9 +75,11 @@ ggplot(data = exam_data, aes(x = MATHS)) +
   scale_y_continuous(NULL, breaks = NULL)
 ```
 
--   `scale_y_continuous` is used to remove the y-axis.
+::: callout-note
+`scale_y_continuous` is used to remove the y-axis.
+:::
 
-## Histogram
+### 3. Histogram (`geom_histogram()`)
 
 ```{R}
 #| code-fold: show
@@ -58,9 +88,13 @@ ggplot(data = exam_data, aes(x = MATHS)) +
   geom_histogram()
 ```
 
--   By default, the bin width is 30.
+::: callout-note
+By default, the bin width is 30.
+:::
 
-### Modifying the histogram by changing `geom()`
+------------------------------------------------------------------------
+
+#### Modifying the histogram by changing `geom()`
 
 In the code chunk below:
 
@@ -77,7 +111,9 @@ ggplot(data = exam_data, aes(x = MATHS)) +
   geom_histogram(bins = 20, color = "black", fill = "violet")
 ```
 
-### Modifying the histogram by changing `aes()`
+------------------------------------------------------------------------
+
+#### Modifying the histogram by changing `aes()`
 
 The code chunk below changes the fill color of the histogram using the subgroup of `aes()`, which in this case, is the gender of the students.
 
@@ -88,7 +124,7 @@ ggplot(data = exam_data, aes(x = MATHS, fill = GENDER)) +
   geom_histogram(bins = 20, color = "grey30")
 ```
 
-## Kernel density estimate
+### 4. Kernel density estimate (`geom_density()`)
 
 ```{R}
 #| code-fold: show
@@ -96,3 +132,223 @@ ggplot(data = exam_data, aes(x = MATHS, fill = GENDER)) +
 ggplot(data = exam_data, aes(x = MATHS)) +
   geom_density()
 ```
+
+```{R}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = MATHS, color = GENDER)) +
+  geom_density()
+```
+
+### 5. Boxplot (`geom_boxplot()`)
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = GENDER, y = MATHS)) +
+  geom_boxplot()
+```
+
+Notches can be added to help visually assess whether the median of the distributions differ:
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = GENDER, y = MATHS)) +
+  geom_boxplot(notch = TRUE)
+```
+
+### 6. Violin plot (`geom_violin()`)
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = GENDER, y = MATHS)) +
+  geom_violin()
+```
+
+### 7. Scatter plot (`geom_point()`)
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = MATHS, y = ENGLISH)) +
+  geom_point()
+```
+
+### 8. Combining multiple plots
+
+The code chunk below plots the data points on the boxplots using `geom_point()` and `geom_boxplot`.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = GENDER, y = MATHS)) +
+  geom_boxplot() +
+  geom_point(position = "jitter", size = 0.5)
+```
+
+## Step 4: Facets
+
+There are two types of facets supported by ggplot2, namely `facet_grid()` and `facet_wrap()`.
+
+### Splitting with `facet_grid()`
+
+The data can be split by one or two variables, either in the horizontal or vertical direction. This is done by giving a formula to `facet_grid()`, of the form `vertical ~ horizontal`
+
+#### Vertical split
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = MATHS)) +
+  geom_histogram(bins = 20) +
+  facet_grid(GENDER ~ .)
+```
+
+#### Vertical split
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = MATHS)) +
+  geom_histogram(bins = 20) +
+  facet_grid(~ GENDER)
+```
+
+#### Vertical and Horizontal split
+
+The code chunk below splits vertically by GENDER, and horizontally by RACE.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = MATHS)) +
+  geom_histogram(bins = 20) +
+  facet_grid(GENDER ~ RACE)
+```
+
+### Splitting with `facet_wrap`
+
+Instead of faceting with variables in the horizontal or vertical direction, `facet_wrap` wraps the panels into a matrix.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = MATHS)) +
+  geom_histogram(bins = 20) +
+  facet_wrap(~ CLASS)
+```
+
+#### Specifying number of columns or rows to wrap
+
+You can also specify the number of columns or rows to wrap the facets, using `ncol` or `nrow`
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = MATHS)) +
+  geom_histogram(bins = 20) +
+  facet_wrap(~ CLASS, ncol = 2)
+```
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = MATHS)) +
+  geom_histogram(bins = 20) +
+  facet_wrap(~ CLASS, nrow = 2)
+```
+
+## Step 5: Statistics
+
+There are two methods to work with statistics: using the `stat_summary()` method or the `geom()` method.
+
+### The `stat_summary()` method
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = GENDER, y = MATHS)) +
+  geom_boxplot() +
+  stat_summary(geom = "point",
+               fun = "mean",
+               color = "red",
+               size = 4)
+```
+
+### The `geom()` method
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = GENDER, y = MATHS)) +
+  geom_boxplot() +
+  geom_point(stat = "summary",
+             fun = "mean",
+             color = "red",
+             size = 4)
+```
+
+## Step 6: Coordinates
+
+### Flipping the coordinates
+
+By default, the bar chart of ggplot2 is in the vertical orientation, as seen earlier in "Step 3".
+
+To flip the coordinates (so that the bar chart is in a horizontal orientation), `coord_flip` is used.
+
+```{r} 
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = RACE)) +   
+  geom_bar() +   
+  coord_flip()
+```
+
+### Changing the limits of the x and y axes
+
+The following scatter plot shows the default limits of the x and y axes. However, as the range is not equal, it can be quite misleading.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data=exam_data, aes(x = MATHS, y = ENGLISH)) +
+  geom_point() +
+  geom_smooth(method=lm, size=0.5)
+```
+In order to define the limits of the axes, `coord_cartesian` is used. The following code chunk fixes the range of limits of both axes to 0 - 100.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data=exam_data, aes(x= MATHS, y=ENGLISH)) +
+  geom_point() +
+  geom_smooth(method=lm, size=0.5) +  
+  coord_cartesian(xlim=c(0,100), ylim=c(0,100))
+```
+
+## Step 7: Theme
+
+Themes allow us to change the appearance of the charts, and are not related to the data itself. Some of the elements that can be modified with themes include background color, font size, grid lines etc.
+
+Some of the built-in themes include: `theme_gray()` (default), `theme_bw()`, `theme_classic()`, `theme_minimal`.
+
+The following code chunks are some examples of what the different built-in themes look like.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = RACE)) +
+  geom_bar() +
+  theme_classic()
+```
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(data = exam_data, aes(x = RACE)) +
+  geom_bar() +
+  theme_minimal()
+```
+

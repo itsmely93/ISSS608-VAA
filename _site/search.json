@@ -14,13 +14,6 @@
     "text": "The code chunk below uses p_load() of the pacman package to check if the tidyverse packages are installed on the computer. If they are, they will then be loaded into the R environment.\n\n\nClick to show/hide the code\npacman::p_load(tidyverse)\n\n\n\n\n\nTo import the data “Exam_data.csv” into the R environment, read_csv() of the readr package is used, as seen in the code chunk below.\n\n\nClick to show/hide the code\nexam_data <- read_csv(\"data/Exam_data.csv\")\n\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "LY’s Visual Analytics Adventure 💯",
-    "section": "",
-    "text": "Hello there! Welcome to my exciting voyage into the captivating realm that is ISSS608 Visual Analytics and Applications! This website serves as a compass for navigating through the coursework that I have prepared for this course.\nJoin me as we journey into the depths of data visualization, delving into its intricate details and unearthing priceless nuggets of insights and revelations."
-  },
-  {
     "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#bar-chart",
     "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#bar-chart",
     "title": "Hands-on Exercise 1",
@@ -32,14 +25,14 @@
     "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#dot-plot",
     "title": "Hands-on Exercise 1",
     "section": "Dot plot",
-    "text": "Dot plot\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) + \n  geom_dotplot(binwidth = 2.5, dotsize = 0.5) +\n  scale_y_continuous(NULL, breaks = NULL)\n\n\n\n\n\n\nscale_y_continuous is used to remove the y-axis."
+    "text": "Dot plot\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) + \n  geom_dotplot(binwidth = 2.5, dotsize = 0.5) +\n  scale_y_continuous(NULL, breaks = NULL)\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nscale_y_continuous is used to remove the y-axis."
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#histogram",
     "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#histogram",
     "title": "Hands-on Exercise 1",
     "section": "Histogram",
-    "text": "Histogram\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram()\n\n\n`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.\n\n\n\n\n\n\nBy default, the bin width is 30.\n\n\nModifying the histogram by changing geom()\nIn the code chunk below:\n\nbins argument is used to change the number of bins to 20\ncolor argument is used to change the outline color of the histogram to black\nfill argument is used to change the fill color of the histogram to violet\n\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram(bins = 20, color = \"black\", fill = \"violet\")\n\n\n\n\n\n\n\nModifying the histogram by changing aes()\nThe code chunk below changes the fill color of the histogram using the subgroup of aes(), which in this case, is the gender of the students.\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS, fill = GENDER)) +\n  geom_histogram(bins = 20, color = \"grey30\")"
+    "text": "Histogram\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram()\n\n\n`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nBy default, the bin width is 30.\n\n\n\n\nModifying the histogram by changing geom()\nIn the code chunk below:\n\nbins argument is used to change the number of bins to 20\ncolor argument is used to change the outline color of the histogram to black\nfill argument is used to change the fill color of the histogram to violet\n\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram(bins = 20, color = \"black\", fill = \"violet\")\n\n\n\n\n\n\n\n\nModifying the histogram by changing aes()\nThe code chunk below changes the fill color of the histogram using the subgroup of aes(), which in this case, is the gender of the students.\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS, fill = GENDER)) +\n  geom_histogram(bins = 20, color = \"grey30\")"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#kernel-density-estimate",
@@ -47,5 +40,145 @@
     "title": "Hands-on Exercise 1",
     "section": "Kernel density estimate",
     "text": "Kernel density estimate\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_density()"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "LY’s Visual Analytics Adventure 💯",
+    "section": "",
+    "text": "Hello there! Welcome to my exciting voyage into the captivating realm that is ISSS608 Visual Analytics and Applications! This website serves as a compass for navigating through the coursework that I have prepared for this course.\nJoin me as we journey into the depths of data visualization, delving into its intricate details and unearthing priceless nuggets of insights and revelations."
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html",
+    "title": "In-class Exercise 1",
+    "section": "",
+    "text": "The code chunk below uses p_load() of the pacman package to check if the tidyverse packages are installed on the computer. If they are, they will then be loaded into the R environment.\n\n\nClick to show/hide the code\npacman::p_load(tidyverse)\n\n\n\n\n\nTo import the data “Exam_data.csv” into the R environment, read_csv() of the readr package is used, as seen in the code chunk below.\n\n\nClick to show/hide the code\nexam_data <- read_csv(\"data/Exam_data.csv\")\n\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#working-with-themes",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#working-with-themes",
+    "title": "In-class Exercise 1",
+    "section": "Working with themes",
+    "text": "Working with themes\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_minimal() +\n  theme(panel.background = element_rect(fill = \"lightblue\", color = \"lightblue\", linewidth = 0.5, linetype = \"solid\"),\n        panel.grid.major = element_line(linewidth = 0.5, linetype = \"solid\", color = \"white\"),\n        panel.grid.minor = element_line(linewidth = 0.25, linetype = \"solid\", color = \"white\"))\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\ncoord_flip() flips cartesian coordinates to create a horizontal bar chart\nthe functions theme() and element_rect() are used for changing the plot panel background color\nelement_line() changes the appearance of the major and minor grid lines"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#working-on-the-criticisms",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#working-on-the-criticisms",
+    "title": "In-class Exercise 1",
+    "section": "Working on the criticisms",
+    "text": "Working on the criticisms\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = reorder(RACE, RACE, function(x)-length(x)))) +\n  geom_bar() +\n  geom_text(stat=\"count\", \n      aes(label=paste0(after_stat(count), \", \", \n      round(..count../sum(..count..)*100, 1), \"%\")),\n      vjust=-1) +\n  xlab(\"Race\") +\n  ylab(\"No. of pupils\") +\n  ylim(0,220) +\n  theme(axis.title.y=element_text(angle = 0))\n\n\nWarning: The dot-dot notation (`..count..`) was deprecated in ggplot2 3.4.0.\nℹ Please use `after_stat(count)` instead."
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design",
+    "title": "In-class Exercise 1",
+    "section": "The original design",
+    "text": "The original design\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = RACE)) +\n  geom_bar()\n\n\n\n\n\n\nCriticisms:\n1. y-axis label is not clear\n2. For effective comparison, the bars should be sorted according to their respective frequencies\n3. For static charts, frequency values should be included for additional information"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design",
+    "title": "In-class Exercise 1",
+    "section": "Modifying the design",
+    "text": "Modifying the design\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = reorder(RACE, RACE, function(x)-length(x)))) +\n  geom_bar() +\n  geom_text(stat=\"count\", \n      aes(label=paste0(after_stat(count), \", \", \n      round(after_stat(count)/sum(after_stat(count))*100, 1), \"%\")),\n      vjust=-1) +\n  xlab(\"Race\") +\n  ylab(\"No. of pupils\") +\n  ylim(0,220) +\n  theme(axis.title.y=element_text(angle = 0))"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design-1",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design-1",
+    "title": "In-class Exercise 1",
+    "section": "The original design",
+    "text": "The original design\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram(bins = 20)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design-1",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design-1",
+    "title": "In-class Exercise 1",
+    "section": "Modifying the design",
+    "text": "Modifying the design\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram(bins = 20, color = \"black\", fill = \"lightblue\") +\n  geom_vline(aes(xintercept = mean(MATHS, na.rm = T)), color = \"red\", linetype = \"dashed\", linewidth = 1) +\n  geom_vline(aes(xintercept = median(MATHS, na.rm = T)), color = \"grey30\", linetype = \"dashed\", linewidth = 1)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design-2",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design-2",
+    "title": "In-class Exercise 1",
+    "section": "The original design",
+    "text": "The original design\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = ENGLISH)) +\n  geom_histogram() +\n  facet_wrap (~ GENDER)\n\n\n`stat_bin()` using `bins = 30`. Pick better value with `binwidth`."
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design-2",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design-2",
+    "title": "In-class Exercise 1",
+    "section": "Modifying the design",
+    "text": "Modifying the design\n\n\nClick to show/hide the code\ndata_bg <- exam_data[,-3]\n\nggplot(data = exam_data, aes(x = ENGLISH, fill = GENDER)) +\n  geom_histogram(data = data_bg, fill = \"grey\", alpha = 0.5) +\n  geom_histogram(color = \"black\") +\n  facet_wrap (~ GENDER) +\n  theme_bw()\n\n\n`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.\n`stat_bin()` using `bins = 30`. Pick better value with `binwidth`."
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design-3",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design-3",
+    "title": "In-class Exercise 1",
+    "section": "The original design",
+    "text": "The original design\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS, y = ENGLISH)) +\n  geom_point()"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design-3",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design-3",
+    "title": "In-class Exercise 1",
+    "section": "Modifying the design",
+    "text": "Modifying the design\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS, y = ENGLISH)) +\n  geom_point() +\n  coord_cartesian(xlim = c(0,100), ylim = c(0,100)) +\n  geom_vline(xintercept = 50, color = \"grey60\", linetype = \"dashed\", linewidth = 1) +\n  geom_hline(yintercept = 50, color = \"grey60\", linetype = \"dashed\", linewidth = 1)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#a-layered-grammar-of-graphics",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#a-layered-grammar-of-graphics",
+    "title": "Hands-on Exercise 1",
+    "section": "A layered grammar of graphics",
+    "text": "A layered grammar of graphics"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#step-1-data",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#step-1-data",
+    "title": "Hands-on Exercise 1",
+    "section": "Step 1: Data",
+    "text": "Step 1: Data\n\n\nClick to show/hide the code\nggplot(data = exam_data)\n\n\n\n\n\nggplot() initializes a ggplot object, and the data argument defines the data set to be used. However, since the aesthetics and geometries are not defined yet, the canvas will be blank."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#step-2-aesthetics",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#step-2-aesthetics",
+    "title": "Hands-on Exercise 1",
+    "section": "Step 2: Aesthetics",
+    "text": "Step 2: Aesthetics\nThe code chunk below adds the aesthetic element into the plot:\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS))\n\n\n\n\n\nAs seen from the plot, the x-axis and the axis’s label are added. To add the charts, we need to proceed to Step 3."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#step-3-geometries",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#step-3-geometries",
+    "title": "Hands-on Exercise 1",
+    "section": "Step 3: Geometries",
+    "text": "Step 3: Geometries\n\n1. Bar chart (geom_bar())\n\n\nClick to show/hide the code\nggplot(data = exam_data, \n       aes(x = RACE)) +\n  geom_bar()\n\n\n\n\n\n\n\n2. Dot plot (geom_dotplot())\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) + \n  geom_dotplot(binwidth = 2.5, dotsize = 0.5) +\n  scale_y_continuous(NULL, breaks = NULL)\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nscale_y_continuous is used to remove the y-axis.\n\n\n\n\n3. Histogram (geom_histogram())\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram()\n\n\n`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nBy default, the bin width is 30.\n\n\n\n\nModifying the histogram by changing geom()\nIn the code chunk below:\n\nbins argument is used to change the number of bins to 20\ncolor argument is used to change the outline color of the histogram to black\nfill argument is used to change the fill color of the histogram to violet\n\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram(bins = 20, color = \"black\", fill = \"violet\")\n\n\n\n\n\n\n\n\nModifying the histogram by changing aes()\nThe code chunk below changes the fill color of the histogram using the subgroup of aes(), which in this case, is the gender of the students.\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS, fill = GENDER)) +\n  geom_histogram(bins = 20, color = \"grey30\")\n\n\n\n\n\n\n\n\n4. Kernel density estimate (geom_density())\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_density()\n\n\n\n\n\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS, color = GENDER)) +\n  geom_density()\n\n\n\n\n\n\n\n5. Boxplot (geom_boxplot())\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = GENDER, y = MATHS)) +\n  geom_boxplot()\n\n\n\n\n\nNotches can be added to help visually assess whether the median of the distributions differ:\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = GENDER, y = MATHS)) +\n  geom_boxplot(notch = TRUE)\n\n\n\n\n\n\n\n6. Violin plot (geom_violin())\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = GENDER, y = MATHS)) +\n  geom_violin()\n\n\n\n\n\n\n\n7. Scatter plot (geom_point())\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS, y = ENGLISH)) +\n  geom_point()\n\n\n\n\n\n\n\n8. Combining multiple plots\nThe code chunk below plots the data points on the boxplots using geom_point() and geom_boxplot.\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = GENDER, y = MATHS)) +\n  geom_boxplot() +\n  geom_point(position = \"jitter\", size = 0.5)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#step-4-facets",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#step-4-facets",
+    "title": "Hands-on Exercise 1",
+    "section": "Step 4: Facets",
+    "text": "Step 4: Facets\nThere are two types of facets supported by ggplot2, namely facet_grid() and facet_wrap().\n\nSplitting with facet_grid()\nThe data can be split by one or two variables, either in the horizontal or vertical direction. This is done by giving a formula to facet_grid(), of the form vertical ~ horizontal\n\nVertical split\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram(bins = 20) +\n  facet_grid(GENDER ~ .)\n\n\n\n\n\n\n\nVertical split\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram(bins = 20) +\n  facet_grid(~ GENDER)\n\n\n\n\n\n\n\nVertical and Horizontal split\nThe code chunk below splits vertically by GENDER, and horizontally by RACE.\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram(bins = 20) +\n  facet_grid(GENDER ~ RACE)\n\n\n\n\n\n\n\n\nSplitting with facet_wrap\nInstead of faceting with variables in the horizontal or vertical direction, facet_wrap wraps the panels into a matrix.\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram(bins = 20) +\n  facet_wrap(~ CLASS)\n\n\n\n\n\n\nSpecifying number of columns or rows to wrap\nYou can also specify the number of columns or rows to wrap the facets, using ncol or nrow\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram(bins = 20) +\n  facet_wrap(~ CLASS, ncol = 2)\n\n\n\n\n\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram(bins = 20) +\n  facet_wrap(~ CLASS, nrow = 2)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#step-5-statistics",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#step-5-statistics",
+    "title": "Hands-on Exercise 1",
+    "section": "Step 5: Statistics",
+    "text": "Step 5: Statistics\nThere are two methods to work with statistics: using the stat_summary() method or the geom() method.\n\nThe stat_summary() method\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = GENDER, y = MATHS)) +\n  geom_boxplot() +\n  stat_summary(geom = \"point\",\n               fun = \"mean\",\n               color = \"red\",\n               size = 4)\n\n\n\n\n\n\n\nThe geom() method\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = GENDER, y = MATHS)) +\n  geom_boxplot() +\n  geom_point(stat = \"summary\",\n             fun = \"mean\",\n             color = \"red\",\n             size = 4)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#step-6-coordinates",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#step-6-coordinates",
+    "title": "Hands-on Exercise 1",
+    "section": "Step 6: Coordinates",
+    "text": "Step 6: Coordinates\n\nFlipping the coordinates\nBy default, the bar chart of ggplot2 is in the vertical orientation, as seen earlier in “Step 3”.\nTo flip the coordinates (so that the bar chart is in a horizontal orientation), coord_flip is used.\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = RACE)) +   \n  geom_bar() +   \n  coord_flip()\n\n\n\n\n\n\n\nChanging the limits of the x and y axes\nThe following scatter plot shows the default limits of the x and y axes. However, as the range is not equal, it can be quite misleading.\n\n\nClick to show/hide the code\nggplot(data=exam_data, aes(x = MATHS, y = ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, size=0.5)\n\n\nWarning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.\nℹ Please use `linewidth` instead.\n\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\nIn order to define the limits of the axes, coord_cartesian is used. The following code chunk fixes the range of limits of both axes to 0 - 100.\n\n\nClick to show/hide the code\nggplot(data=exam_data, aes(x= MATHS, y=ENGLISH)) +\n  geom_point() +\n  geom_smooth(method=lm, size=0.5) +  \n  coord_cartesian(xlim=c(0,100), ylim=c(0,100))\n\n\n`geom_smooth()` using formula = 'y ~ x'"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#step-7-theme",
+    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#step-7-theme",
+    "title": "Hands-on Exercise 1",
+    "section": "Step 7: Theme",
+    "text": "Step 7: Theme\nThemes allow us to change the appearance of the charts, and are not related to the data itself. Some of the elements that can be modified with themes include background color, font size, grid lines etc.\nSome of the built-in themes include: theme_gray() (default), theme_bw(), theme_classic(), theme_minimal.\nThe following code chunks are some examples of what the different built-in themes look like.\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = RACE)) +\n  geom_bar() +\n  theme_classic()\n\n\n\n\n\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = RACE)) +\n  geom_bar() +\n  theme_minimal()"
   }
 ]
