@@ -1,0 +1,225 @@
+---
+title: "Hands-on Exercise 2"
+author: "Lim Li Ying"
+---
+
+# Getting Started
+
+## Installing and loading R packages
+
+For this exercise, besides `tidyverse`, four R packages will be used, namely `ggrepel`, `ggthemes`, `hrbrthemes` and `patchwork`.
+
+The code chunk below uses `p_load()` of the `pacman` package to check if all the packages are installed on the computer. If they are, they will then be loaded into the R environment.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+pacman::p_load(ggrepel, ggthemes, hrbrthemes, patchwork, tidyverse)
+```
+
+## Importing the data
+
+To import the data *"Exam_data.csv"* into the R environment, `read_csv()` of the `readr` package is used, as seen in the code chunk below.
+
+```{r}
+exam_data <- read_csv("data/Exam_data.csv")
+```
+
+# Working with `ggrepel()`
+
+When there is a large number of data points, annotations will overlap one another, thus making them look very messy and difficult to read.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(exam_data, aes(x = MATHS, y = ENGLISH)) + 
+  geom_point() +
+  geom_smooth(method = lm, linewidth = 0.5) +
+  geom_label(aes(label = ID), hjust = 0.5, vjust = -0.5) +
+  coord_cartesian(xlim = c(0,100), ylim = c(0,100)) +
+  ggtitle("English Scores vs Maths Scores for Primary 3")
+
+```
+
+We can use `ggrepel()` to repel overlapping texts, simply by replacing `geom_text()` and `geom_label()` with `geom_text_repel()` and `geom_label_repel()` respectively, as seen in the code chunk below.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(exam_data, aes(x = MATHS, y = ENGLISH)) + 
+  geom_point() +
+  geom_smooth(method = lm, linewidth = 0.5) +
+  geom_label_repel(aes(label = ID), fontface = "bold") +
+  coord_cartesian(xlim = c(0,100), ylim = c(0,100)) +
+  ggtitle("English Scores vs Maths Scores for Primary 3")
+
+```
+
+# Working with themes
+
+## Built-in themes
+
+There are 8 built-in themes that comes with ggplot2, namely `theme_gray()`, `theme_bw()`, `theme_classic()`, `theme_dark()`, `theme_light()`, `theme_linedraw()`, `theme_minimal()` and `theme_void()`.
+
+The following code chunk is an example using `theme_gray()`.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(exam_data, aes(x = MATHS)) +
+  geom_histogram(bins = 20, boundary = 100, color = "grey25", fill = "grey90") +
+  theme_gray() +
+  ggtitle("Distribution of Maths Scores")
+```
+
+## `ggthemes` package
+
+The `ggthemes` package contains themes that replicate the look of plots by 'The Wall Street Journal', 'The Economist' etc.
+
+The following code chunk demonstrates an example using *The Economist* theme.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(exam_data, aes(x = MATHS)) +
+  geom_histogram(bins = 20, boundary = 100, color = "grey25", fill = "grey90") +
+  theme_economist() +
+  ggtitle("Distribution of Maths Scores")
+```
+
+## `hrbrthemes` package
+
+The `hrbrthemes` package contains themes that are typography-centric.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(exam_data, aes(x = MATHS)) +
+  geom_histogram(bins = 20, boundary = 100, color = "grey25", fill = "grey90") +
+  theme_ipsum() +
+  ggtitle("Distribution of Maths Scores")
+```
+
+We can also modify the appearance of the theme, as seen in the code chunk below.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggplot(exam_data, aes(x = MATHS)) +
+  geom_histogram(bins = 20, boundary = 100, color = "grey25", fill = "grey90") +
+  theme_ipsum(axis_title_size = 18, base_size = 15, grid = "Y") +
+  ggtitle("Distribution of Maths Scores")
+```
+
+::: callout-note
+-   `axis_title_size` is used to change the font size of the axis title to 18.
+
+-   `base size` is used to increase the size of the axis label to 15.
+
+-   `grid = "Y"` will only display grid lines along the Y-axis.
+:::
+
+# Combining multiple plots using `patchwork`
+
+## Creating separate plots
+
+First, we will create the individual plots, assigning each plot to a variable name.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+p1 <- ggplot(exam_data, aes(x = MATHS)) +
+  geom_histogram(bins = 20, boundary = 100, color = "grey25", fill = "grey90") +
+  coord_cartesian(xlim = c(0,100)) +
+  ggtitle("Distribution of Maths Scores")
+p1
+```
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+p2 <- ggplot(exam_data, aes(x = ENGLISH)) +
+  geom_histogram(bins = 20, boundary = 100, color = "grey25", fill = "grey90") +
+  coord_cartesian(xlim = c(0,100)) +
+  ggtitle("Distribution of English Scores")
+p2
+```
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+p3 <- ggplot(exam_data, aes(x = MATHS, y = ENGLISH)) +
+  geom_point() +
+  geom_smooth(method = lm, linewidth = 0.5) +
+  coord_cartesian(xlim = c(0,100), ylim = c(0,100)) +
+  ggtitle("English Scores vs Maths Scores for Primary 3")
+p3
+```
+
+## Combining multiple plots using `patchwork`
+
+### Combining two plots
+
+#### General Syntax
+
+-   "+" sign: Combines two plots to form a two-column layout (i.e. side-by-side)
+-   "/" sign: Combines two plots to form a two-row layout (i.e. top and bottom)
+-   "()": to create subplot groups
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+p1 + p2
+```
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+p1 / p2
+```
+
+### Combining three plots
+
+#### Additional syntax
+
+In addition to the aforementioned operators, we can use "\|" to place the plots beside each other. The following code chunk demonstrates the use of appropriate operators to combine three plots together.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+(p1 / p2) | p3
+```
+
+### Tagging subplots
+
+`patchwork` allows auto-tagging of subplots to enable easy identification of each subplot.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+((p1 / p2) | p3) +
+  plot_annotation(tag_levels = "a")
+```
+
+### Creating figures with inserts
+
+We can also use `inset_element()` to insert plots into another plot.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+p3 + inset_element(p2, 
+                   left = 0.02, 
+                   bottom = 0.7, 
+                   right = 0.5, 
+                   top = 1)
+```
+
+# Combining `patchwork` with `ggthemes`
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+patchwork <- (p1 / p2) | p3
+patchwork & theme_economist()
+```
