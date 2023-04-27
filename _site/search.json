@@ -14,118 +14,6 @@
     "text": "The code chunk below uses p_load() of the pacman package to check if the tidyverse packages are installed on the computer. If they are, they will then be loaded into the R environment.\n\n\nClick to show/hide the code\npacman::p_load(tidyverse)\n\n\n\n\n\nTo import the data “Exam_data.csv” into the R environment, read_csv() of the readr package is used, as seen in the code chunk below.\n\n\nClick to show/hide the code\nexam_data <- read_csv(\"data/Exam_data.csv\")\n\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
   },
   {
-    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#bar-chart",
-    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#bar-chart",
-    "title": "Hands-on Exercise 1",
-    "section": "Bar chart",
-    "text": "Bar chart\n\n\nClick to show/hide the code\nggplot(data = exam_data, \n       aes(x = RACE)) +\n  geom_bar()"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#dot-plot",
-    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#dot-plot",
-    "title": "Hands-on Exercise 1",
-    "section": "Dot plot",
-    "text": "Dot plot\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) + \n  geom_dotplot(binwidth = 2.5, dotsize = 0.5) +\n  scale_y_continuous(NULL, breaks = NULL)\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nscale_y_continuous is used to remove the y-axis."
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#histogram",
-    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#histogram",
-    "title": "Hands-on Exercise 1",
-    "section": "Histogram",
-    "text": "Histogram\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram()\n\n\n`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nBy default, the bin width is 30.\n\n\n\n\nModifying the histogram by changing geom()\nIn the code chunk below:\n\nbins argument is used to change the number of bins to 20\ncolor argument is used to change the outline color of the histogram to black\nfill argument is used to change the fill color of the histogram to violet\n\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram(bins = 20, color = \"black\", fill = \"violet\")\n\n\n\n\n\n\n\n\nModifying the histogram by changing aes()\nThe code chunk below changes the fill color of the histogram using the subgroup of aes(), which in this case, is the gender of the students.\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS, fill = GENDER)) +\n  geom_histogram(bins = 20, color = \"grey30\")"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#kernel-density-estimate",
-    "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#kernel-density-estimate",
-    "title": "Hands-on Exercise 1",
-    "section": "Kernel density estimate",
-    "text": "Kernel density estimate\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_density()"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "LY’s Visual Analytics Adventure 💯",
-    "section": "",
-    "text": "Hello there! Welcome to my exciting voyage into the captivating realm that is ISSS608 Visual Analytics and Applications! This website serves as a compass for navigating through the coursework that I have prepared for this course.\nJoin me as we journey into the depths of data visualization, delving into its intricate details and unearthing priceless nuggets of insights and revelations."
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html",
-    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html",
-    "title": "In-class Exercise 1",
-    "section": "",
-    "text": "The code chunk below uses p_load() of the pacman package to check if the tidyverse packages are installed on the computer. If they are, they will then be loaded into the R environment.\n\n\nClick to show/hide the code\npacman::p_load(tidyverse)\n\n\n\n\n\nTo import the data “Exam_data.csv” into the R environment, read_csv() of the readr package is used, as seen in the code chunk below.\n\n\nClick to show/hide the code\nexam_data <- read_csv(\"data/Exam_data.csv\")\n\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#working-with-themes",
-    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#working-with-themes",
-    "title": "In-class Exercise 1",
-    "section": "Working with themes",
-    "text": "Working with themes\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_minimal() +\n  theme(panel.background = element_rect(fill = \"lightblue\", color = \"lightblue\", linewidth = 0.5, linetype = \"solid\"),\n        panel.grid.major = element_line(linewidth = 0.5, linetype = \"solid\", color = \"white\"),\n        panel.grid.minor = element_line(linewidth = 0.25, linetype = \"solid\", color = \"white\"))\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\ncoord_flip() flips cartesian coordinates to create a horizontal bar chart\nthe functions theme() and element_rect() are used for changing the plot panel background color\nelement_line() changes the appearance of the major and minor grid lines"
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#working-on-the-criticisms",
-    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#working-on-the-criticisms",
-    "title": "In-class Exercise 1",
-    "section": "Working on the criticisms",
-    "text": "Working on the criticisms\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = reorder(RACE, RACE, function(x)-length(x)))) +\n  geom_bar() +\n  geom_text(stat=\"count\", \n      aes(label=paste0(after_stat(count), \", \", \n      round(..count../sum(..count..)*100, 1), \"%\")),\n      vjust=-1) +\n  xlab(\"Race\") +\n  ylab(\"No. of pupils\") +\n  ylim(0,220) +\n  theme(axis.title.y=element_text(angle = 0))\n\n\nWarning: The dot-dot notation (`..count..`) was deprecated in ggplot2 3.4.0.\nℹ Please use `after_stat(count)` instead."
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design",
-    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design",
-    "title": "In-class Exercise 1",
-    "section": "The original design",
-    "text": "The original design\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = RACE)) +\n  geom_bar()\n\n\n\n\n\n\nCriticisms:\n1. y-axis label is not clear\n2. For effective comparison, the bars should be sorted according to their respective frequencies\n3. For static charts, frequency values should be included for additional information"
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design",
-    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design",
-    "title": "In-class Exercise 1",
-    "section": "Modifying the design",
-    "text": "Modifying the design\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = reorder(RACE, RACE, function(x)-length(x)))) +\n  geom_bar() +\n  geom_text(stat = \"count\", \n      aes(label = paste0(after_stat(count), \", \", \n      round(after_stat(count)/sum(after_stat(count))*100, 1), \"%\")),\n      vjust=-1) +\n  xlab(\"Race\") +\n  ylab(\"No. of pupils\") +\n  ylim(0,220) +\n  theme(axis.title.y=element_text(angle = 0))\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\ngeom_text() is used to add the labels above the chart.\n\npaste0(after_stat(count)) - to add the total count.\nround(after_stat(count)/sum(after_stat(count))*100, 1), \"%\") - to add the percentage.\nafter_stat(count) is the newer version of ..count.., which has been deprecated in the later version of ggplot2.\n\nxlab and ylab are used to add the axes labels.\n\naxis.title.y is used to modify the y-axis’s label\nelement_text() is used to modify the looks of the texts. In this case, it is used to rotate the y-axis label to 0 degrees (i.e. horizontal orientation)."
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design-1",
-    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design-1",
-    "title": "In-class Exercise 1",
-    "section": "The original design",
-    "text": "The original design\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram(bins = 20)"
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design-1",
-    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design-1",
-    "title": "In-class Exercise 1",
-    "section": "Modifying the design",
-    "text": "Modifying the design\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram(bins = 20, color = \"black\", fill = \"lightblue\") +\n  geom_vline(aes(xintercept = mean(MATHS, na.rm = T)), color = \"red\", linetype = \"dashed\", linewidth = 1) +\n  geom_vline(aes(xintercept = median(MATHS, na.rm = T)), color = \"grey30\", linetype = \"dashed\", linewidth = 1)\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\ngeom_vline() creates a vertical line, which will intercept the x-axis."
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design-2",
-    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design-2",
-    "title": "In-class Exercise 1",
-    "section": "The original design",
-    "text": "The original design\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = ENGLISH)) +\n  geom_histogram() +\n  facet_wrap (~ GENDER)\n\n\n`stat_bin()` using `bins = 30`. Pick better value with `binwidth`."
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design-2",
-    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design-2",
-    "title": "In-class Exercise 1",
-    "section": "Modifying the design",
-    "text": "Modifying the design\n\n\nClick to show/hide the code\ndata_bg <- exam_data[,-3]\n\nggplot(data = exam_data, aes(x = ENGLISH, fill = GENDER)) +\n  geom_histogram(data = data_bg, fill = \"grey\", alpha = 0.5) +\n  geom_histogram(color = \"black\") +\n  facet_wrap (~ GENDER) +\n  theme_bw()\n\n\n`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.\n`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\nThe chart is created by combining two histograms.\nThe histogram in the background shows the total with the transparency adjusted to 50% using alpha, while the histogram in the foreground is split by GENDER using facet_wrap()."
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design-3",
-    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design-3",
-    "title": "In-class Exercise 1",
-    "section": "The original design",
-    "text": "The original design\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS, y = ENGLISH)) +\n  geom_point()"
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design-3",
-    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design-3",
-    "title": "In-class Exercise 1",
-    "section": "Modifying the design",
-    "text": "Modifying the design\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS, y = ENGLISH)) +\n  geom_point() +\n  coord_cartesian(xlim = c(0,100), ylim = c(0,100)) +\n  geom_vline(xintercept = 50, color = \"grey60\", linetype = \"dashed\", linewidth = 1) +\n  geom_hline(yintercept = 50, color = \"grey60\", linetype = \"dashed\", linewidth = 1)\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\ngeom_vline() is used to create a vertical line as mentioned previously.\nTo create a horizontal line, geom_hline() and yintercept is used instead.\ncoord_cartesian() allows us to modify the limits of the x and y axes, in this case, to range from 0 - 100."
-  },
-  {
     "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#a-layered-grammar-of-graphics",
     "href": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html#a-layered-grammar-of-graphics",
     "title": "Hands-on Exercise 1",
@@ -217,24 +105,80 @@
     "text": "Creating separate plots\nFirst, we will create the individual plots, assigning each plot to a variable name.\n\n\nClick to show/hide the code\np1 <- ggplot(exam_data, aes(x = MATHS)) +\n  geom_histogram(bins = 20, boundary = 100, color = \"grey25\", fill = \"grey90\") +\n  coord_cartesian(xlim = c(0,100)) +\n  ggtitle(\"Distribution of Maths Scores\")\np1\n\n\n\n\n\n\n\nClick to show/hide the code\np2 <- ggplot(exam_data, aes(x = ENGLISH)) +\n  geom_histogram(bins = 20, boundary = 100, color = \"grey25\", fill = \"grey90\") +\n  coord_cartesian(xlim = c(0,100)) +\n  ggtitle(\"Distribution of English Scores\")\np2\n\n\n\n\n\n\n\nClick to show/hide the code\np3 <- ggplot(exam_data, aes(x = MATHS, y = ENGLISH)) +\n  geom_point() +\n  geom_smooth(method = lm, linewidth = 0.5) +\n  coord_cartesian(xlim = c(0,100), ylim = c(0,100)) +\n  ggtitle(\"English Scores vs Maths Scores for Primary 3\")\np3\n\n\n`geom_smooth()` using formula = 'y ~ x'"
   },
   {
-    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#combining-multiple-plots-using-patchwork",
-    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#combining-multiple-plots-using-patchwork",
-    "title": "Hands-on Exercise 2",
-    "section": "Combining multiple plots using patchwork",
-    "text": "Combining multiple plots using patchwork\n\nCombining two plots\n\nGeneral Syntax\n\n“+” sign: Combines two plots to form a two-column layout (i.e. side-by-side)\n“/” sign: Combines two plots to form a two-row layout (i.e. top and bottom)\n“()”: to create subplot groups\n\n\n\nClick to show/hide the code\np1 + p2\n\n\n\n\n\n\n\nClick to show/hide the code\np1 / p2\n\n\n\n\n\n\n\n\nCombining three plots\n\nAdditional syntax\nIn addition to the aforementioned operators, we can use “|” to place the plots beside each other. The following code chunk demonstrates the use of appropriate operators to combine three plots together.\n\n\nClick to show/hide the code\n(p1 / p2) | p3\n\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\nTagging subplots\npatchwork allows auto-tagging of subplots to enable easy identification of each subplot.\n\n\nClick to show/hide the code\n((p1 / p2) | p3) +\n  plot_annotation(tag_levels = \"a\")\n\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\nCreating figures with inserts\nWe can also use inset_element() to insert plots into another plot.\n\n\nClick to show/hide the code\np3 + inset_element(p2, \n                   left = 0.02, \n                   bottom = 0.7, \n                   right = 0.5, \n                   top = 1)\n\n\n`geom_smooth()` using formula = 'y ~ x'"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#combining-patchwork-with-ggthemes",
-    "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#combining-patchwork-with-ggthemes",
-    "title": "Hands-on Exercise 2",
-    "section": "Combining patchwork with ggthemes",
-    "text": "Combining patchwork with ggthemes\n\n\nClick to show/hide the code\npatchwork <- (p1 / p2) | p3\npatchwork & theme_economist()\n\n\n`geom_smooth()` using formula = 'y ~ x'"
-  },
-  {
     "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#combining-multiple-plots-using-patchwork-1",
     "href": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html#combining-multiple-plots-using-patchwork-1",
     "title": "Hands-on Exercise 2",
     "section": "Combining multiple plots using patchwork",
     "text": "Combining multiple plots using patchwork\n\nCombining two plots\n\nGeneral Syntax\n\n“+” sign: Combines two plots to form a two-column layout (i.e. side-by-side)\n“/” sign: Combines two plots to form a two-row layout (i.e. top and bottom)\n“()”: to create subplot groups\n\n\n\nClick to show/hide the code\np1 + p2\n\n\n\n\n\n\n\nClick to show/hide the code\np1 / p2\n\n\n\n\n\n\n\n\nCombining three plots\n\nAdditional syntax\nIn addition to the aforementioned operators, we can use “|” to place the plots beside each other. The following code chunk demonstrates the use of appropriate operators to combine three plots together.\n\n\nClick to show/hide the code\n(p1 / p2) | p3\n\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\nTagging subplots\npatchwork allows auto-tagging of subplots to enable easy identification of each subplot.\n\n\nClick to show/hide the code\n((p1 / p2) | p3) +\n  plot_annotation(tag_levels = \"a\")\n\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\nCreating figures with inserts\nWe can also use inset_element() to insert plots into another plot.\n\n\nClick to show/hide the code\np3 + inset_element(p2, \n                   left = 0.02, \n                   bottom = 0.7, \n                   right = 0.5, \n                   top = 1)\n\n\n`geom_smooth()` using formula = 'y ~ x'"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html",
+    "title": "In-class Exercise 1",
+    "section": "",
+    "text": "The code chunk below uses p_load() of the pacman package to check if the tidyverse packages are installed on the computer. If they are, they will then be loaded into the R environment.\n\n\nClick to show/hide the code\npacman::p_load(tidyverse)\n\n\n\n\n\nTo import the data “Exam_data.csv” into the R environment, read_csv() of the readr package is used, as seen in the code chunk below.\n\n\nClick to show/hide the code\nexam_data <- read_csv(\"data/Exam_data.csv\")\n\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design",
+    "title": "In-class Exercise 1",
+    "section": "The original design",
+    "text": "The original design\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = RACE)) +\n  geom_bar()\n\n\n\n\n\n\nCriticisms:\n1. y-axis label is not clear\n2. For effective comparison, the bars should be sorted according to their respective frequencies\n3. For static charts, frequency values should be included for additional information"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design",
+    "title": "In-class Exercise 1",
+    "section": "Modifying the design",
+    "text": "Modifying the design\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = reorder(RACE, RACE, function(x)-length(x)))) +\n  geom_bar() +\n  geom_text(stat = \"count\", \n      aes(label = paste0(after_stat(count), \", \", \n      round(after_stat(count)/sum(after_stat(count))*100, 1), \"%\")),\n      vjust=-1) +\n  xlab(\"Race\") +\n  ylab(\"No. of pupils\") +\n  ylim(0,220) +\n  theme(axis.title.y=element_text(angle = 0))\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\ngeom_text() is used to add the labels above the chart.\n\npaste0(after_stat(count)) - to add the total count.\nround(after_stat(count)/sum(after_stat(count))*100, 1), \"%\") - to add the percentage.\nafter_stat(count) is the newer version of ..count.., which has been deprecated in the later version of ggplot2.\n\nxlab and ylab are used to add the axes labels.\n\naxis.title.y is used to modify the y-axis’s label\nelement_text() is used to modify the looks of the texts. In this case, it is used to rotate the y-axis label to 0 degrees (i.e. horizontal orientation)."
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design-1",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design-1",
+    "title": "In-class Exercise 1",
+    "section": "The original design",
+    "text": "The original design\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram(bins = 20)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design-1",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design-1",
+    "title": "In-class Exercise 1",
+    "section": "Modifying the design",
+    "text": "Modifying the design\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS)) +\n  geom_histogram(bins = 20, color = \"black\", fill = \"lightblue\") +\n  geom_vline(aes(xintercept = mean(MATHS, na.rm = T)), color = \"red\", linetype = \"dashed\", linewidth = 1) +\n  geom_vline(aes(xintercept = median(MATHS, na.rm = T)), color = \"grey30\", linetype = \"dashed\", linewidth = 1)\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\ngeom_vline() creates a vertical line, which will intercept the x-axis."
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design-2",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design-2",
+    "title": "In-class Exercise 1",
+    "section": "The original design",
+    "text": "The original design\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = ENGLISH)) +\n  geom_histogram() +\n  facet_wrap (~ GENDER)\n\n\n`stat_bin()` using `bins = 30`. Pick better value with `binwidth`."
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design-2",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design-2",
+    "title": "In-class Exercise 1",
+    "section": "Modifying the design",
+    "text": "Modifying the design\n\n\nClick to show/hide the code\ndata_bg <- exam_data[,-3]\n\nggplot(data = exam_data, aes(x = ENGLISH, fill = GENDER)) +\n  geom_histogram(data = data_bg, fill = \"grey\", alpha = 0.5) +\n  geom_histogram(color = \"black\") +\n  facet_wrap (~ GENDER) +\n  theme_bw()\n\n\n`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.\n`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\nThe chart is created by combining two histograms.\nThe histogram in the background shows the total with the transparency adjusted to 50% using alpha, while the histogram in the foreground is split by GENDER using facet_wrap()."
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design-3",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#the-original-design-3",
+    "title": "In-class Exercise 1",
+    "section": "The original design",
+    "text": "The original design\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS, y = ENGLISH)) +\n  geom_point()"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design-3",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#modifying-the-design-3",
+    "title": "In-class Exercise 1",
+    "section": "Modifying the design",
+    "text": "Modifying the design\n\n\nClick to show/hide the code\nggplot(data = exam_data, aes(x = MATHS, y = ENGLISH)) +\n  geom_point() +\n  coord_cartesian(xlim = c(0,100), ylim = c(0,100)) +\n  geom_vline(xintercept = 50, color = \"grey60\", linetype = \"dashed\", linewidth = 1) +\n  geom_hline(yintercept = 50, color = \"grey60\", linetype = \"dashed\", linewidth = 1)\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\ngeom_vline() is used to create a vertical line as mentioned previously.\nTo create a horizontal line, geom_hline() and yintercept is used instead.\ncoord_cartesian() allows us to modify the limits of the x and y axes, in this case, to range from 0 - 100."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "LY’s Visual Analytics Adventure 💯",
+    "section": "",
+    "text": "Hello there! Welcome to my exciting voyage into the captivating realm that is ISSS608 Visual Analytics and Applications! This website serves as a compass for navigating through the coursework that I have prepared for this course.\nJoin me as we journey into the depths of data visualization, delving into its intricate details and unearthing priceless nuggets of insights and revelations."
   }
 ]

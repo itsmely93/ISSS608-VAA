@@ -152,6 +152,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html">
  <span class="dropdown-text">Hands-on Exercise 1</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex02.html">
+ <span class="dropdown-text">Hands-on Exercise 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex03.html">
+ <span class="dropdown-text">Hands-on Exercise 3</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -1248,40 +1256,41 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb35-369"><a href="#cb35-369" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
 <span id="cb35-370"><a href="#cb35-370" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span>lm, <span class="at">size=</span><span class="fl">0.5</span>)</span>
 <span id="cb35-371"><a href="#cb35-371" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb35-372"><a href="#cb35-372" aria-hidden="true" tabindex="-1"></a>In order to define the limits of the axes, <span class="in">`coord_cartesian`</span> is used. The following code chunk fixes the range of limits of both axes to 0 - 100.</span>
-<span id="cb35-373"><a href="#cb35-373" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-376"><a href="#cb35-376" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb35-377"><a href="#cb35-377" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: show</span></span>
-<span id="cb35-378"><a href="#cb35-378" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Click to show/hide the code"</span></span>
-<span id="cb35-379"><a href="#cb35-379" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, <span class="fu">aes</span>(<span class="at">x=</span> MATHS, <span class="at">y=</span>ENGLISH)) <span class="sc">+</span></span>
-<span id="cb35-380"><a href="#cb35-380" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb35-381"><a href="#cb35-381" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span>lm, <span class="at">size=</span><span class="fl">0.5</span>) <span class="sc">+</span>  </span>
-<span id="cb35-382"><a href="#cb35-382" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>))</span>
-<span id="cb35-383"><a href="#cb35-383" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb35-384"><a href="#cb35-384" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-385"><a href="#cb35-385" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 7: Theme</span></span>
-<span id="cb35-386"><a href="#cb35-386" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-387"><a href="#cb35-387" aria-hidden="true" tabindex="-1"></a>Themes allow us to change the appearance of the charts, and are not related to the data itself. Some of the elements that can be modified with themes include background color, font size, grid lines etc.</span>
-<span id="cb35-388"><a href="#cb35-388" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-389"><a href="#cb35-389" aria-hidden="true" tabindex="-1"></a>Some of the built-in themes include: <span class="in">`theme_gray()`</span> (default), <span class="in">`theme_bw()`</span>, <span class="in">`theme_classic()`</span>, <span class="in">`theme_minimal`</span>.</span>
-<span id="cb35-390"><a href="#cb35-390" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-391"><a href="#cb35-391" aria-hidden="true" tabindex="-1"></a>The following code chunks are some examples of what the different built-in themes look like.</span>
-<span id="cb35-392"><a href="#cb35-392" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-395"><a href="#cb35-395" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb35-396"><a href="#cb35-396" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: show</span></span>
-<span id="cb35-397"><a href="#cb35-397" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Click to show/hide the code"</span></span>
-<span id="cb35-398"><a href="#cb35-398" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> exam_data, <span class="fu">aes</span>(<span class="at">x =</span> RACE)) <span class="sc">+</span></span>
-<span id="cb35-399"><a href="#cb35-399" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
-<span id="cb35-400"><a href="#cb35-400" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span>
-<span id="cb35-401"><a href="#cb35-401" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb35-402"><a href="#cb35-402" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-405"><a href="#cb35-405" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb35-406"><a href="#cb35-406" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: show</span></span>
-<span id="cb35-407"><a href="#cb35-407" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Click to show/hide the code"</span></span>
-<span id="cb35-408"><a href="#cb35-408" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> exam_data, <span class="fu">aes</span>(<span class="at">x =</span> RACE)) <span class="sc">+</span></span>
-<span id="cb35-409"><a href="#cb35-409" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
-<span id="cb35-410"><a href="#cb35-410" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
-<span id="cb35-411"><a href="#cb35-411" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-372"><a href="#cb35-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-373"><a href="#cb35-373" aria-hidden="true" tabindex="-1"></a>In order to define the limits of the axes, <span class="in">`coord_cartesian`</span> is used. The following code chunk fixes the range of limits of both axes to 0 - 100.</span>
+<span id="cb35-374"><a href="#cb35-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-377"><a href="#cb35-377" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-378"><a href="#cb35-378" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: show</span></span>
+<span id="cb35-379"><a href="#cb35-379" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Click to show/hide the code"</span></span>
+<span id="cb35-380"><a href="#cb35-380" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, <span class="fu">aes</span>(<span class="at">x=</span> MATHS, <span class="at">y=</span>ENGLISH)) <span class="sc">+</span></span>
+<span id="cb35-381"><a href="#cb35-381" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb35-382"><a href="#cb35-382" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span>lm, <span class="at">size=</span><span class="fl">0.5</span>) <span class="sc">+</span>  </span>
+<span id="cb35-383"><a href="#cb35-383" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>))</span>
+<span id="cb35-384"><a href="#cb35-384" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-385"><a href="#cb35-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-386"><a href="#cb35-386" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 7: Theme</span></span>
+<span id="cb35-387"><a href="#cb35-387" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-388"><a href="#cb35-388" aria-hidden="true" tabindex="-1"></a>Themes allow us to change the appearance of the charts, and are not related to the data itself. Some of the elements that can be modified with themes include background color, font size, grid lines etc.</span>
+<span id="cb35-389"><a href="#cb35-389" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-390"><a href="#cb35-390" aria-hidden="true" tabindex="-1"></a>Some of the built-in themes include: <span class="in">`theme_gray()`</span> (default), <span class="in">`theme_bw()`</span>, <span class="in">`theme_classic()`</span>, <span class="in">`theme_minimal`</span>.</span>
+<span id="cb35-391"><a href="#cb35-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-392"><a href="#cb35-392" aria-hidden="true" tabindex="-1"></a>The following code chunks are some examples of what the different built-in themes look like.</span>
+<span id="cb35-393"><a href="#cb35-393" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-396"><a href="#cb35-396" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-397"><a href="#cb35-397" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: show</span></span>
+<span id="cb35-398"><a href="#cb35-398" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Click to show/hide the code"</span></span>
+<span id="cb35-399"><a href="#cb35-399" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> exam_data, <span class="fu">aes</span>(<span class="at">x =</span> RACE)) <span class="sc">+</span></span>
+<span id="cb35-400"><a href="#cb35-400" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb35-401"><a href="#cb35-401" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span>
+<span id="cb35-402"><a href="#cb35-402" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-403"><a href="#cb35-403" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-406"><a href="#cb35-406" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-407"><a href="#cb35-407" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: show</span></span>
+<span id="cb35-408"><a href="#cb35-408" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Click to show/hide the code"</span></span>
+<span id="cb35-409"><a href="#cb35-409" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> exam_data, <span class="fu">aes</span>(<span class="at">x =</span> RACE)) <span class="sc">+</span></span>
+<span id="cb35-410"><a href="#cb35-410" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb35-411"><a href="#cb35-411" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb35-412"><a href="#cb35-412" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

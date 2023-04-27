@@ -298,7 +298,7 @@ By default, the bar chart of ggplot2 is in the vertical orientation, as seen ear
 
 To flip the coordinates (so that the bar chart is in a horizontal orientation), `coord_flip` is used.
 
-```{r} 
+```{r}
 #| code-fold: show
 #| code-summary: "Click to show/hide the code"
 ggplot(data = exam_data, aes(x = RACE)) +   
@@ -317,6 +317,7 @@ ggplot(data=exam_data, aes(x = MATHS, y = ENGLISH)) +
   geom_point() +
   geom_smooth(method=lm, size=0.5)
 ```
+
 In order to define the limits of the axes, `coord_cartesian` is used. The following code chunk fixes the range of limits of both axes to 0 - 100.
 
 ```{r}
@@ -351,4 +352,3 @@ ggplot(data = exam_data, aes(x = RACE)) +
   geom_bar() +
   theme_minimal()
 ```
-
