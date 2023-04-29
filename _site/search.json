@@ -180,5 +180,40 @@
     "title": "LY’s Visual Analytics Adventure 💯",
     "section": "",
     "text": "Hello there! Welcome to my exciting voyage into the captivating realm that is ISSS608 Visual Analytics and Applications! This website serves as a compass for navigating through the coursework that I have prepared for this course.\nJoin me as we journey into the depths of data visualization, delving into its intricate details and unearthing priceless nuggets of insights and revelations."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html",
+    "title": "Hands-on Exercise 3",
+    "section": "",
+    "text": "For this exercise, besides tidyverse, four R packages will be used, namely ggiraph, plotly, DT and patchwork.\n\nggiraph: for making ggplot2 graphics interactive\nplotly: for plotting interactive statistical charts.\nDT: for creating data tables\n\nThe code chunk below uses p_load() of the pacman package to check if all the packages are installed on the computer. If they are, they will then be loaded into the R environment.\n\n\nClick to show/hide the code\npacman::p_load(ggiraph, plotly, patchwork, DT, tidyverse)\n\n\n\n\n\nTo import the data “Exam_data.csv” into the R environment, read_csv() of the readr package is used, as seen in the code chunk below.\n\n\nCode\nexam_data <- read_csv(\"data/Exam_data.csv\")\n\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#tooltip-effect-with-tooltip-aestheitc",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#tooltip-effect-with-tooltip-aestheitc",
+    "title": "Hands-on Exercise 3",
+    "section": "Tooltip effect with tooltip aestheitc",
+    "text": "Tooltip effect with tooltip aestheitc\nThe code chunk below is used to plot an interactive statistical graph using the ggiraph package.\n\n\nCode\n# first plot the ggplot object using `geom_dotplot_interactive`\np <- ggplot(exam_data, aes(x = MATHS)) +\n  geom_dotplot_interactive(\n    aes(tooltip = ID),\n    stackgroups = TRUE,\n    binwidth = 1,\n    method = \"histodot\") +\n  scale_y_continuous(NULL, breaks = NULL)\n\n# use `girafe()` of ggiraph to generate an interactive svg object\ngirafe(\n  ggobj = p,\n  width_svg = 6,\n  height_svg = 6*0.618\n)\n\n\n\n\n\n\nHover over each data point to see the student’s ID"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#displaying-multiple-information-on-tooltip",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#displaying-multiple-information-on-tooltip",
+    "title": "Hands-on Exercise 3",
+    "section": "Displaying multiple information on tooltip",
+    "text": "Displaying multiple information on tooltip\n\n\nCode\n# customize the tooltip\nexam_data$tooltip <- c(paste0(\n  \"Name = \", exam_data$ID,\n  \"\\n Class = \", exam_data$CLASS))\n\n# plot the dotplot\np <- ggplot(exam_data, aes(x = MATHS)) +\n  geom_dotplot_interactive(\n    aes(tooltip = exam_data$tooltip),\n    stackgroups = TRUE,\n    binwidth = 1,\n    method = \"histodot\") +\n  scale_y_continuous(NULL, breaks = NULL)\n\n# use `girafe()` of ggiraph to generate an interactive svg object\ngirafe(\n  ggobj = p,\n  width_svg = 6,\n  height_svg = 6*0.618\n)\n\n\n\n\n\n\nHover over each data point to see the student’s ID and class."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#customising-tooltip-style",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#customising-tooltip-style",
+    "title": "Hands-on Exercise 3",
+    "section": "Customising Tooltip style",
+    "text": "Customising Tooltip style\nThe code chunk below uses opts_tooltip() to customise the tooltip\n\n\nCode\n# use CSS to modify tooltip appearance\ntooltip_css <- \"background-color:white; #<<\nfont-style:bold; color:black;\" #<< \n\n# plot the dotplot\np <- ggplot(exam_data, aes(x = MATHS)) +\n  geom_dotplot_interactive(\n    aes(tooltip = ID),\n    stackgroups = TRUE,\n    binwidth = 1,\n    method = \"histodot\") +\n  scale_y_continuous(NULL, breaks = NULL)\n\n# use `opts_tooltip` to change tooltip appearance\ngirafe(\n  ggobj = p,\n  width_svg = 6,\n  height_svg = 6*0.618,\n  options = list( #<<\n    opts_tooltip( #<<\n      css = tooltip_css)) #<<\n)\n\n\n\n\n\n\nData points now have a white background and black font"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#displaying-statistics-on-tooltip",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#displaying-statistics-on-tooltip",
+    "title": "Hands-on Exercise 3",
+    "section": "Displaying statistics on tooltip",
+    "text": "Displaying statistics on tooltip"
   }
 ]

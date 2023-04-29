@@ -2,3 +2,117 @@
 title: "Hands-on Exercise 3"
 author: "Lim Li Ying"
 ---
+
+# Getting Started
+
+## Installing and loading R packages
+
+For this exercise, besides `tidyverse`, four R packages will be used, namely `ggiraph`, `plotly`, `DT` and `patchwork`.
+
+-   `ggiraph`: for making `ggplot2` graphics interactive
+-   `plotly`: for plotting interactive statistical charts.
+-   `DT`: for creating data tables
+
+The code chunk below uses `p_load()` of the `pacman` package to check if all the packages are installed on the computer. If they are, they will then be loaded into the R environment.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+pacman::p_load(ggiraph, plotly, patchwork, DT, tidyverse)
+```
+
+## Importing the data
+
+To import the data *"Exam_data.csv"* into the R environment, `read_csv()` of the `readr` package is used, as seen in the code chunk below.
+
+```{r}
+exam_data <- read_csv("data/Exam_data.csv")
+```
+# Interactive data visualisation using `ggiraph`
+
+## Tooltip effect with tooltip aestheitc 
+
+The code chunk below is used to plot an interactive statistical graph using the `ggiraph` package. 
+
+```{r}
+# first plot the ggplot object using `geom_dotplot_interactive`
+p <- ggplot(exam_data, aes(x = MATHS)) +
+  geom_dotplot_interactive(
+    aes(tooltip = ID),
+    stackgroups = TRUE,
+    binwidth = 1,
+    method = "histodot") +
+  scale_y_continuous(NULL, breaks = NULL)
+
+# use `girafe()` of ggiraph to generate an interactive svg object
+girafe(
+  ggobj = p,
+  width_svg = 6,
+  height_svg = 6*0.618
+)
+```
+Hover over each data point to see the student's ID
+
+## Displaying multiple information on tooltip
+
+```{r}
+# customize the tooltip
+exam_data$tooltip <- c(paste0(
+  "Name = ", exam_data$ID,
+  "\n Class = ", exam_data$CLASS))
+
+# plot the dotplot
+p <- ggplot(exam_data, aes(x = MATHS)) +
+  geom_dotplot_interactive(
+    aes(tooltip = exam_data$tooltip),
+    stackgroups = TRUE,
+    binwidth = 1,
+    method = "histodot") +
+  scale_y_continuous(NULL, breaks = NULL)
+
+# use `girafe()` of ggiraph to generate an interactive svg object
+girafe(
+  ggobj = p,
+  width_svg = 6,
+  height_svg = 6*0.618
+)
+```
+
+Hover over each data point to see the student's ID and class.
+
+## Customising Tooltip style
+
+The code chunk below uses `opts_tooltip()` to customise the tooltip
+
+```{r}
+# use CSS to modify tooltip appearance
+tooltip_css <- "background-color:white; #<<
+font-style:bold; color:black;" #<< 
+
+# plot the dotplot
+p <- ggplot(exam_data, aes(x = MATHS)) +
+  geom_dotplot_interactive(
+    aes(tooltip = ID),
+    stackgroups = TRUE,
+    binwidth = 1,
+    method = "histodot") +
+  scale_y_continuous(NULL, breaks = NULL)
+
+# use `opts_tooltip` to change tooltip appearance
+girafe(
+  ggobj = p,
+  width_svg = 6,
+  height_svg = 6*0.618,
+  options = list( #<<
+    opts_tooltip( #<<
+      css = tooltip_css)) #<<
+)
+```
+Data points now have a white background and black font
+
+
+## Displaying statistics on tooltip
+
+
+
+
