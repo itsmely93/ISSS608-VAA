@@ -2,3 +2,255 @@
 title: "Hands-on Exercise 4"
 author: "Lim Li Ying"
 ---
+
+# *Visual Statistical Analysis with ggstatsplot*
+
+# Getting Started
+
+## Installing and loading R packages
+
+In this exercise, other than *tidyverse*, *ggstatsplot* will also be used. *ggstatsplot* is an extension of the *ggplot2* package and allows details from statistical tests to be added to the information-rich plots.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+pacman::p_load(tidyverse, ggstatsplot)
+```
+
+## Loading the data
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+exam_data <- read_csv("data/Exam_data.csv")
+exam_data
+```
+
+# One-sample test using `gghistostats()`
+
+The code chunk below uses `gghistostats()` to create a visual of a one-sample test on English scores.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+set.seed(1234)
+
+gghistostats(
+  data = exam_data,
+  x = ENGLISH,
+  type = "bayes",
+  test.value = 60,
+  xlab = "English scores"
+)
+```
+
+# Two-sample mean test using `ggbetweenstats()`
+
+The code chunk below uses `ggbetweenstats()` to create a visual of a two-sample mean test of Maths scores by gender.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggbetweenstats(
+  data = exam_data,
+  x = GENDER,
+  y = MATHS,
+  type = "np",
+  messages = FALSE
+)
+```
+
+::: callout-note
+There are 4 types of statistical approach:
+
+1.  `p` \<- parametric
+
+2.  `np` \<- nonparametric
+
+3.  `r` \<- robust
+
+4.  `b` \<- bayes
+:::
+
+# Oneway ANOVA test using `ggbetweenstats()`
+
+The code chunk below uses `ggbetweenstats()` to create a visual of a oneway ANOVA test of English scores by race.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggbetweenstats(
+  data = exam_data,
+  x = RACE,
+  y = ENGLISH,
+  type = "p",
+  mean.ci = TRUE,
+  pairwise.comparisons = TRUE,
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE
+)
+```
+
+::: callout-note
+For pairwise display,
+
+-   `s` \<- displays only significant pairwise comparisons
+
+-   `ns` \<- displays only non-significant pairwise comparisons
+
+-   `all` \<- displays all pairwise comparisons
+:::
+
+# Significant test of correlation using `ggscatterstats()`
+
+The code chunk below uses `ggscatterstats()` to create a visual of a Significant Test of Correlation between Maths and English scores.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggscatterstats(
+  data = exam_data,
+  x = MATHS,
+  y = ENGLISH,
+  marginal = FALSE
+)
+```
+
+# Significant test of association (dependence) using `ggbarstats()`
+
+Firstly, the Maths scores are binned into 4 groups using `cut()`.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+exam_data1 <- exam_data %>%
+  mutate(MATHS_bins =
+  cut(MATHS, breaks = c(0,60,75,85,100))
+)
+```
+
+The code chunk below uses `ggbarstats()` to create a visual of a Significant Test of Association between Maths scores and gender.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggbarstats(
+  data = exam_data1,
+  x = MATHS_bins,
+  y = GENDER
+)
+```
+
+# *Visualizing Models*
+
+# Getting Started
+
+## Installing and loading R packages
+
+The code chunk below shows the R packages to be installed and loaded into the R environment for this exercise.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+pacman::p_load(readxl, performance, parameters, see)
+```
+
+## Loading the data
+
+To import the excel worksheet *ToyotaCorolla.xls*, `read_xls()` of the *readxl* package is used, as seen in the code chunk below.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+car_resale <- read_xls("data/ToyotaCorolla.xls")
+car_resale
+```
+
+# Multiple linear regression modelling using `lm()`
+
+The following code chunk is uses `lm()` to build a multiple linear regression model.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+model <- lm(Price ~ Age_08_04 + Mfg_Year + KM + 
+              Weight + Guarantee_Period, data = car_resale)
+model
+```
+
+# Model diagnostics: checking for multicollinearity
+
+Multicollinearity can be checked using `check_collinearity()` of the *performance* package, as seen in the code chunk below.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+check_collinearity(model)
+```
+
+::: callout-note
+Variables with a Variance Inflation Factor (VIF) score of \>10 are considered to be highly correlated. In this case, age and manufacturing year have high correlation. Therefore one of the variables will need to be removed from subsequent models.
+:::
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+check_c <- check_collinearity(model)
+plot(check_c)
+```
+
+# Model diagnostic: checking normality assumption
+
+The normality assumption can be checked using `check_normality()` of the *performance* package, as seen in the code chunk below.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+# build another model after removing "Mfg_Year"
+model1 <- lm(Price ~ Age_08_04 + KM + 
+              Weight + Guarantee_Period, data = car_resale)
+check_n <- check_normality(model1)
+plot(check_n)
+```
+# Model diagnostic: checking for homogeneity of variances
+
+Homogeneity of variances can be checked using `check_heteroscedasticity()` of the *performance* package, as seen in the code chunk below.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+check_h <- check_heteroscedasticity(model1)
+plot(check_h)
+```
+
+# Model diagnostic: complete check
+
+We can also perform a complete check using `check_model()`.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+check_model(model1)
+```
+
+# Visualizing regression parameters using *see*
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+plot(parameters(model1))
+```
+
+# Visualizing regression parameters using `ggcoefstats()`
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+ggcoefstats(model1,
+            output = "plot")
+```
+
+
+
+

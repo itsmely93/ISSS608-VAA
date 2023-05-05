@@ -334,5 +334,33 @@
     "title": "Hands-on Exercise 3",
     "section": "Building an animated bubble plot using plot_ly()",
     "text": "Building an animated bubble plot using plot_ly()\n\n\nClick to show/hide the code\nbp <- globalPop %>%\n  plot_ly(x = ~Old, \n          y = ~Young, \n          size = ~Population, \n          color = ~Continent, \n          frame = ~Year, \n          text = ~Country, \n          hoverinfo = \"text\",\n          type = 'scatter',\n          mode = 'markers'\n          )\nbp"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#installing-and-loading-r-packages",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#installing-and-loading-r-packages",
+    "title": "Hands-on Exercise 4",
+    "section": "Installing and loading R packages",
+    "text": "Installing and loading R packages\nIn this exercise, other than tidyverse, ggstatsplot will also be used. ggstatsplot is an extension of the ggplot2 package and allows details from statistical tests to be added to the information-rich plots.\n\n\nClick to show/hide the code\npacman::p_load(tidyverse, ggstatsplot)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#loading-the-data",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#loading-the-data",
+    "title": "Hands-on Exercise 4",
+    "section": "Loading the data",
+    "text": "Loading the data\n\n\nClick to show/hide the code\nexam_data <- read_csv(\"data/Exam_data.csv\")\n\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\n\nClick to show/hide the code\nexam_data\n\n\n# A tibble: 322 × 7\n   ID         CLASS GENDER RACE    ENGLISH MATHS SCIENCE\n   <chr>      <chr> <chr>  <chr>     <dbl> <dbl>   <dbl>\n 1 Student321 3I    Male   Malay        21     9      15\n 2 Student305 3I    Female Malay        24    22      16\n 3 Student289 3H    Male   Chinese      26    16      16\n 4 Student227 3F    Male   Chinese      27    77      31\n 5 Student318 3I    Male   Malay        27    11      25\n 6 Student306 3I    Female Malay        31    16      16\n 7 Student313 3I    Male   Chinese      31    21      25\n 8 Student316 3I    Male   Malay        31    18      27\n 9 Student312 3I    Male   Malay        33    19      15\n10 Student297 3H    Male   Indian       34    49      37\n# ℹ 312 more rows"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#installing-and-loading-r-packages-1",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#installing-and-loading-r-packages-1",
+    "title": "Hands-on Exercise 4",
+    "section": "Installing and loading R packages",
+    "text": "Installing and loading R packages\nThe code chunk below shows the R packages to be installed and loaded into the R environment for this exercise.\n\n\nClick to show/hide the code\npacman::p_load(readxl, performance, parameters, see)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#loading-the-data-1",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#loading-the-data-1",
+    "title": "Hands-on Exercise 4",
+    "section": "Loading the data",
+    "text": "Loading the data\nTo import the excel worksheet ToyotaCorolla.xls, read_xls() of the readxl package is used, as seen in the code chunk below.\n\n\nClick to show/hide the code\ncar_resale <- read_xls(\"data/ToyotaCorolla.xls\")\ncar_resale\n\n\n# A tibble: 1,436 × 38\n      Id Model    Price Age_08_04 Mfg_Month Mfg_Year     KM Quarterly_Tax Weight\n   <dbl> <chr>    <dbl>     <dbl>     <dbl>    <dbl>  <dbl>         <dbl>  <dbl>\n 1    81 TOYOTA … 18950        25         8     2002  20019           100   1180\n 2     1 TOYOTA … 13500        23        10     2002  46986           210   1165\n 3     2 TOYOTA … 13750        23        10     2002  72937           210   1165\n 4     3  TOYOTA… 13950        24         9     2002  41711           210   1165\n 5     4 TOYOTA … 14950        26         7     2002  48000           210   1165\n 6     5 TOYOTA … 13750        30         3     2002  38500           210   1170\n 7     6 TOYOTA … 12950        32         1     2002  61000           210   1170\n 8     7  TOYOTA… 16900        27         6     2002  94612           210   1245\n 9     8 TOYOTA … 18600        30         3     2002  75889           210   1245\n10    44 TOYOTA … 16950        27         6     2002 110404           234   1255\n# ℹ 1,426 more rows\n# ℹ 29 more variables: Guarantee_Period <dbl>, HP_Bin <chr>, CC_bin <chr>,\n#   Doors <dbl>, Gears <dbl>, Cylinders <dbl>, Fuel_Type <chr>, Color <chr>,\n#   Met_Color <dbl>, Automatic <dbl>, Mfr_Guarantee <dbl>,\n#   BOVAG_Guarantee <dbl>, ABS <dbl>, Airbag_1 <dbl>, Airbag_2 <dbl>,\n#   Airco <dbl>, Automatic_airco <dbl>, Boardcomputer <dbl>, CD_Player <dbl>,\n#   Central_Lock <dbl>, Powered_Windows <dbl>, Power_Steering <dbl>, …"
   }
 ]
