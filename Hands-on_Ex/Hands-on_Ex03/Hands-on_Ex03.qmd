@@ -1,6 +1,8 @@
 ---
 title: "Hands-on Exercise 3"
 author: "Lim Li Ying"
+execute: 
+  warning: false
 ---
 
 # Getting Started
@@ -9,7 +11,7 @@ author: "Lim Li Ying"
 
 For this exercise, besides `tidyverse`, four R packages will be used, namely `ggiraph`, `plotly`, `DT` and `patchwork`.
 
--   `ggiraph`: for making `ggplot2` graphics interactive
+-   `ggiraph`: for making `ggplot2` graphics interactive.
 -   `plotly`: for plotting interactive statistical charts.
 -   `DT`: for creating data tables
 
@@ -132,6 +134,8 @@ Data points now have a white background and black font (black background and whi
 The code chunk below shows a more advanced way of customizing the tooltip.
 
 ```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
 # define a function to compute 90% coonfidence interval of the mean
 tooltip <- function(y, ymax, accuracy = 0.01) {
   mean <- scales::number(y, accuracy = accuracy)
@@ -162,6 +166,8 @@ Hover over the bars to see the mean scores.
 Another interactive feature of the `ggiraph` package is the *data_id* feature. The code chunk below shows an example of it.
 
 ```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
 p <- ggplot(exam_data, aes(x = MATHS)) +
   geom_dotplot_interactive(
     aes(data_id = CLASS),
@@ -186,6 +192,8 @@ Hovering over a data point will highly all data points in the same class.
 The code chunk below uses css codes to modify the highlighting effect.
 
 ```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
 p <- ggplot(exam_data, aes(x = MATHS)) +
   geom_dotplot_interactive(
     aes(data_id = CLASS),
@@ -210,6 +218,8 @@ girafe(
 The *onclick* argument provides hotlink interactivity on the web.
 
 ```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
 exam_data$onclick <- sprintf("window.open(\"%s%s\")",
 "https://www.moe.gov.sg/schoolfinder?journey=Primary%20school",
 as.character(exam_data$ID))
@@ -242,6 +252,8 @@ Coordinated multiple views can be created by combining interactive functions of 
 2.  Use the `patchwork` function of the *patchwork* package inside the `girafe()` function to create the interactive coordinated views.
 
 ```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
 p1 <- ggplot(data=exam_data, 
        aes(x = MATHS)) +
   geom_dotplot_interactive(              
@@ -283,6 +295,8 @@ There are two ways to create interactive graphs using `plotly`, namely `plot_ly(
 The code chunk below shows an example of creating a basic interactive scatter plot using `plot_ly()`.
 
 ```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
 plot_ly(exam_data, 
         x = ~MATHS,
         y = ~ENGLISH)
@@ -293,6 +307,8 @@ plot_ly(exam_data,
 In the code chunk below, the *color* argument is mapped to a qualitative visual variable (in this example, the visual variable is the RACE).
 
 ```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
 plot_ly(exam_data, 
         x = ~MATHS,
         y = ~ENGLISH,
@@ -304,6 +320,8 @@ plot_ly(exam_data,
 The code chunk below shows an example of creating a basic interactive scatter plot using `ggplotly()`.
 
 ```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
 p <- ggplot(exam_data, 
             aes(x = MATHS,
                 y = ENGLISH)) +
@@ -328,6 +346,8 @@ There are three steps involved in the creation of coordinated multiple views wit
 3.  `subplot()` function of the *plotly* package is used to place the plots side-by-side.
 
 ```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
 d <- highlight_key(exam_data)
 p1 <- ggplot(data=d, 
             aes(x = MATHS,
@@ -353,12 +373,16 @@ subplot(ggplotly(p1),
 The code chunk below is an example of creating of data tables.
 
 ```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
 DT::datatable(exam_data, class = "compact")
 ```
 
 ## Linked brushing using *crosstalk* method
 
 ```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
 d <- highlight_key(exam_data) 
 p <- ggplot(d, 
             aes(ENGLISH, 
@@ -374,4 +398,8 @@ crosstalk::bscols(gg,
                   DT::datatable(d), 
                   widths = 5)  
 ```
+::: callout-note
 
+Selecting one or multiple rows from the data table will highlight the selection on the scatter plot
+
+:::

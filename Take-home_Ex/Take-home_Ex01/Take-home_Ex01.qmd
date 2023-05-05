@@ -1,0 +1,131 @@
+---
+title: "Take-home Exercise 1"
+author: "Lim Li Ying"
+date: "2 May 2023"
+edit: visual
+execute: 
+  warning: false
+---
+
+# 1. The Task
+
+The objective of this exercise is to reveal the demographic and financial characteristics of the city of Engagement, using appropriate static and interactive statistical graphics methods.
+
+This exercise requires a user-friendly and interactive solution that helps city managers and planners to explore the complex data in an engaging way and reveal hidden patterns.
+
+# 2. The Data
+
+There are two data sets used in this study, namely *Participants.csv* and *FinancialJournal.csv*.
+
+*Participants.csv* consists of 1011 rows and 7 columns, and contains demographic information about the residents of the city of Engagement, as seen in the following table.
+
+| S/N | Columns        | Description                                                                           |
+|---------------|---------------|-------------------------------------------|
+| 1   | participantID  | The unique ID that is assigned to each participant.                                   |
+| 2   | householdSize  | The number of people living in the participant's household.                           |
+| 3   | haveKids       | Whether there are any children living in the participant's household.                 |
+| 4   | age            | The age of the participant at the start of the study.                                 |
+| 5   | educationLevel | The education level of the participant.                                               |
+| 6   | interestGroup  | The participant's primary interest group, represented by the letters A-J.             |
+| 7   | joviality      | The participant's overall happiness level at the start of the study ranging from 0-1. |
+
+*FinancialJournal.csv* has 1513636 rows and 4 columns, and consists of information pertaining to the participant's financial transactions, as seen in the following table.
+
+| S/N | Columns       | Description                                                         |
+|---------------|---------------|-------------------------------------------|
+| 1   | participantID | The financial transaction of the participant with the specified ID. |
+| 2   | timestamp     | The date and time in which the transaction was logged.              |
+| 3   | category      | The category of the expense.                                        |
+| 4   | amount        | The financial transaction amount.                                   |
+
+# 3. Data Preparation
+
+## 3.1 Installing and loading of R packages
+
+In this exercise, the following R packages will be used:
+
+1.  `tidyverse`:
+
+2.  `ggiraph`: for making `ggplot2` graphics interactive
+
+3.  `plotly`: for plotting interactive statistical charts.
+
+4.  `patchwork`:
+
+The code chunk below uses `p_load()` of the `pacman` package to check if all the packages are installed on the computer. If they are, they will then be loaded into the R environment.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+pacman::p_load(ggiraph, plotly, patchwork, DT, tidyverse, skimr)
+```
+
+## 3.2 Importing the data sets
+
+To import the data *"Participants.csv"* and *"FinancialJournal.csv"* into the R environment, `read_csv()` of the `readr` package is used, as seen in the code chunks below.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+participants <- read_csv("data/Participants.csv")
+```
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+fin_journal <- read_csv("data/FinancialJournal.csv")
+```
+
+## 3.3 Data Wrangling
+
+### 3.3.1 Examining the data sets
+
+Firstly, the head of both data sets are acquired and examined.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+head(participants)
+```
+
+**Issues:**
+
+1.  The variables **participantID** and **householdSize** are currently formatted as `<dbl>`. As these variables are categorical in nature, they will need to be converted into `<fct>` format.
+
+2.  Likewise, the variable **interestGroup** is also categorical, and will thus need to be converted from `<chr>` to `<fct>` format.
+
+3.  **Age** is currently formatted as `<dbl>` and will need to be reformatted into `<int>` format.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+head(fin_journal)
+```
+
+**Issues:**
+
+1.  The **timestamp** variable is in "YYYY-MM-DD HH:MM:SS" format. The variable will need to be split into new variables namely **year**, **month**, **day** and **time**, so as to facilitate data analysis.
+
+2.  The variable **participantID**will need to be reformatted from `<dbl>` to `<fct>`.
+
+### 3.3.2 Checking for missing values
+
+`is.na()` function is used to check for any missing values in both data sets. As seen from the results below, there are no missing values present.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+sapply(participants, function(x) sum(is.na(x)))
+```
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+sapply(fin_journal, function(x) sum(is.na(x)))
+```
+
+### 3.3.3 Reformatting of variables
+
+-   
+
+# 4. Data Visualization
