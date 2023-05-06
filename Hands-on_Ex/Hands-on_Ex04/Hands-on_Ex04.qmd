@@ -44,6 +44,10 @@ gghistostats(
 )
 ```
 
+::: callout-note
+Set seed is important especially when doing variance statistics in order to ensure reproducibility.
+:::
+
 # Two-sample mean test using `ggbetweenstats()`
 
 The code chunk below uses `ggbetweenstats()` to create a visual of a two-sample mean test of Maths scores by gender.
@@ -213,6 +217,7 @@ model1 <- lm(Price ~ Age_08_04 + KM +
 check_n <- check_normality(model1)
 plot(check_n)
 ```
+
 # Model diagnostic: checking for homogeneity of variances
 
 Homogeneity of variances can be checked using `check_heteroscedasticity()` of the *performance* package, as seen in the code chunk below.
@@ -250,7 +255,3 @@ plot(parameters(model1))
 ggcoefstats(model1,
             output = "plot")
 ```
-
-
-
-
