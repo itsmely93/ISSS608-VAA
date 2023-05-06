@@ -20,7 +20,7 @@ There are two data sets used in this study, namely *Participants.csv* and *Finan
 *Participants.csv* consists of 1011 rows and 7 columns, and contains demographic information about the residents of the city of Engagement, as seen in the following table.
 
 | S/N | Columns        | Description                                                                           |
-|---------------|---------------|-------------------------------------------|
+|----------------|----------------|---------------------------------------|
 | 1   | participantID  | The unique ID that is assigned to each participant.                                   |
 | 2   | householdSize  | The number of people living in the participant's household.                           |
 | 3   | haveKids       | Whether there are any children living in the participant's household.                 |
@@ -32,7 +32,7 @@ There are two data sets used in this study, namely *Participants.csv* and *Finan
 *FinancialJournal.csv* has 1513636 rows and 4 columns, and consists of information pertaining to the participant's financial transactions, as seen in the following table.
 
 | S/N | Columns       | Description                                                         |
-|---------------|---------------|-------------------------------------------|
+|----------------|----------------|---------------------------------------|
 | 1   | participantID | The financial transaction of the participant with the specified ID. |
 | 2   | timestamp     | The date and time in which the transaction was logged.              |
 | 3   | category      | The category of the expense.                                        |
@@ -99,7 +99,7 @@ head(participants)
 ```{r}
 #| code-fold: show
 #| code-summary: "Click to show/hide the code"
-head(fin_journal)
+fin_journal
 ```
 
 **Issues:**
@@ -123,6 +123,18 @@ sapply(participants, function(x) sum(is.na(x)))
 #| code-summary: "Click to show/hide the code"
 sapply(fin_journal, function(x) sum(is.na(x)))
 ```
+
+### Identify and remove duplicate rows
+
+```{r}
+fin_journal <- unique(fin_journal)
+fin_journal
+```
+
+make educationlevel a factor, sort it.
+follow the type on the take-home ex instructions
+
+make use dplyr, pivoting. make each category a column for fin_journal (can refer to piazza)
 
 ### 3.3.3 Reformatting of variables
 
