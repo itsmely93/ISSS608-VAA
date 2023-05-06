@@ -1,0 +1,108 @@
+---
+title: "In-class Exercise 4"
+author: "Lim Li Ying"
+date: "6 May 2023"
+date-modified: "`r Sys.Date()`"
+edit: visual
+execute: 
+  echo: true
+  eval: true
+  warning: false
+---
+
+# Getting Started
+
+## Installing and loading R packages
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+pacman::p_load(rstatix, gt, patchwork, tidyverse)
+```
+
+## Loading the data
+
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+exam_data <- read_csv("data/Exam_data.csv")
+```
+```{r}
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+exam_data
+```
+
+#  Plotting the Q-Q plot
+
+::: panel-tabset
+
+## The plot
+```{r}
+#| echo: false
+#| fig-width: 8
+#| fig-height: 4
+
+ggplot(exam_data, aes(sample = ENGLISH)) +
+  stat_qq() +
+  stat_qq_line(color = "red", linewidth = 1)
+```
+
+## The code chunk
+
+```{r}
+#| eval: false
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+
+ggplot(exam_data, aes(sample = ENGLISH)) +
+  stat_qq() +
+  stat_qq_line(color = "red", linewidth = 1)
+```
+:::
+
+::: callout-note
+As the points deviate slightly from the diagonal line, it is indicative that the data set DOES NOT conform with normal distribution.
+:::
+
+
+::: panel-tabset
+## The plot
+
+```{r}
+#| echo: false
+qq <- ggplot(exam_data, aes(sample= ENGLISH)) +
+  stat_qq() +
+  stat_qq_line(color = "red")
+
+sw_t <- exam_data %>%
+  shapiro_test(ENGLISH) %>%
+  gt()
+
+tmp <- tempfile(fileext = '.png')
+gtsave(sw_t, tmp)
+table_png <- png::readPNG(tmp, native = TRUE)
+
+qq + table_png
+```
+## The code chunk
+
+```{r}
+#| eval: false
+#| code-fold: show
+#| code-summary: "Click to show/hide the code"
+qq <- ggplot(exam_data, aes(sample= ENGLISH)) +
+  stat_qq() +
+  stat_qq_line(color = "red")
+
+sw_t <- exam_data %>%
+  shapiro_test(ENGLISH) %>%
+  gt()
+
+tmp <- tempfile(fileext = '.png')
+gtsave(sw_t, tmp)
+table_png <- png::readPNG(tmp, native = TRUE)
+
+qq + table_png
+```
+:::
