@@ -7,20 +7,20 @@ execute:
   warning: false
 ---
 
-# 1. The Task
+# 1 The Task
 
 The objective of this exercise is to reveal the demographic and financial characteristics of the city of Engagement, using appropriate static and interactive statistical graphics methods.
 
 This exercise requires a user-friendly and interactive solution that helps city managers and planners to explore the complex data in an engaging way and reveal hidden patterns.
 
-# 2. The Data
+# 2 The Data
 
 There are two data sets used in this study, namely *Participants.csv* and *FinancialJournal.csv*.
 
 *Participants.csv* consists of 1011 rows and 7 columns, and contains demographic information about the residents of the city of Engagement, as seen in the following table.
 
 | S/N | Columns        | Description                                                                           |
-|----------------|----------------|---------------------------------------|
+|-------------------|-------------------|----------------------------------|
 | 1   | participantID  | The unique ID that is assigned to each participant.                                   |
 | 2   | householdSize  | The number of people living in the participant's household.                           |
 | 3   | haveKids       | Whether there are any children living in the participant's household.                 |
@@ -29,35 +29,35 @@ There are two data sets used in this study, namely *Participants.csv* and *Finan
 | 6   | interestGroup  | The participant's primary interest group, represented by the letters A-J.             |
 | 7   | joviality      | The participant's overall happiness level at the start of the study ranging from 0-1. |
 
-*FinancialJournal.csv* has 1513636 rows and 4 columns, and consists of information pertaining to the participant's financial transactions, as seen in the following table.
+*FinancialJournal.csv* has 1,513,636 rows and 4 columns, and consists of information pertaining to the participant's financial transactions, as seen in the following table.
 
 | S/N | Columns       | Description                                                         |
-|----------------|----------------|---------------------------------------|
+|-------------------|-------------------|----------------------------------|
 | 1   | participantID | The financial transaction of the participant with the specified ID. |
 | 2   | timestamp     | The date and time in which the transaction was logged.              |
 | 3   | category      | The category of the expense.                                        |
 | 4   | amount        | The financial transaction amount.                                   |
 
-# 3. Data Preparation
+# 3 Data Preparation
 
 ## 3.1 Installing and loading of R packages
 
 In this exercise, the following R packages will be used:
 
-1.  `tidyverse`:
+1.  `tidyverse`: for data cleaning and manipulation.
 
-2.  `ggiraph`: for making `ggplot2` graphics interactive
+2.  `ggiraph`: for making `ggplot2` graphics interactive.
 
 3.  `plotly`: for plotting interactive statistical charts.
 
 4.  `patchwork`:
 
-The code chunk below uses `p_load()` of the `pacman` package to check if all the packages are installed on the computer. If they are, they will then be loaded into the R environment.
+5.  `knitr`: for generating a simple table using the `kable()` function
+
+The code chunk below uses `p_load()` of the `pacman` package to check if all the packages are installed. If they are, they will then be loaded into the R environment.
 
 ```{r}
-#| code-fold: show
-#| code-summary: "Click to show/hide the code"
-pacman::p_load(ggiraph, plotly, patchwork, DT, tidyverse, skimr)
+pacman::p_load(ggiraph, plotly, patchwork, DT, tidyverse, skimr, knitr, ggstatsplot, ggdist)
 ```
 
 ## 3.2 Importing the data sets
@@ -65,79 +65,298 @@ pacman::p_load(ggiraph, plotly, patchwork, DT, tidyverse, skimr)
 To import the data *"Participants.csv"* and *"FinancialJournal.csv"* into the R environment, `read_csv()` of the `readr` package is used, as seen in the code chunks below.
 
 ```{r}
-#| code-fold: show
-#| code-summary: "Click to show/hide the code"
 participants <- read_csv("data/Participants.csv")
 ```
 
 ```{r}
-#| code-fold: show
-#| code-summary: "Click to show/hide the code"
 fin_journal <- read_csv("data/FinancialJournal.csv")
 ```
 
-## 3.3 Data Wrangling
+## 3.3 Data wrangling
 
-### 3.3.1 Examining the data sets
+### 3.3.1 Reformatting of variables
 
-Firstly, the head of both data sets are acquired and examined.
+Firstly, we will examine the *participants* data set.
 
 ```{r}
-#| code-fold: show
-#| code-summary: "Click to show/hide the code"
 head(participants)
 ```
 
 **Issues:**
 
-1.  The variables **participantID** and **householdSize** are currently formatted as `<dbl>`. As these variables are categorical in nature, they will need to be converted into `<fct>` format.
+1.  The variables *participantID*, *householdSize* and *age* are currently formatted as `<dbl>`. These variables will have to be converted into `<int>` format.
 
-2.  Likewise, the variable **interestGroup** is also categorical, and will thus need to be converted from `<chr>` to `<fct>` format.
+2.  Likewise, the variable *educationLevel* will need to be converted from `<chr>` to `<fct>` format.
 
-3.  **Age** is currently formatted as `<dbl>` and will need to be reformatted into `<int>` format.
+The aforementioned variables are reformatted into the correct type, as seen in the code chunk below.
 
 ```{r}
-#| code-fold: show
-#| code-summary: "Click to show/hide the code"
+participants <- participants %>%
+  
+  # convert 'participantId', 'householdSize' and 'age' into <int> 
+  mutate_at(vars('participantId', 'householdSize', 'age'), as.integer) %>%
+  
+  # convert 'educationLevel' to <fct>
+  mutate_at(vars('educationLevel'), as.factor) %>% 
+  
+  # sort 'educationLevel' in order
+  mutate(educationLevel = factor(educationLevel, levels = c("Low", "HighSchoolOrCollege", "Bachelors", "Graduate"))) 
+
+participants
+```
+
+Next, we will examine the *fin_journal* data set.
+
+```{r}
 fin_journal
 ```
 
 **Issues:**
 
-1.  The **timestamp** variable is in "YYYY-MM-DD HH:MM:SS" format. The variable will need to be split into new variables namely **year**, **month**, **day** and **time**, so as to facilitate data analysis.
+1.  The *timestamp* variable is in "YYYY-MM-DD HH:MM:SS" format. A new variable *yearmon* in "YYYY-MM" format will be created to facilitate in data analysis later on.
 
-2.  The variable **participantID**will need to be reformatted from `<dbl>` to `<fct>`.
+2.  The variable *participantID* will need to be reformatted from `<dbl>` to `<int>`.
+
+The aforementioned issues are addressed in the code chunk below.
+
+```{r}
+fin_journal <- fin_journal %>%
+  
+  # convert 'participantId' to <int>
+  mutate_at(vars('participantId'), as.integer) %>%
+  
+  # create a new 'yearmon' column
+  mutate(yearmon = format(as.Date(timestamp), '%Y-%m'))
+
+fin_journal
+```
 
 ### 3.3.2 Checking for missing values
 
 `is.na()` function is used to check for any missing values in both data sets. As seen from the results below, there are no missing values present.
 
 ```{r}
-#| code-fold: show
-#| code-summary: "Click to show/hide the code"
 sapply(participants, function(x) sum(is.na(x)))
 ```
 
 ```{r}
-#| code-fold: show
-#| code-summary: "Click to show/hide the code"
 sapply(fin_journal, function(x) sum(is.na(x)))
 ```
 
-### Identify and remove duplicate rows
+### 3.3.3 Checking and removing of duplicate rows
+
+We can use the `unique()` function to retain rows that are distinct (i.e remove all duplicate rows).
+
+As seen in the table below, there are now 1,512,523 rows in the data set *fin_journal*, meaning 1,113 duplicate rows were removed from the data set.
 
 ```{r}
 fin_journal <- unique(fin_journal)
 fin_journal
 ```
 
-make educationlevel a factor, sort it.
-follow the type on the take-home ex instructions
+The same check is done on *participants*, and as seen from the table below, there are no duplicate rows to be removed.
 
-make use dplyr, pivoting. make each category a column for fin_journal (can refer to piazza)
+```{r}
+unique(participants)
+```
 
-### 3.3.3 Reformatting of variables
+### 3.3.4 Converting and rounding *amount* values
 
--   
+To facilitate data visualization, all values will be transformed into their absolute values and rounded to two decimal places, keeping in line with the format for currency.
 
-# 4. Data Visualization
+```{r}
+# convert all values *amount* to absolute values
+fin_journal$amount <- abs(fin_journal$amount)
+
+# round all values to 2 decimal places
+fin_journal$amount <- round(fin_journal$amount, digits = 2)
+```
+
+### 3.3.5 Summation of *category* amounts
+
+Since there are several transactions of the same category for each participant within a given month, we will employ the `group_by()` and `summarise()` functions to combine all transactions of the same category by adding them up.
+
+```{r}
+fin_journal <- fin_journal %>%
+  group_by(participantId, yearmon, category) %>% 
+  summarise(amount = sum(amount))
+```
+
+### 3.3.6 Pivoting *category* column in *fin_journal*
+
+The pivot_wider() function is used to generate separate columns for each transaction category.
+
+In addition, any missing 'NaN' values are substituted with 0 to indicate that the participant had no transactions of that specific category in that particular month and year.
+
+```{r}
+fin_journal <- fin_journal %>%
+  
+  # pivoting the category column
+  pivot_wider(names_from = category,
+              values_from = amount) %>%
+  
+  # fill missing values with 0
+  mutate_all(~replace(., is.na(.), 0))
+```
+
+### 3.3.7 Creating new variables *total_expenses*, *total_earnings* and *total_savings*
+
+```{r}
+fin_journal <- fin_journal %>%
+  
+  # create new column for total expenses
+  mutate(total_expenses = sum(Education, Food, Recreation, Shelter)) %>%
+  
+  # create new column for total earnings
+  mutate(total_earnings = sum(Wage, RentAdjustment)) %>%  
+
+  # create new column for total earnings
+  mutate(total_savings = (total_earnings - total_expenses))
+```
+
+### 3.3.8 Displaying of final cleaned data sets
+
+Using the `kable()` function of the `knitr` package, the final cleaned data sets are displayed as follows:
+
+```{r}
+kable(head(participants), align = "c")
+```
+
+```{r}
+kable(head(fin_journal), align = "c")
+```
+
+# 4 Data Visualization
+
+## 4.1 Exploratory Data Analysis
+
+### 4.1.1 Distribution of participants' age
+
+```{r}
+age <- plot_ly(participants, x = ~age, type = "histogram")
+
+age <- age %>% 
+  layout(title = 'Distribution of participant age',
+         xaxis = list(title = 'Age',
+                      zeroline = TRUE,
+                      range = c(15, 65)),
+         yaxis = list(title = 'Count'))
+
+age
+```
+
+### 4.1.1 Proportion of participants based on
+
+::: panel-tabset
+## Education Level
+
+The code
+
+```{r}
+#| eval: false
+edu_count = count(participants, educationLevel)
+
+edu_prop <- plot_ly(participants, labels = ~edu_count$educationLevel, values = ~edu_count$n, type = 'pie',
+        textposition = 'inside',
+        textinfo = 'label+percent',
+        showlegend = FALSE) %>%
+  layout(title = 'Proportion of participants by education level')
+
+# edu_prop <- edu_prop %>% 
+#   layout(title = 'Proportion of participants by education level')
+
+edu_prop
+```
+
+The plot
+
+```{r}
+#| echo: false
+edu_count = count(participants, educationLevel)
+
+edu_prop <- plot_ly(participants, labels = ~edu_count$educationLevel, values = ~edu_count$n, type = 'pie',
+        textposition = 'inside',
+        textinfo = 'label+percent',
+        hoverinfo = 'text',
+        text = ~paste(edu_count$n, 'participants'),
+        showlegend = FALSE) %>%
+  layout(title = 'Proportion of participants by education level')
+
+edu_prop
+```
+
+## Household size
+
+The code
+
+```{r}
+#| eval: false
+hhld_count = count(participants, householdSize)
+
+hhld_prop <- plot_ly(participants, labels = ~hhld_count$householdSize, values = ~hhld_count$n, type = 'pie',
+        textposition = 'inside',
+        textinfo = 'label+percent',
+        hoverinfo = 'text',
+        text = ~paste('Number of households =', hhld_count$n),
+        showlegend = FALSE) %>%
+  layout(title = 'Proportion of participants by household size')
+
+hhld_prop
+```
+
+The plot
+
+```{r}
+#| echo: false
+hhld_count = count(participants, householdSize)
+
+hhld_prop <- plot_ly(participants, labels = ~hhld_count$householdSize, values = ~hhld_count$n, type = 'pie',
+        textposition = 'inside',
+        textinfo = 'label+percent',
+        showlegend = FALSE) %>%
+  layout(title = 'Proportion of participants by household size')
+
+hhld_prop
+```
+:::
+
+**Insights:**
+
+1.  Most participants in the city of Engagement are highly educated, with only 8.31% of the participants surveyed having a low level of education.
+
+2.  
+
+## 4.1 Education level and joviality?
+
+```{r}
+education <- plot_ly(
+  data = participants,
+  y = ~joviality,
+  color = ~educationLevel,
+  type = "box",
+  showlegend = FALSE,
+  boxmean = TRUE,
+  notched = TRUE) %>% 
+  
+  layout(title = list(text = "Boxplot of joviality by education level"),
+         xaxis = list(title = list(text ='Education Level')),
+         yaxis = list(title = list(text ='Joviality')))
+
+education
+```
+
+**Insights:**
+
+1.  All participants seem to have similar joviality scores, regardless of education level.
+
+2.  Slight increases in median and mean joviality as education level increases.
+
+```{r}
+ggscatterstats(
+  data = participants,
+  x = age,
+  y = joviality, 
+  bins = 20) +
+  theme_minimal()
+  
+```

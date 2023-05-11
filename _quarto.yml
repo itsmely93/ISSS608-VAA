@@ -40,7 +40,8 @@ format:
     theme: vapor
     css: styles.css
     toc: true
-    code-fold: true
+    code-fold: show
+    code-summary: "Click to show/hide the code"
     code-tools: true
 
 editor: visual

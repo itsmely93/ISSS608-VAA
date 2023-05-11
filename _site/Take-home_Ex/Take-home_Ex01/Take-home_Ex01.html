@@ -123,6 +123,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-submit-button-title": "Submit"
   }
 }</script>
+<script src="../../site_libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<script src="../../site_libs/plotly-binding-4.10.1/plotly.js"></script>
+<script src="../../site_libs/typedarray-0.1/typedarray.min.js"></script>
+<script src="../../site_libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="../../site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet">
+<script src="../../site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="../../site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="../../site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
 
 
 <link rel="stylesheet" href="../../styles.css">
@@ -222,21 +230,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#the-task" id="toc-the-task" class="nav-link active" data-scroll-target="#the-task">1. The Task</a></li>
-  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data">2. The Data</a></li>
-  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">3. Data Preparation</a>
+  <li><a href="#the-task" id="toc-the-task" class="nav-link active" data-scroll-target="#the-task">1 The Task</a></li>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data">2 The Data</a></li>
+  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">3 Data Preparation</a>
   <ul class="collapse">
   <li><a href="#installing-and-loading-of-r-packages" id="toc-installing-and-loading-of-r-packages" class="nav-link" data-scroll-target="#installing-and-loading-of-r-packages">3.1 Installing and loading of R packages</a></li>
   <li><a href="#importing-the-data-sets" id="toc-importing-the-data-sets" class="nav-link" data-scroll-target="#importing-the-data-sets">3.2 Importing the data sets</a></li>
-  <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling">3.3 Data Wrangling</a>
+  <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling">3.3 Data wrangling</a>
   <ul class="collapse">
-  <li><a href="#examining-the-data-sets" id="toc-examining-the-data-sets" class="nav-link" data-scroll-target="#examining-the-data-sets">3.3.1 Examining the data sets</a></li>
+  <li><a href="#reformatting-of-variables" id="toc-reformatting-of-variables" class="nav-link" data-scroll-target="#reformatting-of-variables">3.3.1 Reformatting of variables</a></li>
   <li><a href="#checking-for-missing-values" id="toc-checking-for-missing-values" class="nav-link" data-scroll-target="#checking-for-missing-values">3.3.2 Checking for missing values</a></li>
-  <li><a href="#identify-and-remove-duplicate-rows" id="toc-identify-and-remove-duplicate-rows" class="nav-link" data-scroll-target="#identify-and-remove-duplicate-rows">Identify and remove duplicate rows</a></li>
-  <li><a href="#reformatting-of-variables" id="toc-reformatting-of-variables" class="nav-link" data-scroll-target="#reformatting-of-variables">3.3.3 Reformatting of variables</a></li>
+  <li><a href="#checking-and-removing-of-duplicate-rows" id="toc-checking-and-removing-of-duplicate-rows" class="nav-link" data-scroll-target="#checking-and-removing-of-duplicate-rows">3.3.3 Checking and removing of duplicate rows</a></li>
+  <li><a href="#converting-and-rounding-amount-values" id="toc-converting-and-rounding-amount-values" class="nav-link" data-scroll-target="#converting-and-rounding-amount-values">3.3.4 Converting and rounding <em>amount</em> values</a></li>
+  <li><a href="#summation-of-category-amounts" id="toc-summation-of-category-amounts" class="nav-link" data-scroll-target="#summation-of-category-amounts">3.3.5 Summation of <em>category</em> amounts</a></li>
+  <li><a href="#pivoting-category-column-in-fin_journal" id="toc-pivoting-category-column-in-fin_journal" class="nav-link" data-scroll-target="#pivoting-category-column-in-fin_journal">3.3.6 Pivoting <em>category</em> column in <em>fin_journal</em></a></li>
+  <li><a href="#creating-new-variables-total_expenses-total_earnings-and-total_savings" id="toc-creating-new-variables-total_expenses-total_earnings-and-total_savings" class="nav-link" data-scroll-target="#creating-new-variables-total_expenses-total_earnings-and-total_savings">3.3.7 Creating new variables <em>total_expenses</em>, <em>total_earnings</em> and <em>total_savings</em></a></li>
+  <li><a href="#displaying-of-final-cleaned-data-sets" id="toc-displaying-of-final-cleaned-data-sets" class="nav-link" data-scroll-target="#displaying-of-final-cleaned-data-sets">3.3.8 Displaying of final cleaned data sets</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#data-visualization" id="toc-data-visualization" class="nav-link" data-scroll-target="#data-visualization">4. Data Visualization</a></li>
+  <li><a href="#data-visualization" id="toc-data-visualization" class="nav-link" data-scroll-target="#data-visualization">4 Data Visualization</a>
+  <ul class="collapse">
+  <li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link" data-scroll-target="#exploratory-data-analysis">4.1 Exploratory Data Analysis</a>
+  <ul class="collapse">
+  <li><a href="#distribution-of-participants-age" id="toc-distribution-of-participants-age" class="nav-link" data-scroll-target="#distribution-of-participants-age">4.1.1 Distribution of participants’ age</a></li>
+  <li><a href="#proportion-of-participants-based-on" id="toc-proportion-of-participants-based-on" class="nav-link" data-scroll-target="#proportion-of-participants-based-on">4.1.1 Proportion of participants based on</a></li>
+  </ul></li>
+  <li><a href="#education-level-and-joviality" id="toc-education-level-and-joviality" class="nav-link" data-scroll-target="#education-level-and-joviality">4.1 Education level and joviality?</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -273,19 +293,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </header>
 
 <section id="the-task" class="level1">
-<h1>1. The Task</h1>
+<h1>1 The Task</h1>
 <p>The objective of this exercise is to reveal the demographic and financial characteristics of the city of Engagement, using appropriate static and interactive statistical graphics methods.</p>
 <p>This exercise requires a user-friendly and interactive solution that helps city managers and planners to explore the complex data in an engaging way and reveal hidden patterns.</p>
 </section>
 <section id="the-data" class="level1">
-<h1>2. The Data</h1>
+<h1>2 The Data</h1>
 <p>There are two data sets used in this study, namely <em>Participants.csv</em> and <em>FinancialJournal.csv</em>.</p>
 <p><em>Participants.csv</em> consists of 1011 rows and 7 columns, and contains demographic information about the residents of the city of Engagement, as seen in the following table.</p>
 <table class="table">
 <colgroup>
-<col style="width: 22%">
-<col style="width: 22%">
-<col style="width: 54%">
+<col style="width: 26%">
+<col style="width: 26%">
+<col style="width: 47%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -332,12 +352,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-<p><em>FinancialJournal.csv</em> has 1513636 rows and 4 columns, and consists of information pertaining to the participant’s financial transactions, as seen in the following table.</p>
+<p><em>FinancialJournal.csv</em> has 1,513,636 rows and 4 columns, and consists of information pertaining to the participant’s financial transactions, as seen in the following table.</p>
 <table class="table">
 <colgroup>
-<col style="width: 22%">
-<col style="width: 22%">
-<col style="width: 54%">
+<col style="width: 26%">
+<col style="width: 26%">
+<col style="width: 47%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -371,21 +391,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </table>
 </section>
 <section id="data-preparation" class="level1">
-<h1>3. Data Preparation</h1>
+<h1>3 Data Preparation</h1>
 <section id="installing-and-loading-of-r-packages" class="level2">
 <h2 class="anchored" data-anchor-id="installing-and-loading-of-r-packages">3.1 Installing and loading of R packages</h2>
 <p>In this exercise, the following R packages will be used:</p>
 <ol type="1">
-<li><p><code>tidyverse</code>:</p></li>
-<li><p><code>ggiraph</code>: for making <code>ggplot2</code> graphics interactive</p></li>
+<li><p><code>tidyverse</code>: for data cleaning and manipulation.</p></li>
+<li><p><code>ggiraph</code>: for making <code>ggplot2</code> graphics interactive.</p></li>
 <li><p><code>plotly</code>: for plotting interactive statistical charts.</p></li>
 <li><p><code>patchwork</code>:</p></li>
+<li><p><code>knitr</code>: for generating a simple table using the <code>kable()</code> function</p></li>
 </ol>
-<p>The code chunk below uses <code>p_load()</code> of the <code>pacman</code> package to check if all the packages are installed on the computer. If they are, they will then be loaded into the R environment.</p>
+<p>The code chunk below uses <code>p_load()</code> of the <code>pacman</code> package to check if all the packages are installed. If they are, they will then be loaded into the R environment.</p>
 <div class="cell">
 <details open="">
 <summary>Click to show/hide the code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggiraph, plotly, patchwork, DT, tidyverse, skimr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggiraph, plotly, patchwork, DT, tidyverse, skimr, knitr, ggstatsplot, ggdist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -406,10 +427,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </section>
 <section id="data-wrangling" class="level2">
-<h2 class="anchored" data-anchor-id="data-wrangling">3.3 Data Wrangling</h2>
-<section id="examining-the-data-sets" class="level3">
-<h3 class="anchored" data-anchor-id="examining-the-data-sets">3.3.1 Examining the data sets</h3>
-<p>Firstly, the head of both data sets are acquired and examined.</p>
+<h2 class="anchored" data-anchor-id="data-wrangling">3.3 Data wrangling</h2>
+<section id="reformatting-of-variables" class="level3">
+<h3 class="anchored" data-anchor-id="reformatting-of-variables">3.3.1 Reformatting of variables</h3>
+<p>Firstly, we will examine the <em>participants</em> data set.</p>
 <div class="cell">
 <details open="">
 <summary>Click to show/hide the code</summary>
@@ -430,14 +451,49 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p><strong>Issues:</strong></p>
 <ol type="1">
-<li><p>The variables <strong>participantID</strong> and <strong>householdSize</strong> are currently formatted as <code>&lt;dbl&gt;</code>. As these variables are categorical in nature, they will need to be converted into <code>&lt;fct&gt;</code> format.</p></li>
-<li><p>Likewise, the variable <strong>interestGroup</strong> is also categorical, and will thus need to be converted from <code>&lt;chr&gt;</code> to <code>&lt;fct&gt;</code> format.</p></li>
-<li><p><strong>Age</strong> is currently formatted as <code>&lt;dbl&gt;</code> and will need to be reformatted into <code>&lt;int&gt;</code> format.</p></li>
+<li><p>The variables <em>participantID</em>, <em>householdSize</em> and <em>age</em> are currently formatted as <code>&lt;dbl&gt;</code>. These variables will have to be converted into <code>&lt;int&gt;</code> format.</p></li>
+<li><p>Likewise, the variable <em>educationLevel</em> will need to be converted from <code>&lt;chr&gt;</code> to <code>&lt;fct&gt;</code> format.</p></li>
 </ol>
+<p>The aforementioned variables are reformatted into the correct type, as seen in the code chunk below.</p>
 <div class="cell">
 <details open="">
 <summary>Click to show/hide the code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fin_journal</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>participants <span class="ot">&lt;-</span> participants <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># convert 'participantId', 'householdSize' and 'age' into &lt;int&gt; </span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="st">'participantId'</span>, <span class="st">'householdSize'</span>, <span class="st">'age'</span>), as.integer) <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># convert 'educationLevel' to &lt;fct&gt;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="st">'educationLevel'</span>), as.factor) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sort 'educationLevel' in order</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">educationLevel =</span> <span class="fu">factor</span>(educationLevel, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Low"</span>, <span class="st">"HighSchoolOrCollege"</span>, <span class="st">"Bachelors"</span>, <span class="st">"Graduate"</span>))) </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>participants</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1,011 × 7
+   participantId householdSize haveKids   age educationLevel      interestGroup
+           &lt;int&gt;         &lt;int&gt; &lt;lgl&gt;    &lt;int&gt; &lt;fct&gt;               &lt;chr&gt;        
+ 1             0             3 TRUE        36 HighSchoolOrCollege H            
+ 2             1             3 TRUE        25 HighSchoolOrCollege B            
+ 3             2             3 TRUE        35 HighSchoolOrCollege A            
+ 4             3             3 TRUE        21 HighSchoolOrCollege I            
+ 5             4             3 TRUE        43 Bachelors           H            
+ 6             5             3 TRUE        32 HighSchoolOrCollege D            
+ 7             6             3 TRUE        26 HighSchoolOrCollege I            
+ 8             7             3 TRUE        27 Bachelors           A            
+ 9             8             3 TRUE        20 Bachelors           G            
+10             9             3 TRUE        35 Bachelors           D            
+# ℹ 1,001 more rows
+# ℹ 1 more variable: joviality &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Next, we will examine the <em>fin_journal</em> data set.</p>
+<div class="cell">
+<details open="">
+<summary>Click to show/hide the code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fin_journal</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1,513,636 × 4
@@ -458,9 +514,40 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p><strong>Issues:</strong></p>
 <ol type="1">
-<li><p>The <strong>timestamp</strong> variable is in “YYYY-MM-DD HH:MM:SS” format. The variable will need to be split into new variables namely <strong>year</strong>, <strong>month</strong>, <strong>day</strong> and <strong>time</strong>, so as to facilitate data analysis.</p></li>
-<li><p>The variable <strong>participantID</strong>will need to be reformatted from <code>&lt;dbl&gt;</code> to <code>&lt;fct&gt;</code>.</p></li>
+<li><p>The <em>timestamp</em> variable is in “YYYY-MM-DD HH:MM:SS” format. A new variable <em>yearmon</em> in “YYYY-MM” format will be created to facilitate in data analysis later on.</p></li>
+<li><p>The variable <em>participantID</em> will need to be reformatted from <code>&lt;dbl&gt;</code> to <code>&lt;int&gt;</code>.</p></li>
 </ol>
+<p>The aforementioned issues are addressed in the code chunk below.</p>
+<div class="cell">
+<details open="">
+<summary>Click to show/hide the code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fin_journal <span class="ot">&lt;-</span> fin_journal <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># convert 'participantId' to &lt;int&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="st">'participantId'</span>), as.integer) <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create a new 'yearmon' column</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">yearmon =</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(timestamp), <span class="st">'%Y-%m'</span>))</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>fin_journal</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1,513,636 × 5
+   participantId timestamp           category  amount yearmon
+           &lt;int&gt; &lt;dttm&gt;              &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;  
+ 1             0 2022-03-01 00:00:00 Wage      2473.  2022-03
+ 2             0 2022-03-01 00:00:00 Shelter   -555.  2022-03
+ 3             0 2022-03-01 00:00:00 Education  -38.0 2022-03
+ 4             1 2022-03-01 00:00:00 Wage      2047.  2022-03
+ 5             1 2022-03-01 00:00:00 Shelter   -555.  2022-03
+ 6             1 2022-03-01 00:00:00 Education  -38.0 2022-03
+ 7             2 2022-03-01 00:00:00 Wage      2437.  2022-03
+ 8             2 2022-03-01 00:00:00 Shelter   -557.  2022-03
+ 9             2 2022-03-01 00:00:00 Education  -12.8 2022-03
+10             3 2022-03-01 00:00:00 Wage      2367.  2022-03
+# ℹ 1,513,626 more rows</code></pre>
+</div>
+</div>
 </section>
 <section id="checking-for-missing-values" class="level3">
 <h3 class="anchored" data-anchor-id="checking-for-missing-values">3.3.2 Checking for missing values</h3>
@@ -468,7 +555,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <details open="">
 <summary>Click to show/hide the code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(participants, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(participants, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code> participantId  householdSize       haveKids            age educationLevel 
@@ -480,56 +567,480 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <details open="">
 <summary>Click to show/hide the code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(fin_journal, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(fin_journal, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>participantId     timestamp      category        amount 
-            0             0             0             0 </code></pre>
+<pre><code>participantId     timestamp      category        amount       yearmon 
+            0             0             0             0             0 </code></pre>
 </div>
 </div>
 </section>
-<section id="identify-and-remove-duplicate-rows" class="level3">
-<h3 class="anchored" data-anchor-id="identify-and-remove-duplicate-rows">Identify and remove duplicate rows</h3>
+<section id="checking-and-removing-of-duplicate-rows" class="level3">
+<h3 class="anchored" data-anchor-id="checking-and-removing-of-duplicate-rows">3.3.3 Checking and removing of duplicate rows</h3>
+<p>We can use the <code>unique()</code> function to retain rows that are distinct (i.e remove all duplicate rows).</p>
+<p>As seen in the table below, there are now 1,512,523 rows in the data set <em>fin_journal</em>, meaning 1,113 duplicate rows were removed from the data set.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fin_journal <span class="ot">&lt;-</span> <span class="fu">unique</span>(fin_journal)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>fin_journal</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details open="">
+<summary>Click to show/hide the code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>fin_journal <span class="ot">&lt;-</span> <span class="fu">unique</span>(fin_journal)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>fin_journal</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1,512,523 × 4
-   participantId timestamp           category  amount
-           &lt;dbl&gt; &lt;dttm&gt;              &lt;chr&gt;      &lt;dbl&gt;
- 1             0 2022-03-01 00:00:00 Wage      2473. 
- 2             0 2022-03-01 00:00:00 Shelter   -555. 
- 3             0 2022-03-01 00:00:00 Education  -38.0
- 4             1 2022-03-01 00:00:00 Wage      2047. 
- 5             1 2022-03-01 00:00:00 Shelter   -555. 
- 6             1 2022-03-01 00:00:00 Education  -38.0
- 7             2 2022-03-01 00:00:00 Wage      2437. 
- 8             2 2022-03-01 00:00:00 Shelter   -557. 
- 9             2 2022-03-01 00:00:00 Education  -12.8
-10             3 2022-03-01 00:00:00 Wage      2367. 
+<pre><code># A tibble: 1,512,523 × 5
+   participantId timestamp           category  amount yearmon
+           &lt;int&gt; &lt;dttm&gt;              &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;  
+ 1             0 2022-03-01 00:00:00 Wage      2473.  2022-03
+ 2             0 2022-03-01 00:00:00 Shelter   -555.  2022-03
+ 3             0 2022-03-01 00:00:00 Education  -38.0 2022-03
+ 4             1 2022-03-01 00:00:00 Wage      2047.  2022-03
+ 5             1 2022-03-01 00:00:00 Shelter   -555.  2022-03
+ 6             1 2022-03-01 00:00:00 Education  -38.0 2022-03
+ 7             2 2022-03-01 00:00:00 Wage      2437.  2022-03
+ 8             2 2022-03-01 00:00:00 Shelter   -557.  2022-03
+ 9             2 2022-03-01 00:00:00 Education  -12.8 2022-03
+10             3 2022-03-01 00:00:00 Wage      2367.  2022-03
 # ℹ 1,512,513 more rows</code></pre>
 </div>
 </div>
-<p>make educationlevel a factor, sort it. follow the type on the take-home ex instructions</p>
-<p>make use dplyr, pivoting. make each category a column for fin_journal (can refer to piazza)</p>
+<p>The same check is done on <em>participants</em>, and as seen from the table below, there are no duplicate rows to be removed.</p>
+<div class="cell">
+<details open="">
+<summary>Click to show/hide the code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(participants)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1,011 × 7
+   participantId householdSize haveKids   age educationLevel      interestGroup
+           &lt;int&gt;         &lt;int&gt; &lt;lgl&gt;    &lt;int&gt; &lt;fct&gt;               &lt;chr&gt;        
+ 1             0             3 TRUE        36 HighSchoolOrCollege H            
+ 2             1             3 TRUE        25 HighSchoolOrCollege B            
+ 3             2             3 TRUE        35 HighSchoolOrCollege A            
+ 4             3             3 TRUE        21 HighSchoolOrCollege I            
+ 5             4             3 TRUE        43 Bachelors           H            
+ 6             5             3 TRUE        32 HighSchoolOrCollege D            
+ 7             6             3 TRUE        26 HighSchoolOrCollege I            
+ 8             7             3 TRUE        27 Bachelors           A            
+ 9             8             3 TRUE        20 Bachelors           G            
+10             9             3 TRUE        35 Bachelors           D            
+# ℹ 1,001 more rows
+# ℹ 1 more variable: joviality &lt;dbl&gt;</code></pre>
+</div>
+</div>
 </section>
-<section id="reformatting-of-variables" class="level3">
-<h3 class="anchored" data-anchor-id="reformatting-of-variables">3.3.3 Reformatting of variables</h3>
-<ul>
-<li></li>
-</ul>
+<section id="converting-and-rounding-amount-values" class="level3">
+<h3 class="anchored" data-anchor-id="converting-and-rounding-amount-values">3.3.4 Converting and rounding <em>amount</em> values</h3>
+<p>To facilitate data visualization, all values will be transformed into their absolute values and rounded to two decimal places, keeping in line with the format for currency.</p>
+<div class="cell">
+<details open="">
+<summary>Click to show/hide the code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert all values *amount* to absolute values</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>fin_journal<span class="sc">$</span>amount <span class="ot">&lt;-</span> <span class="fu">abs</span>(fin_journal<span class="sc">$</span>amount)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># round all values to 2 decimal places</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>fin_journal<span class="sc">$</span>amount <span class="ot">&lt;-</span> <span class="fu">round</span>(fin_journal<span class="sc">$</span>amount, <span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="summation-of-category-amounts" class="level3">
+<h3 class="anchored" data-anchor-id="summation-of-category-amounts">3.3.5 Summation of <em>category</em> amounts</h3>
+<p>Since there are several transactions of the same category for each participant within a given month, we will employ the <code>group_by()</code> and <code>summarise()</code> functions to combine all transactions of the same category by adding them up.</p>
+<div class="cell">
+<details open="">
+<summary>Click to show/hide the code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>fin_journal <span class="ot">&lt;-</span> fin_journal <span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(participantId, yearmon, category) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">amount =</span> <span class="fu">sum</span>(amount))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="pivoting-category-column-in-fin_journal" class="level3">
+<h3 class="anchored" data-anchor-id="pivoting-category-column-in-fin_journal">3.3.6 Pivoting <em>category</em> column in <em>fin_journal</em></h3>
+<p>The pivot_wider() function is used to generate separate columns for each transaction category.</p>
+<p>In addition, any missing ‘NaN’ values are substituted with 0 to indicate that the participant had no transactions of that specific category in that particular month and year.</p>
+<div class="cell">
+<details open="">
+<summary>Click to show/hide the code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>fin_journal <span class="ot">&lt;-</span> fin_journal <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># pivoting the category column</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> category,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> amount) <span class="sc">%&gt;%</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># fill missing values with 0</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_all</span>(<span class="sc">~</span><span class="fu">replace</span>(., <span class="fu">is.na</span>(.), <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="creating-new-variables-total_expenses-total_earnings-and-total_savings" class="level3">
+<h3 class="anchored" data-anchor-id="creating-new-variables-total_expenses-total_earnings-and-total_savings">3.3.7 Creating new variables <em>total_expenses</em>, <em>total_earnings</em> and <em>total_savings</em></h3>
+<div class="cell">
+<details open="">
+<summary>Click to show/hide the code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>fin_journal <span class="ot">&lt;-</span> fin_journal <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create new column for total expenses</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_expenses =</span> <span class="fu">sum</span>(Education, Food, Recreation, Shelter)) <span class="sc">%&gt;%</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create new column for total earnings</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_earnings =</span> <span class="fu">sum</span>(Wage, RentAdjustment)) <span class="sc">%&gt;%</span>  </span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create new column for total earnings</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_savings =</span> (total_earnings <span class="sc">-</span> total_expenses))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="displaying-of-final-cleaned-data-sets" class="level3">
+<h3 class="anchored" data-anchor-id="displaying-of-final-cleaned-data-sets">3.3.8 Displaying of final cleaned data sets</h3>
+<p>Using the <code>kable()</code> function of the <code>knitr</code> package, the final cleaned data sets are displayed as follows:</p>
+<div class="cell">
+<details open="">
+<summary>Click to show/hide the code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(participants), <span class="at">align =</span> <span class="st">"c"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 10%">
+<col style="width: 5%">
+<col style="width: 22%">
+<col style="width: 16%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">participantId</th>
+<th style="text-align: center;">householdSize</th>
+<th style="text-align: center;">haveKids</th>
+<th style="text-align: center;">age</th>
+<th style="text-align: center;">educationLevel</th>
+<th style="text-align: center;">interestGroup</th>
+<th style="text-align: center;">joviality</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">TRUE</td>
+<td style="text-align: center;">36</td>
+<td style="text-align: center;">HighSchoolOrCollege</td>
+<td style="text-align: center;">H</td>
+<td style="text-align: center;">0.0016267</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">TRUE</td>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;">HighSchoolOrCollege</td>
+<td style="text-align: center;">B</td>
+<td style="text-align: center;">0.3280865</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">TRUE</td>
+<td style="text-align: center;">35</td>
+<td style="text-align: center;">HighSchoolOrCollege</td>
+<td style="text-align: center;">A</td>
+<td style="text-align: center;">0.3934696</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">TRUE</td>
+<td style="text-align: center;">21</td>
+<td style="text-align: center;">HighSchoolOrCollege</td>
+<td style="text-align: center;">I</td>
+<td style="text-align: center;">0.1380634</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">TRUE</td>
+<td style="text-align: center;">43</td>
+<td style="text-align: center;">Bachelors</td>
+<td style="text-align: center;">H</td>
+<td style="text-align: center;">0.8573967</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">TRUE</td>
+<td style="text-align: center;">32</td>
+<td style="text-align: center;">HighSchoolOrCollege</td>
+<td style="text-align: center;">D</td>
+<td style="text-align: center;">0.7729578</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Click to show/hide the code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(fin_journal), <span class="at">align =</span> <span class="st">"c"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 6%">
+<col style="width: 8%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 6%">
+<col style="width: 7%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">participantId</th>
+<th style="text-align: center;">yearmon</th>
+<th style="text-align: center;">Education</th>
+<th style="text-align: center;">Food</th>
+<th style="text-align: center;">Recreation</th>
+<th style="text-align: center;">Shelter</th>
+<th style="text-align: center;">Wage</th>
+<th style="text-align: center;">RentAdjustment</th>
+<th style="text-align: center;">total_expenses</th>
+<th style="text-align: center;">total_earnings</th>
+<th style="text-align: center;">total_savings</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">2022-03</td>
+<td style="text-align: center;">38.01</td>
+<td style="text-align: center;">268.26</td>
+<td style="text-align: center;">348.68</td>
+<td style="text-align: center;">554.99</td>
+<td style="text-align: center;">11931.95</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1209.94</td>
+<td style="text-align: center;">11931.95</td>
+<td style="text-align: center;">10722.01</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">2022-04</td>
+<td style="text-align: center;">38.01</td>
+<td style="text-align: center;">265.79</td>
+<td style="text-align: center;">219.42</td>
+<td style="text-align: center;">554.99</td>
+<td style="text-align: center;">8636.88</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1078.21</td>
+<td style="text-align: center;">8636.88</td>
+<td style="text-align: center;">7558.67</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">2022-05</td>
+<td style="text-align: center;">38.01</td>
+<td style="text-align: center;">264.54</td>
+<td style="text-align: center;">382.99</td>
+<td style="text-align: center;">554.99</td>
+<td style="text-align: center;">9048.16</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1240.53</td>
+<td style="text-align: center;">9048.16</td>
+<td style="text-align: center;">7807.63</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">2022-06</td>
+<td style="text-align: center;">38.01</td>
+<td style="text-align: center;">256.90</td>
+<td style="text-align: center;">465.67</td>
+<td style="text-align: center;">554.99</td>
+<td style="text-align: center;">9048.16</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1315.57</td>
+<td style="text-align: center;">9048.16</td>
+<td style="text-align: center;">7732.59</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">2022-07</td>
+<td style="text-align: center;">38.01</td>
+<td style="text-align: center;">270.13</td>
+<td style="text-align: center;">1069.48</td>
+<td style="text-align: center;">554.99</td>
+<td style="text-align: center;">8636.88</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1932.61</td>
+<td style="text-align: center;">8636.88</td>
+<td style="text-align: center;">6704.27</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">2022-08</td>
+<td style="text-align: center;">38.01</td>
+<td style="text-align: center;">261.76</td>
+<td style="text-align: center;">314.13</td>
+<td style="text-align: center;">554.99</td>
+<td style="text-align: center;">9459.44</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1168.89</td>
+<td style="text-align: center;">9459.44</td>
+<td style="text-align: center;">8290.55</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </section>
 </section>
 </section>
 <section id="data-visualization" class="level1">
-<h1>4. Data Visualization</h1>
+<h1>4 Data Visualization</h1>
+<section id="exploratory-data-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-data-analysis">4.1 Exploratory Data Analysis</h2>
+<section id="distribution-of-participants-age" class="level3">
+<h3 class="anchored" data-anchor-id="distribution-of-participants-age">4.1.1 Distribution of participants’ age</h3>
+<div class="cell">
+<details open="">
+<summary>Click to show/hide the code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">plot_ly</span>(participants, <span class="at">x =</span> <span class="sc">~</span>age, <span class="at">type =</span> <span class="st">"histogram"</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>age <span class="ot">&lt;-</span> age <span class="sc">%&gt;%</span> </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">title =</span> <span class="st">'Distribution of participant age'</span>,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">'Age'</span>,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">zeroline =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">range =</span> <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">65</span>)),</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">'Count'</span>))</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>age</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-e5bb469b9a10f04eddc9" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-e5bb469b9a10f04eddc9">{"x":{"visdat":{"33e03e15611c":["function () ","plotlyVisDat"]},"cur_data":"33e03e15611c","attrs":{"33e03e15611c":{"x":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"histogram"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Distribution of participant age","xaxis":{"domain":[0,1],"automargin":true,"title":"Age","zeroline":true,"range":[15,65]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Count"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[36,25,35,21,43,32,26,27,20,35,48,27,34,18,38,35,39,57,20,25,41,35,25,57,44,38,28,45,54,18,49,40,33,21,23,20,41,54,34,54,55,41,24,48,39,50,47,58,42,54,45,26,39,19,32,37,40,56,40,35,46,44,57,36,52,23,51,19,42,24,49,59,21,32,48,59,34,20,24,56,59,27,40,53,33,45,31,58,20,54,20,41,43,48,23,47,23,56,55,31,29,38,56,18,47,52,34,26,36,52,26,30,23,51,55,56,43,22,33,32,31,45,37,43,49,50,26,60,57,27,48,26,36,27,53,59,34,34,49,48,24,24,24,18,23,30,46,44,37,26,44,46,41,23,29,55,52,25,25,39,52,47,36,26,27,30,21,49,48,24,20,58,38,19,43,22,24,23,29,44,34,22,26,41,38,31,38,44,19,53,31,48,59,23,23,60,28,30,39,31,51,54,25,24,33,37,52,30,56,24,18,20,60,44,33,31,38,57,38,57,56,50,44,43,41,49,43,59,53,41,52,59,53,38,43,29,44,48,21,45,21,30,26,31,30,52,30,33,51,25,59,58,59,43,23,59,25,24,37,31,52,29,52,31,28,44,32,59,53,56,32,57,47,46,44,60,50,34,56,23,25,27,38,60,52,45,20,51,34,35,43,37,27,31,24,41,39,53,45,35,58,46,44,34,50,31,49,38,30,30,29,45,42,55,20,25,34,52,55,32,53,18,59,31,48,19,24,55,51,53,25,18,23,37,22,47,56,58,52,29,33,34,43,42,41,36,55,30,43,19,38,59,29,34,60,38,31,40,36,43,32,32,28,49,19,20,39,29,20,54,33,38,18,38,57,34,19,30,60,38,38,59,43,23,39,19,39,58,48,52,31,42,43,26,54,54,41,60,53,33,36,47,24,44,58,25,24,20,33,18,42,21,58,56,24,18,30,38,44,36,55,38,27,53,49,33,41,37,44,53,49,20,26,32,25,27,36,25,43,35,32,49,27,56,30,23,31,49,28,41,35,19,18,35,43,49,25,57,24,18,37,55,60,42,31,29,20,38,40,26,18,36,59,60,49,24,26,37,58,58,39,44,55,36,42,28,29,49,51,24,46,19,58,29,40,47,49,28,49,28,53,23,18,24,35,45,34,34,31,58,25,27,48,57,41,32,22,35,44,18,40,39,20,31,33,55,25,31,44,27,42,54,51,51,50,46,46,42,22,47,44,49,27,54,18,18,60,20,54,40,46,58,60,28,29,23,30,18,36,60,46,51,49,41,38,56,22,50,52,20,49,57,23,49,57,38,23,19,21,48,29,60,50,50,36,34,41,51,45,23,53,54,32,43,37,27,19,30,22,32,49,32,53,59,49,44,28,53,24,42,58,18,41,46,45,36,52,26,22,31,31,34,54,56,31,35,28,60,38,59,30,56,38,32,52,33,39,23,48,19,24,25,37,55,37,33,36,54,49,38,31,24,30,40,19,30,41,46,38,49,30,22,47,22,53,30,32,19,44,28,22,51,22,23,43,55,37,47,38,54,48,51,32,31,30,42,21,48,50,49,50,36,54,39,55,55,44,26,24,33,28,50,49,49,44,50,24,57,23,52,50,27,51,22,50,58,20,36,19,47,56,24,35,55,50,57,20,58,38,19,48,44,41,50,38,51,46,43,23,49,41,49,57,51,57,50,19,36,26,58,30,32,47,21,34,58,28,58,56,54,31,29,22,27,52,29,38,18,28,28,32,51,38,23,32,41,34,48,18,31,35,42,30,47,54,55,23,37,31,35,55,36,47,40,41,50,58,30,36,49,50,43,18,43,18,19,23,27,56,43,46,27,44,29,54,38,20,35,22,18,44,35,57,22,40,26,28,38,27,26,57,55,47,22,24,49,53,49,52,29,47,57,39,59,46,40,44,28,34,30,57,19,50,33,28,56,38,57,31,60,29,59,53,59,49,39,42,35,51,53,32,48,37,58,55,35,60,24,40,53,49,53,44,43,51,60,28,22,31,19,21,28,46,46,44,40,28,50,60,59,60,37,27,23,59,50,22,31,29,44,41,50,28,55,44,40,38,32,33,56,52,52,55,55,31,42,57,58,20,43,41,30,23,53,42,42,33,44,60,35,34,50,48,50,48,21,60,41,26,19,27,25,27,45,41,42,32,31,33,58,35,21,45,30,50,29,46,33,54,45,53,54,29,20,24,47,26,52,44,30,54,35,53,44,35,46,57,20,32,57,37,21,48,31,42,60,55,48,53,48,56,49,51,48,41,47,19,40,23,39,52],"type":"histogram","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="proportion-of-participants-based-on" class="level3">
+<h3 class="anchored" data-anchor-id="proportion-of-participants-based-on">4.1.1 Proportion of participants based on</h3>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Education Level</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Household size</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>The code</p>
+<div class="cell">
+<details open="">
+<summary>Click to show/hide the code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>edu_count <span class="ot">=</span> <span class="fu">count</span>(participants, educationLevel)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>edu_prop <span class="ot">&lt;-</span> <span class="fu">plot_ly</span>(participants, <span class="at">labels =</span> <span class="sc">~</span>edu_count<span class="sc">$</span>educationLevel, <span class="at">values =</span> <span class="sc">~</span>edu_count<span class="sc">$</span>n, <span class="at">type =</span> <span class="st">'pie'</span>,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">textposition =</span> <span class="st">'inside'</span>,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">textinfo =</span> <span class="st">'label+percent'</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">showlegend =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">title =</span> <span class="st">'Proportion of participants by education level'</span>)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co"># edu_prop &lt;- edu_prop %&gt;% </span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co">#   layout(title = 'Proportion of participants by education level')</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>edu_prop</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The plot</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-18b72d9d0536f9d00418" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-18b72d9d0536f9d00418">{"x":{"visdat":{"33e06a4c448d":["function () ","plotlyVisDat"]},"cur_data":"33e06a4c448d","attrs":{"33e06a4c448d":{"labels":{},"values":{},"textposition":"inside","textinfo":"label+percent","hoverinfo":"text","text":{},"showlegend":false,"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Proportion of participants by education level","hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"labels":["Low","HighSchoolOrCollege","Bachelors","Graduate"],"values":[84,525,232,170],"textposition":["inside","inside","inside","inside"],"textinfo":"label+percent","hoverinfo":["text","text","text","text"],"text":["84 participants","525 participants","232 participants","170 participants"],"showlegend":false,"type":"pie","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(255,255,255,1)"}},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>The code</p>
+<div class="cell">
+<details open="">
+<summary>Click to show/hide the code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>hhld_count <span class="ot">=</span> <span class="fu">count</span>(participants, householdSize)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>hhld_prop <span class="ot">&lt;-</span> <span class="fu">plot_ly</span>(participants, <span class="at">labels =</span> <span class="sc">~</span>hhld_count<span class="sc">$</span>householdSize, <span class="at">values =</span> <span class="sc">~</span>hhld_count<span class="sc">$</span>n, <span class="at">type =</span> <span class="st">'pie'</span>,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">textposition =</span> <span class="st">'inside'</span>,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">textinfo =</span> <span class="st">'label+percent'</span>,</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">hoverinfo =</span> <span class="st">'text'</span>,</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">text =</span> <span class="sc">~</span><span class="fu">paste</span>(<span class="st">'Number of households ='</span>, hhld_count<span class="sc">$</span>n),</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">showlegend =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">title =</span> <span class="st">'Proportion of participants by household size'</span>)</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>hhld_prop</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The plot</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-3d3b790672186014451f" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-3d3b790672186014451f">{"x":{"visdat":{"33e027c02b58":["function () ","plotlyVisDat"]},"cur_data":"33e027c02b58","attrs":{"33e027c02b58":{"labels":{},"values":{},"textposition":"inside","textinfo":"label+percent","showlegend":false,"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Proportion of participants by household size","hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"labels":[1,2,3],"values":[337,373,301],"textposition":["inside","inside","inside"],"textinfo":"label+percent","showlegend":false,"type":"pie","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(255,255,255,1)"}},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><strong>Insights:</strong></p>
+<ol type="1">
+<li><p>Most participants in the city of Engagement are highly educated, with only 8.31% of the participants surveyed having a low level of education.</p></li>
+<li></li>
+</ol>
+</section>
+</section>
+<section id="education-level-and-joviality" class="level2">
+<h2 class="anchored" data-anchor-id="education-level-and-joviality">4.1 Education level and joviality?</h2>
+<div class="cell">
+<details open="">
+<summary>Click to show/hide the code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>education <span class="ot">&lt;-</span> <span class="fu">plot_ly</span>(</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> participants,</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="sc">~</span>joviality,</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">color =</span> <span class="sc">~</span>educationLevel,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"box"</span>,</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">showlegend =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">boxmean =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">notched =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">title =</span> <span class="fu">list</span>(<span class="at">text =</span> <span class="st">"Boxplot of joviality by education level"</span>),</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="fu">list</span>(<span class="at">text =</span><span class="st">'Education Level'</span>)),</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="fu">list</span>(<span class="at">text =</span><span class="st">'Joviality'</span>)))</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>education</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-40425dffcff28f4a3dd6" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-40425dffcff28f4a3dd6">{"x":{"visdat":{"33e05e3b7818":["function () ","plotlyVisDat"]},"cur_data":"33e05e3b7818","attrs":{"33e05e3b7818":{"y":{},"showlegend":false,"boxmean":true,"notched":true,"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"box"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":{"text":"Boxplot of joviality by education level"},"xaxis":{"domain":[0,1],"automargin":true,"title":{"text":"Education Level"}},"yaxis":{"domain":[0,1],"automargin":true,"title":{"text":"Joviality"}},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"fillcolor":"rgba(102,194,165,0.5)","y":[0.931240975,0.260211811,0.607853294,0.767112453,0.707950782,0.215116214,0.880410054,0.976499153,0.140697641,0.451218504,0.142686163,0.159854965,0.627739055,0.114389766,0.100777319,0.207533138,0.360151845,0.271944209,0.857673439,0.28441375,0.10774033,0.256101892,0.795405195,0.867500339,0.370084679,0.873371058,0.093271632,0.494087429,0.253614379,0.346047608,0.70462894,0.34088384,0.21035075,0.299050559,0.438986616,0.140477262,0.230962551,0.622118277,0.725281643,0.773790326,0.563457797,0.24042683,0.02038719,0.293051648,0.277699434,0.449809053,0.100871333,0.865316562,0.812872098,0.739359987,0.79664861,0.665589674,0.051798314,0.141341978,0.467859308,0.960391982,0.241785645,0.037220396,0.298490597,0.063256748,0.933334008,0.7844507,0.24609694,0.546776461,0.442987521,0.706306798,0.972081828,0.818566502,0.493231932,0.437718862,0.206406844,0.501048865,0.904248183,0.60769828,0.249719036,0.980908737,0.247843267,0.384062608,0.880292697,0.570251922,0.119913514,0.969600048,0.970492609,0.828330134],"showlegend":false,"boxmean":true,"notched":true,"type":"box","name":"Low","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"line":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(252,141,98,0.5)","y":[0.001626703,0.3280865,0.39346959,0.138063446,0.772957791,0.833980668,0.557176006,0.25422732,0.241615182,0.232266068,0.619057739,0.663815663,0.520535752,0.549177225,0.135148815,0.681423545,0.189498641,0.174975799,0.863663966,0.055283617,0.225049088,0.424159724,0.485827661,0.576174771,0.730126771,0.770806686,0.411129251,0.598278749,0.583943591,0.330606159,0.498178653,0.438788793,0.519538618,0.72544679,0.904601349,0.791342831,0.362917704,0.621716267,0.03403389,0.40138993,0.027148207,0.455102277,0.354510651,0.399201318,0.725176476,0.746921002,0.169054036,0.139818869,0.733204092,0.467868166,0.580101654,0.504845427,0.366630644,0.020504586,0.991414933,0.851915894,0.357131296,0.098903572,0.290464519,0.313305546,0.720330648,0.57753282,0.876546337,0.41537229,0.159723746,0.118152103,0.72895287,0.882038681,0.371183768,0.524660325,0.551268581,0.247000174,0.86081073,0.87301128,0.732757238,0.789243454,0.107753878,0.444080663,0.882253016,0.643761923,0.528698226,0.6089739,0.758079342,0.954706293,0.466716971,0.24297235,0.965708743,0.936659644,0.225309113,0.846680285,0.364391587,0.481863571,0.495453274,0.787497465,0.839659224,0.95269116,0.270514436,0.447070968,0.262612842,0.901982488,0.379086335,0.203183443,0.985936814,0.939180121,0.194899452,0.365692745,0.371925591,0.25635218,0.748988452,0.300610569,0.153900625,0.948411855,0.971074532,0.955659284,0.727868507,0.617025806,0.004829228,0.490213553,0.902213545,0.96685839,0.088547964,0.662515201,0.969991586,0.968768651,0.627740735,0.386580333,0.564718074,0.852187763,0.807211251,0.405851044,0.19286307,0.465652496,0.664033926,0.223825175,0.106440071,0.798810236,0.041170737,0.36077235,0.173976665,0.331893543,0.669281126,0.874083512,0.79265137,0.173802734,0.836787725,0.811965348,0.478284265,0.109360456,0.754293139,0.897884327,0.476984055,0.599616007,0.910143395,0.126082302,0.847052228,0.057905387,0.852555697,0.5149016,0.21434781,0.254585434,0.183595892,0.260386143,0.172405182,0.125682773,0.061286668,0.699020662,0.260798961,0.633335142,0.175386489,0.473772081,0.650831243,0.122182828,0.480441948,0.228872071,0.713809975,0.227355255,0.584828154,0.025541228,0.573738776,0.51011746,0.788841177,0.686094014,0.969014671,0.757990018,0.41088011,0.753234813,0.253379525,0.138808298,0.13664462,0.139040705,0.371688755,0.85417223,0.184734538,0.141162784,0.991810222,0.061959185,0.690118062,0.621188126,0.964579432,0.694582993,0.949906952,0.569018722,0.401545108,0.848830989,0.909124868,0.52722067,0.396967817,0.082643442,0.512379139,0.264710804,0.674497947,0.617829242,0.801609951,0.686077576,0.175733331,0.507728111,0.662852559,0.171319189,0.128459971,0.695894652,0.976850716,0.085672033,0.132465984,0.723576465,0.334417031,0.09631243,0.949453894,0.420302416,0.949412047,0.450502705,0.930702522,0.049076886,0.800759302,0.758121962,0.504323829,0.164418633,0.742684694,0.811967182,0.158418515,0.685091778,0.151671229,0.312528351,0.329111154,0.191165293,0.586290946,0.45189519,0.679944615,0.094335508,0.383485068,0.753570226,0.211241597,0.012329643,0.770104322,0.008404856,0.149860389,0.478280008,0.145298865,0.906250776,0.653874654,0.239743189,0.597042481,0.892482505,0.108711953,0.466477753,0.87972655,0.705961036,0.716063608,0.173537994,0.66240327,0.306487271,0.896797286,0.41490899,0.369711957,0.460451549,0.379599106,0.974802854,0.477456741,0.80318727,0.01017311,0.703025703,0.543392106,0.008329855,0.585489943,0.134122197,0.504013735,0.137689076,0.969868254,0.778143316,0.557004306,0.632529807,0.211903193,0.420901962,0.551760119,0.604777434,0.626384882,0.540412762,0.805252435,0.240288209,0.24858955,0.401423701,0.650812395,0.36821258,0.681954474,0.856878184,0.83712939,0.93659165,0.66433137,0.468741471,0.008705951,0.444743825,0.412038273,0.975273877,0.448569158,0.919710751,0.408345757,0.171959185,0.998644049,0.585843678,0.853874668,0.751229979,0.875113575,0.705971019,0.370138058,0.370246957,0.358497175,0.734927742,0.541632245,0.059062573,0.544782269,0.965741735,0.089915241,0.025245948,0.738766851,0.576129491,0.604580267,0.84035204,0.38852626,0.217949026,0.915889403,0.104168464,0.221999544,0.527164931,0.396350271,0.261732596,0.619875624,0.130781968,0.042960665,0.047571871,0.39520838,0.380975259,0.71872952,0.675085656,0.056860736,0.937254935,0.270124892,0.172855291,0.037996177,0.59491202,0.183180758,0.39578961,0.270624129,0.543992757,0.545251458,0.068612756,0.137446199,0.440943662,0.392351739,0.954361914,0.434048369,0.402956862,0.391601344,0.976239224,0.055989127,0.907301342,0.440877016,0.609793327,0.746716458,0.692283941,0.404529522,0.275811473,0.570765537,0.100837923,0.325503058,0.318139199,0.634111119,0.315916767,0.624709649,0.502901494,0.465075787,0.748473896,0.130649539,0.68222841,0.409040073,0.187180439,0.091096884,0.447644949,0.10382656,0.588102942,0.066469676,0.017790641,0.414137953,0.797833033,0.000204,0.751787305,0.815990235,0.12564865,0.573952621,0.268937352,0.808558886,0.854523316,0.453217413,0.112504967,0.449689991,0.193751151,0.1411042,0.377309384,0.517238511,0.747594455,0.001365799,0.14514474,0.415138085,0.839157196,0.865257446,0.695900691,0.517422334,0.430036143,0.665923892,0.992601749,0.217382928,0.468583888,0.328587955,0.033479552,0.8452362,0.457280127,0.144875993,0.619525261,0.539387528,0.521630433,0.758474429,0.053564289,0.202769644,0.780884351,0.97254096,0.813680504,0.280151127,0.139770688,0.408977137,0.201801545,0.048428984,0.636640992,0.234712133,0.948917655,0.30005276,0.42856627,0.547588054,0.370060753,0.87924161,0.7135266,0.839802108,0.997604884,0.416211045,0.115098336,0.709526793,0.38081745,0.928387676,0.535316197,0.289402134,0.020957045,0.280787048,0.550077037,0.983190272,0.03022743,0.692154335,0.385248792,0.89356989,0.480241663,0.063125207,0.632828416,0.014316555,0.303588097,0.283020728,0.96153717,0.8563378,0.275547256,0.132602239,0.185717667,0.777990984,0.203002706,0.88226691,0.522667054,0.097293702,0.441937538,0.679262409,0.010975349,0.116646459,0.380395715,0.148548085,0.549042649,0.349445327,0.132914203,0.455351665,0.258533986,0.950638773,0.982251017,0.129766383,0.159548434,0.360847428,0.086367063,0.398379338,0.357706459,0.548974082,0.458594873,0.198499294,0.315707809,0.659934449,0.833977506,0.932521377,0.444802157,0.572648773,0.323610205,0.336785107,0.070626542,0.639268458,0.934347783,0.17538799],"showlegend":false,"boxmean":true,"notched":true,"type":"box","name":"HighSchoolOrCollege","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"line":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(141,160,203,0.5)","y":[0.857396691,0.958189409,0.697554819,0.467131409,0.724503834,0.392189088,0.114667399,0.486470164,0.607328128,0.230073813,0.094585958,0.862950926,0.045228735,0.186308253,0.491406814,0.773765426,0.743901318,0.947066909,0.218744284,0.381370977,0.413830119,0.39686665,0.265501227,0.194724115,0.700811306,0.760663448,0.140611532,0.718790546,0.802929522,0.846097713,0.216307476,0.792161061,0.266938991,0.80654106,0.20807405,0.168095803,0.133248852,0.725246226,0.900831449,0.730336584,0.61053033,0.976160413,0.162966636,0.321634269,0.814611008,0.214486332,0.961066785,0.089838002,0.700821194,0.965943386,0.168680628,0.68602034,0.004466007,0.287889236,0.17968177,0.951577316,0.048044295,0.107405002,0.259541618,0.102762652,0.686374918,0.84325552,0.477539156,0.654885921,0.085267909,0.323175901,0.299174844,0.103185768,0.21098913,0.029688855,0.464569175,0.270904553,0.269322751,0.70247421,0.986983183,0.76530714,0.364809779,0.963462391,0.884407261,0.794096009,0.370202736,0.517662469,0.916735753,0.981851015,0.000985,0.618031654,0.523649971,0.496667064,0.249578287,0.344762529,0.969102133,0.302215803,0.554244414,0.614071428,0.495874155,0.936547208,0.471347147,0.107608661,0.843920569,0.364100624,0.641308283,0.895202266,0.154725513,0.262933648,0.298257944,0.428775106,0.617029061,0.820897579,0.149424876,0.574526753,0.061282494,0.065619544,0.061410383,0.684335696,0.329193948,0.970166283,0.842958885,0.906449778,0.539205582,0.98284777,0.768714853,0.130737765,0.265413241,0.263048698,0.791591163,0.213011118,0.034839253,0.673541165,0.719188185,0.916163673,0.793880506,0.26189132,0.653881117,0.243164359,0.573248725,0.686982312,0.634994302,0.665307968,0.872069831,0.315950154,0.354910317,0.328627654,0.470322266,0.90601112,0.599260494,0.786524128,0.42355875,0.54286479,0.452363587,0.674877675,0.288396985,0.324954076,0.942801579,0.11885355,0.132319548,0.232407811,0.945430646,0.619208795,0.522010625,0.933937799,0.879171582,0.077442954,0.262320121,0.339503386,0.17565975,0.623466515,0.321067111,0.834580963,0.96008167,0.44174758,0.065357535,0.152431791,0.957400017,0.221489156,0.469113963,0.683850663,0.659909909,0.828259584,0.631431974,0.042899175,0.853049624,0.332054621,0.807449064,0.997670843,0.820903516,0.282834314,0.573668238,0.337456142,0.353813394,0.021946709,0.889292896,0.126644557,0.550025961,0.628664697,0.210131243,0.161994033,0.533005979,0.930669564,0.598767089,0.652990074,0.000265,0.992351674,0.784906863,0.431612119,0.931029947,0.046984156,0.093249599,0.445184451,0.235105787,0.240105908,0.807027625,0.840828509,0.715480626,0.449546034,0.819895146,0.131920315,0.932155545,0.556397418,0.301470597,0.890386981,0.172802708,0.274541862,0.345104613,0.077140899,0.502257508,0.098639485,0.301652515,0.182773504,0.280018247,0.335018383,0.254432893,0.356881322],"showlegend":false,"boxmean":true,"notched":true,"type":"box","name":"Bachelors","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"line":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(231,138,195,0.5)","y":[0.930003289,0.32696558,0.23266675,0.348019484,0.179657824,0.229589642,0.374354513,0.778504463,0.734056857,0.422849796,0.192945633,0.188638917,0.871320255,0.955760648,0.679506778,0.646977694,0.999233967,0.413490065,0.30282788,0.612907872,0.14336634,0.150075471,0.540291283,0.555650922,0.176618296,0.254005742,0.468930899,0.812453062,0.964990249,0.365595636,0.575001936,0.78521373,0.718049535,0.931237599,0.109940826,0.89222241,0.216100876,0.058702708,0.122095522,0.79251329,0.263283426,0.332411556,0.936585851,0.110877355,0.641752748,0.113248116,0.859058201,0.842954238,0.560328176,0.33366576,0.972629863,0.880967299,0.955240694,0.271552097,0.439355556,0.548350934,0.543218407,0.962210067,0.287666416,0.842877969,0.757226712,0.7738118,0.417763616,0.328727521,0.600454813,0.108965479,0.034283769,0.517999111,0.735837586,0.536520661,0.404476978,0.039923482,0.979407864,0.035335186,0.479804894,0.687759804,0.596117189,0.675097131,0.645271398,0.106292289,0.647441392,0.469702696,0.059265966,0.63736647,0.048951659,0.154285175,0.689153128,0.924288993,0.392066569,0.353252364,0.923037343,0.039582663,0.941687305,0.088574034,0.237641609,0.209746249,0.494442294,0.602514117,0.568405413,0.303479796,0.492572167,0.057542458,0.978406157,0.968722072,0.417992624,0.568154176,0.22126511,0.278112333,0.967555161,0.526105544,0.227976736,0.447001762,0.134078822,0.962520694,0.846974117,0.741834688,0.038611164,0.980481087,0.241410497,0.411069142,0.609420425,0.560883015,0.905015948,0.373642689,0.839634412,0.930475595,0.240042805,0.874661744,0.77217008,0.736149674,0.880468848,0.338259596,0.740682908,0.289569911,0.806871224,0.027591944,0.490190335,0.030335914,0.283066289,0.269842118,0.610736625,0.655361489,0.633519504,0.677712189,0.495487226,0.067887485,0.891019925,0.20389365,0.643407835,0.875200368,0.554827306,0.540411016,0.486920328,0.544405537,0.933377794,0.405713393,0.230593991,0.536881382,0.660069967,0.880591759,0.846871205,0.305318637,0.217082066,0.91308015,0.21831518,0.905125735,0.128853966,0.983012498,0.043433461,0.163721028],"showlegend":false,"boxmean":true,"notched":true,"type":"box","name":"Graduate","marker":{"color":"rgba(231,138,195,1)","line":{"color":"rgba(231,138,195,1)"}},"line":{"color":"rgba(231,138,195,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p><strong>Insights:</strong></p>
+<ol type="1">
+<li><p>All participants seem to have similar joviality scores, regardless of education level.</p></li>
+<li><p>Slight increases in median and mean joviality as education level increases.</p></li>
+</ol>
+<div class="cell">
+<details open="">
+<summary>Click to show/hide the code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggscatterstats</span>(</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> participants,</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> age,</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> joviality, </span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">bins =</span> <span class="dv">20</span>) <span class="sc">+</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 
 
 <!-- -->
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -717,149 +1228,368 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb14" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Take-home Exercise 1"</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Lim Li Ying"</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2 May 2023"</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="an">edit:</span><span class="co"> visual</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span><span class="co"> </span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="fu"># 1. The Task</span></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>The objective of this exercise is to reveal the demographic and financial characteristics of the city of Engagement, using appropriate static and interactive statistical graphics methods.</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>This exercise requires a user-friendly and interactive solution that helps city managers and planners to explore the complex data in an engaging way and reveal hidden patterns.</span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="fu"># 2. The Data</span></span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>There are two data sets used in this study, namely *Participants.csv* and *FinancialJournal.csv*.</span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>*Participants.csv* consists of 1011 rows and 7 columns, and contains demographic information about the residents of the city of Engagement, as seen in the following table.</span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>| S/N | Columns        | Description                                                                           |</span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>|----------------|----------------|---------------------------------------|</span>
-<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>| 1   | participantID  | The unique ID that is assigned to each participant.                                   |</span>
-<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>| 2   | householdSize  | The number of people living in the participant's household.                           |</span>
-<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>| 3   | haveKids       | Whether there are any children living in the participant's household.                 |</span>
-<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>| 4   | age            | The age of the participant at the start of the study.                                 |</span>
-<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>| 5   | educationLevel | The education level of the participant.                                               |</span>
-<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>| 6   | interestGroup  | The participant's primary interest group, represented by the letters A-J.             |</span>
-<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>| 7   | joviality      | The participant's overall happiness level at the start of the study ranging from 0-1. |</span>
-<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>*FinancialJournal.csv* has 1513636 rows and 4 columns, and consists of information pertaining to the participant's financial transactions, as seen in the following table.</span>
-<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>| S/N | Columns       | Description                                                         |</span>
-<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>|----------------|----------------|---------------------------------------|</span>
-<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>| 1   | participantID | The financial transaction of the participant with the specified ID. |</span>
-<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>| 2   | timestamp     | The date and time in which the transaction was logged.              |</span>
-<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>| 3   | category      | The category of the expense.                                        |</span>
-<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>| 4   | amount        | The financial transaction amount.                                   |</span>
-<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a><span class="fu"># 3. Data Preparation</span></span>
-<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3.1 Installing and loading of R packages</span></span>
-<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>In this exercise, the following R packages will be used:</span>
-<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span><span class="in">`tidyverse`</span>:</span>
-<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span><span class="in">`ggiraph`</span>: for making <span class="in">`ggplot2`</span> graphics interactive</span>
-<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span><span class="in">`plotly`</span>: for plotting interactive statistical charts.</span>
-<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span><span class="in">`patchwork`</span>:</span>
-<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>The code chunk below uses <span class="in">`p_load()`</span> of the <span class="in">`pacman`</span> package to check if all the packages are installed on the computer. If they are, they will then be loaded into the R environment.</span>
-<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: show</span></span>
-<span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Click to show/hide the code"</span></span>
-<span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggiraph, plotly, patchwork, DT, tidyverse, skimr)</span>
-<span id="cb14-63"><a href="#cb14-63" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-64"><a href="#cb14-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-65"><a href="#cb14-65" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3.2 Importing the data sets</span></span>
-<span id="cb14-66"><a href="#cb14-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-67"><a href="#cb14-67" aria-hidden="true" tabindex="-1"></a>To import the data *"Participants.csv"* and *"FinancialJournal.csv"* into the R environment, <span class="in">`read_csv()`</span> of the <span class="in">`readr`</span> package is used, as seen in the code chunks below.</span>
-<span id="cb14-68"><a href="#cb14-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-71"><a href="#cb14-71" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb14-72"><a href="#cb14-72" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: show</span></span>
-<span id="cb14-73"><a href="#cb14-73" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Click to show/hide the code"</span></span>
-<span id="cb14-74"><a href="#cb14-74" aria-hidden="true" tabindex="-1"></a>participants <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/Participants.csv"</span>)</span>
-<span id="cb14-75"><a href="#cb14-75" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-76"><a href="#cb14-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-79"><a href="#cb14-79" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb14-80"><a href="#cb14-80" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: show</span></span>
-<span id="cb14-81"><a href="#cb14-81" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Click to show/hide the code"</span></span>
-<span id="cb14-82"><a href="#cb14-82" aria-hidden="true" tabindex="-1"></a>fin_journal <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/FinancialJournal.csv"</span>)</span>
-<span id="cb14-83"><a href="#cb14-83" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-84"><a href="#cb14-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-85"><a href="#cb14-85" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3.3 Data Wrangling</span></span>
-<span id="cb14-86"><a href="#cb14-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-87"><a href="#cb14-87" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.3.1 Examining the data sets</span></span>
-<span id="cb14-88"><a href="#cb14-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-89"><a href="#cb14-89" aria-hidden="true" tabindex="-1"></a>Firstly, the head of both data sets are acquired and examined.</span>
-<span id="cb14-90"><a href="#cb14-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-93"><a href="#cb14-93" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb14-94"><a href="#cb14-94" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: show</span></span>
-<span id="cb14-95"><a href="#cb14-95" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Click to show/hide the code"</span></span>
-<span id="cb14-96"><a href="#cb14-96" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(participants)</span>
-<span id="cb14-97"><a href="#cb14-97" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-98"><a href="#cb14-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-99"><a href="#cb14-99" aria-hidden="true" tabindex="-1"></a>**Issues:**</span>
-<span id="cb14-100"><a href="#cb14-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-101"><a href="#cb14-101" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>The variables **participantID** and **householdSize** are currently formatted as <span class="in">`&lt;dbl&gt;`</span>. As these variables are categorical in nature, they will need to be converted into <span class="in">`&lt;fct&gt;`</span> format.</span>
-<span id="cb14-102"><a href="#cb14-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-103"><a href="#cb14-103" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Likewise, the variable **interestGroup** is also categorical, and will thus need to be converted from <span class="in">`&lt;chr&gt;`</span> to <span class="in">`&lt;fct&gt;`</span> format.</span>
-<span id="cb14-104"><a href="#cb14-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-105"><a href="#cb14-105" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Age** is currently formatted as <span class="in">`&lt;dbl&gt;`</span> and will need to be reformatted into <span class="in">`&lt;int&gt;`</span> format.</span>
-<span id="cb14-106"><a href="#cb14-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-109"><a href="#cb14-109" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb14-110"><a href="#cb14-110" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: show</span></span>
-<span id="cb14-111"><a href="#cb14-111" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Click to show/hide the code"</span></span>
-<span id="cb14-112"><a href="#cb14-112" aria-hidden="true" tabindex="-1"></a>fin_journal</span>
-<span id="cb14-113"><a href="#cb14-113" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-114"><a href="#cb14-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-115"><a href="#cb14-115" aria-hidden="true" tabindex="-1"></a>**Issues:**</span>
-<span id="cb14-116"><a href="#cb14-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-117"><a href="#cb14-117" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>The **timestamp** variable is in "YYYY-MM-DD HH:MM:SS" format. The variable will need to be split into new variables namely **year**, **month**, **day** and **time**, so as to facilitate data analysis.</span>
-<span id="cb14-118"><a href="#cb14-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-119"><a href="#cb14-119" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>The variable **participantID**will need to be reformatted from <span class="in">`&lt;dbl&gt;`</span> to <span class="in">`&lt;fct&gt;`</span>.</span>
-<span id="cb14-120"><a href="#cb14-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-121"><a href="#cb14-121" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.3.2 Checking for missing values</span></span>
-<span id="cb14-122"><a href="#cb14-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-123"><a href="#cb14-123" aria-hidden="true" tabindex="-1"></a><span class="in">`is.na()`</span> function is used to check for any missing values in both data sets. As seen from the results below, there are no missing values present.</span>
-<span id="cb14-124"><a href="#cb14-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-127"><a href="#cb14-127" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb14-128"><a href="#cb14-128" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: show</span></span>
-<span id="cb14-129"><a href="#cb14-129" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Click to show/hide the code"</span></span>
-<span id="cb14-130"><a href="#cb14-130" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(participants, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span>
-<span id="cb14-131"><a href="#cb14-131" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-132"><a href="#cb14-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-135"><a href="#cb14-135" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb14-136"><a href="#cb14-136" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: show</span></span>
-<span id="cb14-137"><a href="#cb14-137" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Click to show/hide the code"</span></span>
-<span id="cb14-138"><a href="#cb14-138" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(fin_journal, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span>
-<span id="cb14-139"><a href="#cb14-139" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-140"><a href="#cb14-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-141"><a href="#cb14-141" aria-hidden="true" tabindex="-1"></a><span class="fu">### Identify and remove duplicate rows</span></span>
-<span id="cb14-142"><a href="#cb14-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-145"><a href="#cb14-145" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb14-146"><a href="#cb14-146" aria-hidden="true" tabindex="-1"></a>fin_journal <span class="ot">&lt;-</span> <span class="fu">unique</span>(fin_journal)</span>
-<span id="cb14-147"><a href="#cb14-147" aria-hidden="true" tabindex="-1"></a>fin_journal</span>
-<span id="cb14-148"><a href="#cb14-148" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-149"><a href="#cb14-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-150"><a href="#cb14-150" aria-hidden="true" tabindex="-1"></a>make educationlevel a factor, sort it.</span>
-<span id="cb14-151"><a href="#cb14-151" aria-hidden="true" tabindex="-1"></a>follow the type on the take-home ex instructions</span>
-<span id="cb14-152"><a href="#cb14-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-153"><a href="#cb14-153" aria-hidden="true" tabindex="-1"></a>make use dplyr, pivoting. make each category a column for fin_journal (can refer to piazza)</span>
-<span id="cb14-154"><a href="#cb14-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-155"><a href="#cb14-155" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.3.3 Reformatting of variables</span></span>
-<span id="cb14-156"><a href="#cb14-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-157"><a href="#cb14-157" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span></span>
-<span id="cb14-158"><a href="#cb14-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-159"><a href="#cb14-159" aria-hidden="true" tabindex="-1"></a><span class="fu"># 4. Data Visualization</span></span>
+<div class="sourceCode" id="cb31" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Take-home Exercise 1"</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Lim Li Ying"</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2 May 2023"</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="an">edit:</span><span class="co"> visual</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span><span class="co"> </span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="fu"># 1 The Task</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>The objective of this exercise is to reveal the demographic and financial characteristics of the city of Engagement, using appropriate static and interactive statistical graphics methods.</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>This exercise requires a user-friendly and interactive solution that helps city managers and planners to explore the complex data in an engaging way and reveal hidden patterns.</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a><span class="fu"># 2 The Data</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>There are two data sets used in this study, namely *Participants.csv* and *FinancialJournal.csv*.</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>*Participants.csv* consists of 1011 rows and 7 columns, and contains demographic information about the residents of the city of Engagement, as seen in the following table.</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>| S/N | Columns        | Description                                                                           |</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>|-------------------|-------------------|----------------------------------|</span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>| 1   | participantID  | The unique ID that is assigned to each participant.                                   |</span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>| 2   | householdSize  | The number of people living in the participant's household.                           |</span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>| 3   | haveKids       | Whether there are any children living in the participant's household.                 |</span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>| 4   | age            | The age of the participant at the start of the study.                                 |</span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>| 5   | educationLevel | The education level of the participant.                                               |</span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>| 6   | interestGroup  | The participant's primary interest group, represented by the letters A-J.             |</span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>| 7   | joviality      | The participant's overall happiness level at the start of the study ranging from 0-1. |</span>
+<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>*FinancialJournal.csv* has 1,513,636 rows and 4 columns, and consists of information pertaining to the participant's financial transactions, as seen in the following table.</span>
+<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a>| S/N | Columns       | Description                                                         |</span>
+<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a>|-------------------|-------------------|----------------------------------|</span>
+<span id="cb31-36"><a href="#cb31-36" aria-hidden="true" tabindex="-1"></a>| 1   | participantID | The financial transaction of the participant with the specified ID. |</span>
+<span id="cb31-37"><a href="#cb31-37" aria-hidden="true" tabindex="-1"></a>| 2   | timestamp     | The date and time in which the transaction was logged.              |</span>
+<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a>| 3   | category      | The category of the expense.                                        |</span>
+<span id="cb31-39"><a href="#cb31-39" aria-hidden="true" tabindex="-1"></a>| 4   | amount        | The financial transaction amount.                                   |</span>
+<span id="cb31-40"><a href="#cb31-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-41"><a href="#cb31-41" aria-hidden="true" tabindex="-1"></a><span class="fu"># 3 Data Preparation</span></span>
+<span id="cb31-42"><a href="#cb31-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-43"><a href="#cb31-43" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3.1 Installing and loading of R packages</span></span>
+<span id="cb31-44"><a href="#cb31-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-45"><a href="#cb31-45" aria-hidden="true" tabindex="-1"></a>In this exercise, the following R packages will be used:</span>
+<span id="cb31-46"><a href="#cb31-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-47"><a href="#cb31-47" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span><span class="in">`tidyverse`</span>: for data cleaning and manipulation.</span>
+<span id="cb31-48"><a href="#cb31-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-49"><a href="#cb31-49" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span><span class="in">`ggiraph`</span>: for making <span class="in">`ggplot2`</span> graphics interactive.</span>
+<span id="cb31-50"><a href="#cb31-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-51"><a href="#cb31-51" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span><span class="in">`plotly`</span>: for plotting interactive statistical charts.</span>
+<span id="cb31-52"><a href="#cb31-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-53"><a href="#cb31-53" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span><span class="in">`patchwork`</span>:</span>
+<span id="cb31-54"><a href="#cb31-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-55"><a href="#cb31-55" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span><span class="in">`knitr`</span>: for generating a simple table using the <span class="in">`kable()`</span> function</span>
+<span id="cb31-56"><a href="#cb31-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-57"><a href="#cb31-57" aria-hidden="true" tabindex="-1"></a>The code chunk below uses <span class="in">`p_load()`</span> of the <span class="in">`pacman`</span> package to check if all the packages are installed. If they are, they will then be loaded into the R environment.</span>
+<span id="cb31-58"><a href="#cb31-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-61"><a href="#cb31-61" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-62"><a href="#cb31-62" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggiraph, plotly, patchwork, DT, tidyverse, skimr, knitr, ggstatsplot, ggdist)</span>
+<span id="cb31-63"><a href="#cb31-63" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-64"><a href="#cb31-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-65"><a href="#cb31-65" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3.2 Importing the data sets</span></span>
+<span id="cb31-66"><a href="#cb31-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-67"><a href="#cb31-67" aria-hidden="true" tabindex="-1"></a>To import the data *"Participants.csv"* and *"FinancialJournal.csv"* into the R environment, <span class="in">`read_csv()`</span> of the <span class="in">`readr`</span> package is used, as seen in the code chunks below.</span>
+<span id="cb31-68"><a href="#cb31-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-71"><a href="#cb31-71" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-72"><a href="#cb31-72" aria-hidden="true" tabindex="-1"></a>participants <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/Participants.csv"</span>)</span>
+<span id="cb31-73"><a href="#cb31-73" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-74"><a href="#cb31-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-77"><a href="#cb31-77" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-78"><a href="#cb31-78" aria-hidden="true" tabindex="-1"></a>fin_journal <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/FinancialJournal.csv"</span>)</span>
+<span id="cb31-79"><a href="#cb31-79" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-80"><a href="#cb31-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-81"><a href="#cb31-81" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3.3 Data wrangling</span></span>
+<span id="cb31-82"><a href="#cb31-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-83"><a href="#cb31-83" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.3.1 Reformatting of variables</span></span>
+<span id="cb31-84"><a href="#cb31-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-85"><a href="#cb31-85" aria-hidden="true" tabindex="-1"></a>Firstly, we will examine the *participants* data set.</span>
+<span id="cb31-86"><a href="#cb31-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-89"><a href="#cb31-89" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-90"><a href="#cb31-90" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(participants)</span>
+<span id="cb31-91"><a href="#cb31-91" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-92"><a href="#cb31-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-93"><a href="#cb31-93" aria-hidden="true" tabindex="-1"></a>**Issues:**</span>
+<span id="cb31-94"><a href="#cb31-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-95"><a href="#cb31-95" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>The variables *participantID*, *householdSize* and *age* are currently formatted as <span class="in">`&lt;dbl&gt;`</span>. These variables will have to be converted into <span class="in">`&lt;int&gt;`</span> format.</span>
+<span id="cb31-96"><a href="#cb31-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-97"><a href="#cb31-97" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Likewise, the variable *educationLevel* will need to be converted from <span class="in">`&lt;chr&gt;`</span> to <span class="in">`&lt;fct&gt;`</span> format.</span>
+<span id="cb31-98"><a href="#cb31-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-99"><a href="#cb31-99" aria-hidden="true" tabindex="-1"></a>The aforementioned variables are reformatted into the correct type, as seen in the code chunk below.</span>
+<span id="cb31-100"><a href="#cb31-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-103"><a href="#cb31-103" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-104"><a href="#cb31-104" aria-hidden="true" tabindex="-1"></a>participants <span class="ot">&lt;-</span> participants <span class="sc">%&gt;%</span></span>
+<span id="cb31-105"><a href="#cb31-105" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb31-106"><a href="#cb31-106" aria-hidden="true" tabindex="-1"></a>  <span class="co"># convert 'participantId', 'householdSize' and 'age' into &lt;int&gt; </span></span>
+<span id="cb31-107"><a href="#cb31-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="st">'participantId'</span>, <span class="st">'householdSize'</span>, <span class="st">'age'</span>), as.integer) <span class="sc">%&gt;%</span></span>
+<span id="cb31-108"><a href="#cb31-108" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb31-109"><a href="#cb31-109" aria-hidden="true" tabindex="-1"></a>  <span class="co"># convert 'educationLevel' to &lt;fct&gt;</span></span>
+<span id="cb31-110"><a href="#cb31-110" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="st">'educationLevel'</span>), as.factor) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-111"><a href="#cb31-111" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb31-112"><a href="#cb31-112" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sort 'educationLevel' in order</span></span>
+<span id="cb31-113"><a href="#cb31-113" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">educationLevel =</span> <span class="fu">factor</span>(educationLevel, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Low"</span>, <span class="st">"HighSchoolOrCollege"</span>, <span class="st">"Bachelors"</span>, <span class="st">"Graduate"</span>))) </span>
+<span id="cb31-114"><a href="#cb31-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-115"><a href="#cb31-115" aria-hidden="true" tabindex="-1"></a>participants</span>
+<span id="cb31-116"><a href="#cb31-116" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-117"><a href="#cb31-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-118"><a href="#cb31-118" aria-hidden="true" tabindex="-1"></a>Next, we will examine the *fin_journal* data set.</span>
+<span id="cb31-119"><a href="#cb31-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-122"><a href="#cb31-122" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-123"><a href="#cb31-123" aria-hidden="true" tabindex="-1"></a>fin_journal</span>
+<span id="cb31-124"><a href="#cb31-124" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-125"><a href="#cb31-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-126"><a href="#cb31-126" aria-hidden="true" tabindex="-1"></a>**Issues:**</span>
+<span id="cb31-127"><a href="#cb31-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-128"><a href="#cb31-128" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>The *timestamp* variable is in "YYYY-MM-DD HH:MM:SS" format. A new variable *yearmon* in "YYYY-MM" format will be created to facilitate in data analysis later on.</span>
+<span id="cb31-129"><a href="#cb31-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-130"><a href="#cb31-130" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>The variable *participantID* will need to be reformatted from <span class="in">`&lt;dbl&gt;`</span> to <span class="in">`&lt;int&gt;`</span>.</span>
+<span id="cb31-131"><a href="#cb31-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-132"><a href="#cb31-132" aria-hidden="true" tabindex="-1"></a>The aforementioned issues are addressed in the code chunk below.</span>
+<span id="cb31-133"><a href="#cb31-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-136"><a href="#cb31-136" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-137"><a href="#cb31-137" aria-hidden="true" tabindex="-1"></a>fin_journal <span class="ot">&lt;-</span> fin_journal <span class="sc">%&gt;%</span></span>
+<span id="cb31-138"><a href="#cb31-138" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb31-139"><a href="#cb31-139" aria-hidden="true" tabindex="-1"></a>  <span class="co"># convert 'participantId' to &lt;int&gt;</span></span>
+<span id="cb31-140"><a href="#cb31-140" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="st">'participantId'</span>), as.integer) <span class="sc">%&gt;%</span></span>
+<span id="cb31-141"><a href="#cb31-141" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb31-142"><a href="#cb31-142" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create a new 'yearmon' column</span></span>
+<span id="cb31-143"><a href="#cb31-143" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">yearmon =</span> <span class="fu">format</span>(<span class="fu">as.Date</span>(timestamp), <span class="st">'%Y-%m'</span>))</span>
+<span id="cb31-144"><a href="#cb31-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-145"><a href="#cb31-145" aria-hidden="true" tabindex="-1"></a>fin_journal</span>
+<span id="cb31-146"><a href="#cb31-146" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-147"><a href="#cb31-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-148"><a href="#cb31-148" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.3.2 Checking for missing values</span></span>
+<span id="cb31-149"><a href="#cb31-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-150"><a href="#cb31-150" aria-hidden="true" tabindex="-1"></a><span class="in">`is.na()`</span> function is used to check for any missing values in both data sets. As seen from the results below, there are no missing values present.</span>
+<span id="cb31-151"><a href="#cb31-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-154"><a href="#cb31-154" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-155"><a href="#cb31-155" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(participants, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span>
+<span id="cb31-156"><a href="#cb31-156" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-157"><a href="#cb31-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-160"><a href="#cb31-160" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-161"><a href="#cb31-161" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(fin_journal, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span>
+<span id="cb31-162"><a href="#cb31-162" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-163"><a href="#cb31-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-164"><a href="#cb31-164" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.3.3 Checking and removing of duplicate rows</span></span>
+<span id="cb31-165"><a href="#cb31-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-166"><a href="#cb31-166" aria-hidden="true" tabindex="-1"></a>We can use the <span class="in">`unique()`</span> function to retain rows that are distinct (i.e remove all duplicate rows).</span>
+<span id="cb31-167"><a href="#cb31-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-168"><a href="#cb31-168" aria-hidden="true" tabindex="-1"></a>As seen in the table below, there are now 1,512,523 rows in the data set *fin_journal*, meaning 1,113 duplicate rows were removed from the data set.</span>
+<span id="cb31-169"><a href="#cb31-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-172"><a href="#cb31-172" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-173"><a href="#cb31-173" aria-hidden="true" tabindex="-1"></a>fin_journal <span class="ot">&lt;-</span> <span class="fu">unique</span>(fin_journal)</span>
+<span id="cb31-174"><a href="#cb31-174" aria-hidden="true" tabindex="-1"></a>fin_journal</span>
+<span id="cb31-175"><a href="#cb31-175" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-176"><a href="#cb31-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-177"><a href="#cb31-177" aria-hidden="true" tabindex="-1"></a>The same check is done on *participants*, and as seen from the table below, there are no duplicate rows to be removed.</span>
+<span id="cb31-178"><a href="#cb31-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-181"><a href="#cb31-181" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-182"><a href="#cb31-182" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(participants)</span>
+<span id="cb31-183"><a href="#cb31-183" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-184"><a href="#cb31-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-185"><a href="#cb31-185" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.3.4 Converting and rounding *amount* values</span></span>
+<span id="cb31-186"><a href="#cb31-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-187"><a href="#cb31-187" aria-hidden="true" tabindex="-1"></a>To facilitate data visualization, all values will be transformed into their absolute values and rounded to two decimal places, keeping in line with the format for currency.</span>
+<span id="cb31-188"><a href="#cb31-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-191"><a href="#cb31-191" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-192"><a href="#cb31-192" aria-hidden="true" tabindex="-1"></a><span class="co"># convert all values *amount* to absolute values</span></span>
+<span id="cb31-193"><a href="#cb31-193" aria-hidden="true" tabindex="-1"></a>fin_journal<span class="sc">$</span>amount <span class="ot">&lt;-</span> <span class="fu">abs</span>(fin_journal<span class="sc">$</span>amount)</span>
+<span id="cb31-194"><a href="#cb31-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-195"><a href="#cb31-195" aria-hidden="true" tabindex="-1"></a><span class="co"># round all values to 2 decimal places</span></span>
+<span id="cb31-196"><a href="#cb31-196" aria-hidden="true" tabindex="-1"></a>fin_journal<span class="sc">$</span>amount <span class="ot">&lt;-</span> <span class="fu">round</span>(fin_journal<span class="sc">$</span>amount, <span class="at">digits =</span> <span class="dv">2</span>)</span>
+<span id="cb31-197"><a href="#cb31-197" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-198"><a href="#cb31-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-199"><a href="#cb31-199" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.3.5 Summation of *category* amounts</span></span>
+<span id="cb31-200"><a href="#cb31-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-201"><a href="#cb31-201" aria-hidden="true" tabindex="-1"></a>Since there are several transactions of the same category for each participant within a given month, we will employ the <span class="in">`group_by()`</span> and <span class="in">`summarise()`</span> functions to combine all transactions of the same category by adding them up.</span>
+<span id="cb31-202"><a href="#cb31-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-205"><a href="#cb31-205" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-206"><a href="#cb31-206" aria-hidden="true" tabindex="-1"></a>fin_journal <span class="ot">&lt;-</span> fin_journal <span class="sc">%&gt;%</span></span>
+<span id="cb31-207"><a href="#cb31-207" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(participantId, yearmon, category) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-208"><a href="#cb31-208" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">amount =</span> <span class="fu">sum</span>(amount))</span>
+<span id="cb31-209"><a href="#cb31-209" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-210"><a href="#cb31-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-211"><a href="#cb31-211" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.3.6 Pivoting *category* column in *fin_journal*</span></span>
+<span id="cb31-212"><a href="#cb31-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-213"><a href="#cb31-213" aria-hidden="true" tabindex="-1"></a>The pivot_wider() function is used to generate separate columns for each transaction category.</span>
+<span id="cb31-214"><a href="#cb31-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-215"><a href="#cb31-215" aria-hidden="true" tabindex="-1"></a>In addition, any missing 'NaN' values are substituted with 0 to indicate that the participant had no transactions of that specific category in that particular month and year.</span>
+<span id="cb31-216"><a href="#cb31-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-219"><a href="#cb31-219" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-220"><a href="#cb31-220" aria-hidden="true" tabindex="-1"></a>fin_journal <span class="ot">&lt;-</span> fin_journal <span class="sc">%&gt;%</span></span>
+<span id="cb31-221"><a href="#cb31-221" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb31-222"><a href="#cb31-222" aria-hidden="true" tabindex="-1"></a>  <span class="co"># pivoting the category column</span></span>
+<span id="cb31-223"><a href="#cb31-223" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> category,</span>
+<span id="cb31-224"><a href="#cb31-224" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> amount) <span class="sc">%&gt;%</span></span>
+<span id="cb31-225"><a href="#cb31-225" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb31-226"><a href="#cb31-226" aria-hidden="true" tabindex="-1"></a>  <span class="co"># fill missing values with 0</span></span>
+<span id="cb31-227"><a href="#cb31-227" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_all</span>(<span class="sc">~</span><span class="fu">replace</span>(., <span class="fu">is.na</span>(.), <span class="dv">0</span>))</span>
+<span id="cb31-228"><a href="#cb31-228" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-229"><a href="#cb31-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-230"><a href="#cb31-230" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.3.7 Creating new variables *total_expenses*, *total_earnings* and *total_savings*</span></span>
+<span id="cb31-231"><a href="#cb31-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-234"><a href="#cb31-234" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-235"><a href="#cb31-235" aria-hidden="true" tabindex="-1"></a>fin_journal <span class="ot">&lt;-</span> fin_journal <span class="sc">%&gt;%</span></span>
+<span id="cb31-236"><a href="#cb31-236" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb31-237"><a href="#cb31-237" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create new column for total expenses</span></span>
+<span id="cb31-238"><a href="#cb31-238" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_expenses =</span> <span class="fu">sum</span>(Education, Food, Recreation, Shelter)) <span class="sc">%&gt;%</span></span>
+<span id="cb31-239"><a href="#cb31-239" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb31-240"><a href="#cb31-240" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create new column for total earnings</span></span>
+<span id="cb31-241"><a href="#cb31-241" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_earnings =</span> <span class="fu">sum</span>(Wage, RentAdjustment)) <span class="sc">%&gt;%</span>  </span>
+<span id="cb31-242"><a href="#cb31-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-243"><a href="#cb31-243" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create new column for total earnings</span></span>
+<span id="cb31-244"><a href="#cb31-244" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_savings =</span> (total_earnings <span class="sc">-</span> total_expenses))</span>
+<span id="cb31-245"><a href="#cb31-245" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-246"><a href="#cb31-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-247"><a href="#cb31-247" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.3.8 Displaying of final cleaned data sets</span></span>
+<span id="cb31-248"><a href="#cb31-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-249"><a href="#cb31-249" aria-hidden="true" tabindex="-1"></a>Using the <span class="in">`kable()`</span> function of the <span class="in">`knitr`</span> package, the final cleaned data sets are displayed as follows:</span>
+<span id="cb31-250"><a href="#cb31-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-253"><a href="#cb31-253" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-254"><a href="#cb31-254" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(participants), <span class="at">align =</span> <span class="st">"c"</span>)</span>
+<span id="cb31-255"><a href="#cb31-255" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-256"><a href="#cb31-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-259"><a href="#cb31-259" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-260"><a href="#cb31-260" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(fin_journal), <span class="at">align =</span> <span class="st">"c"</span>)</span>
+<span id="cb31-261"><a href="#cb31-261" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-262"><a href="#cb31-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-263"><a href="#cb31-263" aria-hidden="true" tabindex="-1"></a><span class="fu"># 4 Data Visualization</span></span>
+<span id="cb31-264"><a href="#cb31-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-265"><a href="#cb31-265" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4.1 Exploratory Data Analysis</span></span>
+<span id="cb31-266"><a href="#cb31-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-267"><a href="#cb31-267" aria-hidden="true" tabindex="-1"></a><span class="fu">### 4.1.1 Distribution of participants' age</span></span>
+<span id="cb31-268"><a href="#cb31-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-271"><a href="#cb31-271" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-272"><a href="#cb31-272" aria-hidden="true" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">plot_ly</span>(participants, <span class="at">x =</span> <span class="sc">~</span>age, <span class="at">type =</span> <span class="st">"histogram"</span>)</span>
+<span id="cb31-273"><a href="#cb31-273" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-274"><a href="#cb31-274" aria-hidden="true" tabindex="-1"></a>age <span class="ot">&lt;-</span> age <span class="sc">%&gt;%</span> </span>
+<span id="cb31-275"><a href="#cb31-275" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">title =</span> <span class="st">'Distribution of participant age'</span>,</span>
+<span id="cb31-276"><a href="#cb31-276" aria-hidden="true" tabindex="-1"></a>         <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">'Age'</span>,</span>
+<span id="cb31-277"><a href="#cb31-277" aria-hidden="true" tabindex="-1"></a>                      <span class="at">zeroline =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb31-278"><a href="#cb31-278" aria-hidden="true" tabindex="-1"></a>                      <span class="at">range =</span> <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">65</span>)),</span>
+<span id="cb31-279"><a href="#cb31-279" aria-hidden="true" tabindex="-1"></a>         <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">'Count'</span>))</span>
+<span id="cb31-280"><a href="#cb31-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-281"><a href="#cb31-281" aria-hidden="true" tabindex="-1"></a>age</span>
+<span id="cb31-282"><a href="#cb31-282" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-283"><a href="#cb31-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-284"><a href="#cb31-284" aria-hidden="true" tabindex="-1"></a><span class="fu">### 4.1.1 Proportion of participants based on</span></span>
+<span id="cb31-285"><a href="#cb31-285" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-286"><a href="#cb31-286" aria-hidden="true" tabindex="-1"></a>::: panel-tabset</span>
+<span id="cb31-287"><a href="#cb31-287" aria-hidden="true" tabindex="-1"></a><span class="fu">## Education Level</span></span>
+<span id="cb31-288"><a href="#cb31-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-289"><a href="#cb31-289" aria-hidden="true" tabindex="-1"></a>The code</span>
+<span id="cb31-290"><a href="#cb31-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-293"><a href="#cb31-293" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-294"><a href="#cb31-294" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb31-295"><a href="#cb31-295" aria-hidden="true" tabindex="-1"></a>edu_count <span class="ot">=</span> <span class="fu">count</span>(participants, educationLevel)</span>
+<span id="cb31-296"><a href="#cb31-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-297"><a href="#cb31-297" aria-hidden="true" tabindex="-1"></a>edu_prop <span class="ot">&lt;-</span> <span class="fu">plot_ly</span>(participants, <span class="at">labels =</span> <span class="sc">~</span>edu_count<span class="sc">$</span>educationLevel, <span class="at">values =</span> <span class="sc">~</span>edu_count<span class="sc">$</span>n, <span class="at">type =</span> <span class="st">'pie'</span>,</span>
+<span id="cb31-298"><a href="#cb31-298" aria-hidden="true" tabindex="-1"></a>        <span class="at">textposition =</span> <span class="st">'inside'</span>,</span>
+<span id="cb31-299"><a href="#cb31-299" aria-hidden="true" tabindex="-1"></a>        <span class="at">textinfo =</span> <span class="st">'label+percent'</span>,</span>
+<span id="cb31-300"><a href="#cb31-300" aria-hidden="true" tabindex="-1"></a>        <span class="at">showlegend =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-301"><a href="#cb31-301" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">title =</span> <span class="st">'Proportion of participants by education level'</span>)</span>
+<span id="cb31-302"><a href="#cb31-302" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-303"><a href="#cb31-303" aria-hidden="true" tabindex="-1"></a><span class="co"># edu_prop &lt;- edu_prop %&gt;% </span></span>
+<span id="cb31-304"><a href="#cb31-304" aria-hidden="true" tabindex="-1"></a><span class="co">#   layout(title = 'Proportion of participants by education level')</span></span>
+<span id="cb31-305"><a href="#cb31-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-306"><a href="#cb31-306" aria-hidden="true" tabindex="-1"></a>edu_prop</span>
+<span id="cb31-307"><a href="#cb31-307" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-308"><a href="#cb31-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-309"><a href="#cb31-309" aria-hidden="true" tabindex="-1"></a>The plot</span>
+<span id="cb31-310"><a href="#cb31-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-313"><a href="#cb31-313" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-314"><a href="#cb31-314" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb31-315"><a href="#cb31-315" aria-hidden="true" tabindex="-1"></a>edu_count <span class="ot">=</span> <span class="fu">count</span>(participants, educationLevel)</span>
+<span id="cb31-316"><a href="#cb31-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-317"><a href="#cb31-317" aria-hidden="true" tabindex="-1"></a>edu_prop <span class="ot">&lt;-</span> <span class="fu">plot_ly</span>(participants, <span class="at">labels =</span> <span class="sc">~</span>edu_count<span class="sc">$</span>educationLevel, <span class="at">values =</span> <span class="sc">~</span>edu_count<span class="sc">$</span>n, <span class="at">type =</span> <span class="st">'pie'</span>,</span>
+<span id="cb31-318"><a href="#cb31-318" aria-hidden="true" tabindex="-1"></a>        <span class="at">textposition =</span> <span class="st">'inside'</span>,</span>
+<span id="cb31-319"><a href="#cb31-319" aria-hidden="true" tabindex="-1"></a>        <span class="at">textinfo =</span> <span class="st">'label+percent'</span>,</span>
+<span id="cb31-320"><a href="#cb31-320" aria-hidden="true" tabindex="-1"></a>        <span class="at">hoverinfo =</span> <span class="st">'text'</span>,</span>
+<span id="cb31-321"><a href="#cb31-321" aria-hidden="true" tabindex="-1"></a>        <span class="at">text =</span> <span class="sc">~</span><span class="fu">paste</span>(edu_count<span class="sc">$</span>n, <span class="st">'participants'</span>),</span>
+<span id="cb31-322"><a href="#cb31-322" aria-hidden="true" tabindex="-1"></a>        <span class="at">showlegend =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-323"><a href="#cb31-323" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">title =</span> <span class="st">'Proportion of participants by education level'</span>)</span>
+<span id="cb31-324"><a href="#cb31-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-325"><a href="#cb31-325" aria-hidden="true" tabindex="-1"></a>edu_prop</span>
+<span id="cb31-326"><a href="#cb31-326" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-327"><a href="#cb31-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-328"><a href="#cb31-328" aria-hidden="true" tabindex="-1"></a><span class="fu">## Household size</span></span>
+<span id="cb31-329"><a href="#cb31-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-330"><a href="#cb31-330" aria-hidden="true" tabindex="-1"></a>The code</span>
+<span id="cb31-331"><a href="#cb31-331" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-334"><a href="#cb31-334" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-335"><a href="#cb31-335" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb31-336"><a href="#cb31-336" aria-hidden="true" tabindex="-1"></a>hhld_count <span class="ot">=</span> <span class="fu">count</span>(participants, householdSize)</span>
+<span id="cb31-337"><a href="#cb31-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-338"><a href="#cb31-338" aria-hidden="true" tabindex="-1"></a>hhld_prop <span class="ot">&lt;-</span> <span class="fu">plot_ly</span>(participants, <span class="at">labels =</span> <span class="sc">~</span>hhld_count<span class="sc">$</span>householdSize, <span class="at">values =</span> <span class="sc">~</span>hhld_count<span class="sc">$</span>n, <span class="at">type =</span> <span class="st">'pie'</span>,</span>
+<span id="cb31-339"><a href="#cb31-339" aria-hidden="true" tabindex="-1"></a>        <span class="at">textposition =</span> <span class="st">'inside'</span>,</span>
+<span id="cb31-340"><a href="#cb31-340" aria-hidden="true" tabindex="-1"></a>        <span class="at">textinfo =</span> <span class="st">'label+percent'</span>,</span>
+<span id="cb31-341"><a href="#cb31-341" aria-hidden="true" tabindex="-1"></a>        <span class="at">hoverinfo =</span> <span class="st">'text'</span>,</span>
+<span id="cb31-342"><a href="#cb31-342" aria-hidden="true" tabindex="-1"></a>        <span class="at">text =</span> <span class="sc">~</span><span class="fu">paste</span>(<span class="st">'Number of households ='</span>, hhld_count<span class="sc">$</span>n),</span>
+<span id="cb31-343"><a href="#cb31-343" aria-hidden="true" tabindex="-1"></a>        <span class="at">showlegend =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-344"><a href="#cb31-344" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">title =</span> <span class="st">'Proportion of participants by household size'</span>)</span>
+<span id="cb31-345"><a href="#cb31-345" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-346"><a href="#cb31-346" aria-hidden="true" tabindex="-1"></a>hhld_prop</span>
+<span id="cb31-347"><a href="#cb31-347" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-348"><a href="#cb31-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-349"><a href="#cb31-349" aria-hidden="true" tabindex="-1"></a>The plot</span>
+<span id="cb31-350"><a href="#cb31-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-353"><a href="#cb31-353" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-354"><a href="#cb31-354" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb31-355"><a href="#cb31-355" aria-hidden="true" tabindex="-1"></a>hhld_count <span class="ot">=</span> <span class="fu">count</span>(participants, householdSize)</span>
+<span id="cb31-356"><a href="#cb31-356" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-357"><a href="#cb31-357" aria-hidden="true" tabindex="-1"></a>hhld_prop <span class="ot">&lt;-</span> <span class="fu">plot_ly</span>(participants, <span class="at">labels =</span> <span class="sc">~</span>hhld_count<span class="sc">$</span>householdSize, <span class="at">values =</span> <span class="sc">~</span>hhld_count<span class="sc">$</span>n, <span class="at">type =</span> <span class="st">'pie'</span>,</span>
+<span id="cb31-358"><a href="#cb31-358" aria-hidden="true" tabindex="-1"></a>        <span class="at">textposition =</span> <span class="st">'inside'</span>,</span>
+<span id="cb31-359"><a href="#cb31-359" aria-hidden="true" tabindex="-1"></a>        <span class="at">textinfo =</span> <span class="st">'label+percent'</span>,</span>
+<span id="cb31-360"><a href="#cb31-360" aria-hidden="true" tabindex="-1"></a>        <span class="at">showlegend =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-361"><a href="#cb31-361" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">title =</span> <span class="st">'Proportion of participants by household size'</span>)</span>
+<span id="cb31-362"><a href="#cb31-362" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-363"><a href="#cb31-363" aria-hidden="true" tabindex="-1"></a>hhld_prop</span>
+<span id="cb31-364"><a href="#cb31-364" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-365"><a href="#cb31-365" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb31-366"><a href="#cb31-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-367"><a href="#cb31-367" aria-hidden="true" tabindex="-1"></a>**Insights:**</span>
+<span id="cb31-368"><a href="#cb31-368" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-369"><a href="#cb31-369" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Most participants in the city of Engagement are highly educated, with only 8.31% of the participants surveyed having a low level of education.</span>
+<span id="cb31-370"><a href="#cb31-370" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-371"><a href="#cb31-371" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span></span>
+<span id="cb31-372"><a href="#cb31-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-373"><a href="#cb31-373" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4.1 Education level and joviality?</span></span>
+<span id="cb31-374"><a href="#cb31-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-377"><a href="#cb31-377" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-378"><a href="#cb31-378" aria-hidden="true" tabindex="-1"></a>education <span class="ot">&lt;-</span> <span class="fu">plot_ly</span>(</span>
+<span id="cb31-379"><a href="#cb31-379" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> participants,</span>
+<span id="cb31-380"><a href="#cb31-380" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="sc">~</span>joviality,</span>
+<span id="cb31-381"><a href="#cb31-381" aria-hidden="true" tabindex="-1"></a>  <span class="at">color =</span> <span class="sc">~</span>educationLevel,</span>
+<span id="cb31-382"><a href="#cb31-382" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"box"</span>,</span>
+<span id="cb31-383"><a href="#cb31-383" aria-hidden="true" tabindex="-1"></a>  <span class="at">showlegend =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb31-384"><a href="#cb31-384" aria-hidden="true" tabindex="-1"></a>  <span class="at">boxmean =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb31-385"><a href="#cb31-385" aria-hidden="true" tabindex="-1"></a>  <span class="at">notched =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-386"><a href="#cb31-386" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb31-387"><a href="#cb31-387" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">title =</span> <span class="fu">list</span>(<span class="at">text =</span> <span class="st">"Boxplot of joviality by education level"</span>),</span>
+<span id="cb31-388"><a href="#cb31-388" aria-hidden="true" tabindex="-1"></a>         <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="fu">list</span>(<span class="at">text =</span><span class="st">'Education Level'</span>)),</span>
+<span id="cb31-389"><a href="#cb31-389" aria-hidden="true" tabindex="-1"></a>         <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="fu">list</span>(<span class="at">text =</span><span class="st">'Joviality'</span>)))</span>
+<span id="cb31-390"><a href="#cb31-390" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-391"><a href="#cb31-391" aria-hidden="true" tabindex="-1"></a>education</span>
+<span id="cb31-392"><a href="#cb31-392" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-393"><a href="#cb31-393" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-394"><a href="#cb31-394" aria-hidden="true" tabindex="-1"></a>**Insights:**</span>
+<span id="cb31-395"><a href="#cb31-395" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-396"><a href="#cb31-396" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>All participants seem to have similar joviality scores, regardless of education level.</span>
+<span id="cb31-397"><a href="#cb31-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-398"><a href="#cb31-398" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Slight increases in median and mean joviality as education level increases.</span>
+<span id="cb31-399"><a href="#cb31-399" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-402"><a href="#cb31-402" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-403"><a href="#cb31-403" aria-hidden="true" tabindex="-1"></a><span class="fu">ggscatterstats</span>(</span>
+<span id="cb31-404"><a href="#cb31-404" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> participants,</span>
+<span id="cb31-405"><a href="#cb31-405" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> age,</span>
+<span id="cb31-406"><a href="#cb31-406" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> joviality, </span>
+<span id="cb31-407"><a href="#cb31-407" aria-hidden="true" tabindex="-1"></a>  <span class="at">bins =</span> <span class="dv">20</span>) <span class="sc">+</span></span>
+<span id="cb31-408"><a href="#cb31-408" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb31-409"><a href="#cb31-409" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb31-410"><a href="#cb31-410" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
