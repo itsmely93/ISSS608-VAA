@@ -76,17 +76,17 @@ fin_journal <- read_csv("data/FinancialJournal.csv")
 
 ### 3.3.1 Reformatting of variables
 
-Firstly, we will examine the *participants* data set.
+We will examine both data sets using the `glimpse()` function of the *dplyr* package. Firstly, the *participants* data set is examined.
 
 ```{r}
-head(participants)
+glimpse(participants)
 ```
 
 **Issues:**
 
 1.  The variables *participantID*, *householdSize* and *age* are currently formatted as `<dbl>`. These variables will have to be converted into `<int>` format.
 
-2.  Likewise, the variable *educationLevel* will need to be converted from `<chr>` to `<fct>` format.
+2.  Likewise, the variable *educationLevel* will need to be converted from `<chr>` to `<fct>` format. The *educationLevel* will then be sorted from the lowest level (*Low*) to the highest level (*Graduate*).
 
 The aforementioned variables are reformatted into the correct type, as seen in the code chunk below.
 
@@ -102,13 +102,13 @@ participants <- participants %>%
   # sort 'educationLevel' in order
   mutate(educationLevel = factor(educationLevel, levels = c("Low", "HighSchoolOrCollege", "Bachelors", "Graduate"))) 
 
-participants
+glimpse(participants)
 ```
 
 Next, we will examine the *fin_journal* data set.
 
 ```{r}
-fin_journal
+glimpse(fin_journal)
 ```
 
 **Issues:**
@@ -128,7 +128,7 @@ fin_journal <- fin_journal %>%
   # create a new 'yearmon' column
   mutate(yearmon = format(as.Date(timestamp), '%Y-%m'))
 
-fin_journal
+glimpse(fin_journal)
 ```
 
 ### 3.3.2 Checking for missing values
@@ -348,118 +348,41 @@ ggplot(participants,
 
 ### 4.1.3 Proportion of participants
 
-::: panel-tabset
-## By education level
-
-The code
-
 ```{r}
-#| code-fold: true
-#| eval: false
-edu_count = count(participants, educationLevel)
+fig <- plot_ly()
 
-edu_prop <- plot_ly(participants, labels = ~edu_count$educationLevel, values = ~edu_count$n, type = "pie",
-        textposition = "inside",
-        textinfo = "label+percent",
-        hoverinfo = "text",
-        text = ~paste(edu_count$n, "participants"),
-        showlegend = FALSE) %>%
-  layout(title = "Proportion of participants by education level")
+fig <- fig %>% 
+  add_pie(data = count(participants, educationLevel), 
+          labels = ~educationLevel, 
+          values = ~n,
+          name = "Education level",
+          title = "Education Level",
+          domain = list(row = 0, column = 0))
+                      
+fig <- fig %>% 
+  add_pie(data = count(participants, householdSize), 
+          labels = ~householdSize, 
+          values = ~n,
+          name = "Household size", 
+          title = "Household size",
+          domain = list(row = 0, column = 1))
+                       
+fig <- fig %>% 
+  add_pie(data = count(participants, haveKids), 
+          labels = ~haveKids, 
+          values = ~n,
+          name = "Have Kids",
+          title = "Have kids",
+          domain = list(row = 0, column = 2))
 
-edu_prop
+fig <- fig %>% layout(title = "Proportion of participants", showlegend = F,
+                      grid = list(rows=1, columns=3),
+                      xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                      yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+
+fig
 ```
 
-The plot
-
-```{r}
-#| echo: false
-edu_count = count(participants, educationLevel)
-
-edu_prop <- plot_ly(participants, labels = ~edu_count$educationLevel, values = ~edu_count$n, type = "pie",
-        textposition = "inside",
-        textinfo = "label+percent",
-        hoverinfo = "text",
-        text = ~paste(edu_count$n, "participants"),
-        showlegend = FALSE) %>%
-  layout(title = "Proportion of participants by education level")
-
-edu_prop
-```
-
-## By household size
-
-The code
-
-```{r}
-#| code-fold: true
-#| eval: false
-hhld_count = count(participants, householdSize)
-
-hhld_prop <- plot_ly(participants, labels = ~hhld_count$householdSize, values = ~hhld_count$n, type = "pie",
-        textposition = "inside",
-        textinfo = "label+percent",
-        hoverinfo = "text",
-        text = ~paste("Number of households =", hhld_count$n),
-        showlegend = FALSE) %>%
-  layout(title = "Proportion of participants by household size")
-
-hhld_prop
-```
-
-The plot
-
-```{r}
-#| echo: false
-hhld_count = count(participants, householdSize)
-
-hhld_prop <- plot_ly(participants, labels = ~hhld_count$householdSize, values = ~hhld_count$n, type = "pie",
-        textposition = "inside",
-        textinfo = "label+percent",
-        hoverinfo = "text",
-        text = ~paste("Number of households =", hhld_count$n),
-        showlegend = FALSE) %>%
-  layout(title = "Proportion of participants by household size")
-
-hhld_prop
-```
-
-## Have Kids
-
-The code
-
-```{r}
-#| code-fold: true
-#| eval: false
-kids_count = count(participants, haveKids)
-
-kids_prop <- plot_ly(participants, labels = ~kids_count$haveKids, values = ~kids_count$n, type = "pie",
-        textposition = "inside",
-        textinfo = "label+percent",
-        hoverinfo = "text",
-        text = ~paste("Number of households with kids =", kids_count$n),
-        showlegend = FALSE) %>%
-  layout(title = "Proportion of participants whose households have kids")
-
-kids_prop
-```
-
-The plot
-
-```{r}
-#| echo: false
-kids_count = count(participants, haveKids)
-
-kids_prop <- plot_ly(participants, labels = ~kids_count$haveKids, values = ~kids_count$n, type = "pie",
-        textposition = "inside",
-        textinfo = "label+percent",
-        hoverinfo = "text",
-        text = ~paste("Number of households with kids =", kids_count$n),
-        showlegend = FALSE) %>%
-  layout(title = "Proportion of participants whose households have kids")
-
-kids_prop
-```
-:::
 
 **Insights:**
 
@@ -469,7 +392,9 @@ kids_prop
 
 3.  This could be attributed to the fact that more than 2/3 of households (70.2%) do not have children.
 
-These insights lead us to the next question: does having a high level of education result in fewer participants having children? We will look into this later on at section 4.2.
+These insights lead us to the next question: does having a high level of education result in fewer participants having children? We will explore more about this later on in section 4.2.
+
+
 
 ### 4.1.4 What do the participants of the City of Engagement spend the most on?
 
@@ -503,6 +428,9 @@ total_fig
 Most of the participants' expenditure is due to Shelter, which accounts for 45.9% of the total spending.
 
 The category that participants spent the least on is Education, accounting for only 0.9% of the total spending.
+
+
+
 
 ## 4.2 Confirmatory Data Analysis 
 
