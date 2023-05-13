@@ -27,17 +27,18 @@ pacman::p_load(rstatix, gt, patchwork, tidyverse)
 #| code-summary: "Click to show/hide the code"
 exam_data <- read_csv("data/Exam_data.csv")
 ```
+
 ```{r}
 #| code-fold: show
 #| code-summary: "Click to show/hide the code"
 exam_data
 ```
 
-#  Plotting the Q-Q plot
+# Plotting the Q-Q plot
 
 ::: panel-tabset
-
 ## The plot
+
 ```{r}
 #| echo: false
 #| fig-width: 8
@@ -65,7 +66,6 @@ ggplot(exam_data, aes(sample = ENGLISH)) +
 As the points deviate slightly from the diagonal line, it is indicative that the data set DOES NOT conform with normal distribution.
 :::
 
-
 ::: panel-tabset
 ## The plot
 
@@ -85,6 +85,7 @@ table_png <- png::readPNG(tmp, native = TRUE)
 
 qq + table_png
 ```
+
 ## The code chunk
 
 ```{r}
