@@ -1,0 +1,44 @@
+---
+title: "Hands-on Exercise 5"
+author: "Lim Li Ying"
+date: "10 May 2023"
+edit: visual
+execute: 
+  warning: false
+---
+
+# Getting Started
+
+## Installing and loading R packages
+
+```{r}
+pacman::p_load(igraph, tidygraph, ggraph, visNetwork, lubridate, clock, tidyverse, graphlayouts)
+```
+
+## Loading the data
+
+In this hands-on exercise, two datasets will be used, namely *GAStech_email_edge-v2.csv* and *GAStech_email_node.csv*.
+
+```{r}
+GAStech_edges <- read_csv("data/GAStech_email_edge-v2.csv")
+```
+
+```{r}
+GAStech_nodes <- read_csv("data/GAStech_email_node.csv")
+```
+
+## Reviewing the data
+
+Using the `glimpse()` function of the *dplyr* package, we can examine the structure of the data.
+
+```{r}
+glimpse(GAStech_edges)
+```
+
+```{r}
+GAStech_edges <- GAStech_edges %>%
+  mutate(SendDate = dmy(SentDate)) %>%
+  mutate(Weekday = wday(SentDate,
+                        label = TRUE,
+                        abbr = FALSE))
+```
