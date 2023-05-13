@@ -57,7 +57,7 @@ In this exercise, the following R packages will be used:
 The code chunk below uses `p_load()` of the `pacman` package to check if all the packages are installed. If they are, they will then be loaded into the R environment.
 
 ```{r}
-pacman::p_load(ggiraph, plotly, patchwork, DT, tidyverse, skimr, knitr, ggstatsplot, ggridges)
+pacman::p_load(ggiraph, plotly, patchwork, DT, tidyverse, skimr, knitr, ggstatsplot, ggridges, ggmosaic)
 ```
 
 ## 3.2 Importing the data sets
@@ -228,7 +228,7 @@ kable(head(fin_journal), align = "c")
 
 # 4 Data Analysis and Visualization
 
-## 4.1 Exploratory Data Analysis 
+## 4.1 Exploratory Data Analysis
 
 ### 4.1.1 Distribution of participants by age
 
@@ -243,14 +243,12 @@ age <- plot_ly(
                             width = 1.5))) %>%
   layout(title = "Distribution of participants' age",
          xaxis = list(title = "Age",
-                      zeroline = TRUE,
+                      zeroline = FALSE,
                       range = c(15, 65)),
          yaxis = list(title = "Count"))
 
 age
 ```
-
-------------------------------------------------------------------------
 
 **Insights:**
 
@@ -375,6 +373,7 @@ fig <- fig %>%
           title = "Have kids",
           domain = list(row = 0, column = 2))
 
+
 fig <- fig %>% layout(title = "Proportion of participants", showlegend = F,
                       grid = list(rows=1, columns=3),
                       xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
@@ -382,7 +381,6 @@ fig <- fig %>% layout(title = "Proportion of participants", showlegend = F,
 
 fig
 ```
-
 
 **Insights:**
 
@@ -392,9 +390,7 @@ fig
 
 3.  This could be attributed to the fact that more than 2/3 of households (70.2%) do not have children.
 
-These insights lead us to the next question: does having a high level of education result in fewer participants having children? We will explore more about this later on in section 4.2.
-
-
+These insights lead us to the next question: does having a high level of education result in fewer participants having children? We will explore more about this later on in **section 4.2.1**.
 
 ### 4.1.4 What do the participants of the City of Engagement spend the most on?
 
@@ -429,10 +425,22 @@ Most of the participants' expenditure is due to Shelter, which accounts for 45.9
 
 The category that participants spent the least on is Education, accounting for only 0.9% of the total spending.
 
+### 4.1.5. Interest group by education level
 
+```{r}
+int_edu <- ggplot(data = participants) +
+  geom_mosaic(aes(x = product(educationLevel), fill = interestGroup)) +
+  labs(x = "Education Level", y = "Interest Group", title = "Education levels and their interest groups") +
+  theme(legend.position = "none")
 
+ggplotly(int_edu)
+```
 
-## 4.2 Confirmatory Data Analysis 
+### 4.1.6 Average earning, spending and savings 
+
+### 4.1.7 Spending, earning, savings by household size, age
+
+## 4.2 Confirmatory Data Analysis
 
 ### 4.2.1 Is education level associated with having kids?
 
@@ -565,7 +573,7 @@ kids_jov <- ggbetweenstats(
 kids_jov
 ```
 
-### Does spending more lead to higher jovality
+### Does spending more lead to higher joviality?
 
 ```{r}
 total <- fin_journal %>% 
@@ -589,5 +597,14 @@ spend_jov
 #Do a boxplot here to see spending
 ```
 
+Interest group by age
 
-Does earning more lead to higher joviality
+interest group by education level
+
+explore grouped ggstats
+
+does having kids result in greater spending and lower savings? \<- CDA
+
+is education level associated with spending, saving? like smarter ppl save more? or stupid people spend more?
+
+stop talking about joviality alr. not demographic or financial

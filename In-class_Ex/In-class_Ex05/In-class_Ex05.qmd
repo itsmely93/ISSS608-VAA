@@ -16,9 +16,17 @@ pacman::p_load(igraph, tidygraph, ggraph, visNetwork, lubridate, clock, tidyvers
 ```
 
 ## Loading the data set
+
 ```{r}
-GAStech_edges <- read_csv("data/GAStech_email_edge-v2.csv")
+MC1 <- jsonlite::fromJSON("data/MC1.json")
 ```
+
 ```{r}
-GAStech_nodes <- read_csv("data/GAStech_email_node.csv")
+MC1_nodes <- as_tibble(MC1$nodes) %>%
+  select(id, type, country)
+```
+
+```{r}
+MC1_edges <- as_tibble(MC1$links) %>%
+  select(source, target, type, weight, key)
 ```
