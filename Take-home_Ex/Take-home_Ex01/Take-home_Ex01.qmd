@@ -57,7 +57,7 @@ In this exercise, the following R packages will be used:
 The code chunk below uses `p_load()` of the `pacman` package to check if all the packages are installed. If they are, they will then be loaded into the R environment.
 
 ```{r}
-pacman::p_load(ggiraph, plotly, patchwork, DT, tidyverse, skimr, knitr, ggstatsplot, ggdist)
+pacman::p_load(ggiraph, plotly, patchwork, DT, tidyverse, skimr, knitr, ggstatsplot, ggridges)
 ```
 
 ## 3.2 Importing the data sets
@@ -226,44 +226,145 @@ kable(head(participants), align = "c")
 kable(head(fin_journal), align = "c")
 ```
 
-# 4 Data Visualization
+# 4 Data Analysis and Visualization
 
-## 4.1 Exploratory Data Analysis
+## 4.1 Exploratory Data Analysis 
 
-### 4.1.1 Distribution of participants' age
+### 4.1.1 Distribution of participants by age
 
 ```{r}
-age <- plot_ly(participants, x = ~age, type = "histogram")
-
-age <- age %>% 
-  layout(title = 'Distribution of participant age',
-         xaxis = list(title = 'Age',
+age <- plot_ly(
+  participants, 
+  x = ~age, 
+  type = "histogram", 
+  nbinsx = 10, 
+  marker = list(color = 'rgb(158,202,225)',
+                line = list(color = 'rgb(8,48,107)', 
+                            width = 1.5))) %>%
+  layout(title = "Distribution of participants' age",
+         xaxis = list(title = "Age",
                       zeroline = TRUE,
                       range = c(15, 65)),
-         yaxis = list(title = 'Count'))
+         yaxis = list(title = "Count"))
 
 age
 ```
 
-### 4.1.1 Proportion of participants based on
+------------------------------------------------------------------------
+
+**Insights:**
+
+There is a relatively even distribution of participants' ages between 20-59 years old, with the smallest number of participants being those who are 60 years old and above (23 participants) and those aged 15-19 (48 participants). The age group with the highest number of participants is the 30-34 age range, which has 130 participants.
+
+### 4.1.2 Distribution of participants
 
 ::: panel-tabset
-## Education Level
+## Interest groups by age
 
 The code
 
 ```{r}
+#| code-fold: true
+#| eval: false
+ggplot(participants, 
+       aes(x = age, 
+           y = interestGroup)) +
+  geom_density_ridges(
+    scale = 3,
+    rel_min_height = 0.01,
+    bandwidth = 3.4,
+    fill = alpha("#7097BB", 0.5),
+    color = "white") +
+  scale_x_continuous(
+    name = "Age",
+    expand = c(0, 0)) +
+  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +
+  theme_ridges()
+```
+
+The plot
+
+```{r}
+#| echo: false
+ggplot(participants, 
+       aes(x = age, 
+           y = interestGroup)) +
+  geom_density_ridges(
+    scale = 3,
+    rel_min_height = 0.01,
+    bandwidth = 3.4,
+    fill = alpha("#7097BB", 0.5),
+    color = "white") +
+  scale_x_continuous(
+    name = "Age",
+    expand = c(0, 0)) +
+  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +
+  theme_ridges()
+```
+
+## Education level by age
+
+The code
+
+```{r}
+#| code-fold: true
+#| eval: false
+ggplot(participants, 
+       aes(x = age, 
+           y = educationLevel)) +
+  geom_density_ridges(
+    scale = 3,
+    rel_min_height = 0.01,
+    bandwidth = 3.4,
+    fill = alpha("#800020", 0.5),
+    color = "white") +
+  scale_x_continuous(
+    name = "Age",
+    expand = c(0, 0)) +
+  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +
+  theme_ridges()
+```
+
+The plot
+
+```{r}
+#| echo: false
+ggplot(participants, 
+       aes(x = age, 
+           y = educationLevel)) +
+  geom_density_ridges(
+    scale = 3,
+    rel_min_height = 0.01,
+    bandwidth = 3.4,
+    fill = alpha("#800020", 0.5),
+    color = "white") +
+  scale_x_continuous(
+    name = "Age",
+    expand = c(0, 0)) +
+  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +
+  theme_ridges()
+```
+:::
+
+### 4.1.3 Proportion of participants
+
+::: panel-tabset
+## By education level
+
+The code
+
+```{r}
+#| code-fold: true
 #| eval: false
 edu_count = count(participants, educationLevel)
 
-edu_prop <- plot_ly(participants, labels = ~edu_count$educationLevel, values = ~edu_count$n, type = 'pie',
-        textposition = 'inside',
-        textinfo = 'label+percent',
+edu_prop <- plot_ly(participants, labels = ~edu_count$educationLevel, values = ~edu_count$n, type = "pie",
+        textposition = "inside",
+        textinfo = "label+percent",
+        hoverinfo = "text",
+        text = ~paste(edu_count$n, "participants"),
         showlegend = FALSE) %>%
-  layout(title = 'Proportion of participants by education level')
-
-# edu_prop <- edu_prop %>% 
-#   layout(title = 'Proportion of participants by education level')
+  layout(title = "Proportion of participants by education level")
 
 edu_prop
 ```
@@ -274,32 +375,33 @@ The plot
 #| echo: false
 edu_count = count(participants, educationLevel)
 
-edu_prop <- plot_ly(participants, labels = ~edu_count$educationLevel, values = ~edu_count$n, type = 'pie',
-        textposition = 'inside',
-        textinfo = 'label+percent',
-        hoverinfo = 'text',
-        text = ~paste(edu_count$n, 'participants'),
+edu_prop <- plot_ly(participants, labels = ~edu_count$educationLevel, values = ~edu_count$n, type = "pie",
+        textposition = "inside",
+        textinfo = "label+percent",
+        hoverinfo = "text",
+        text = ~paste(edu_count$n, "participants"),
         showlegend = FALSE) %>%
-  layout(title = 'Proportion of participants by education level')
+  layout(title = "Proportion of participants by education level")
 
 edu_prop
 ```
 
-## Household size
+## By household size
 
 The code
 
 ```{r}
+#| code-fold: true
 #| eval: false
 hhld_count = count(participants, householdSize)
 
-hhld_prop <- plot_ly(participants, labels = ~hhld_count$householdSize, values = ~hhld_count$n, type = 'pie',
-        textposition = 'inside',
-        textinfo = 'label+percent',
-        hoverinfo = 'text',
-        text = ~paste('Number of households =', hhld_count$n),
+hhld_prop <- plot_ly(participants, labels = ~hhld_count$householdSize, values = ~hhld_count$n, type = "pie",
+        textposition = "inside",
+        textinfo = "label+percent",
+        hoverinfo = "text",
+        text = ~paste("Number of households =", hhld_count$n),
         showlegend = FALSE) %>%
-  layout(title = 'Proportion of participants by household size')
+  layout(title = "Proportion of participants by household size")
 
 hhld_prop
 ```
@@ -310,13 +412,52 @@ The plot
 #| echo: false
 hhld_count = count(participants, householdSize)
 
-hhld_prop <- plot_ly(participants, labels = ~hhld_count$householdSize, values = ~hhld_count$n, type = 'pie',
-        textposition = 'inside',
-        textinfo = 'label+percent',
+hhld_prop <- plot_ly(participants, labels = ~hhld_count$householdSize, values = ~hhld_count$n, type = "pie",
+        textposition = "inside",
+        textinfo = "label+percent",
+        hoverinfo = "text",
+        text = ~paste("Number of households =", hhld_count$n),
         showlegend = FALSE) %>%
-  layout(title = 'Proportion of participants by household size')
+  layout(title = "Proportion of participants by household size")
 
 hhld_prop
+```
+
+## Have Kids
+
+The code
+
+```{r}
+#| code-fold: true
+#| eval: false
+kids_count = count(participants, haveKids)
+
+kids_prop <- plot_ly(participants, labels = ~kids_count$haveKids, values = ~kids_count$n, type = "pie",
+        textposition = "inside",
+        textinfo = "label+percent",
+        hoverinfo = "text",
+        text = ~paste("Number of households with kids =", kids_count$n),
+        showlegend = FALSE) %>%
+  layout(title = "Proportion of participants whose households have kids")
+
+kids_prop
+```
+
+The plot
+
+```{r}
+#| echo: false
+kids_count = count(participants, haveKids)
+
+kids_prop <- plot_ly(participants, labels = ~kids_count$haveKids, values = ~kids_count$n, type = "pie",
+        textposition = "inside",
+        textinfo = "label+percent",
+        hoverinfo = "text",
+        text = ~paste("Number of households with kids =", kids_count$n),
+        showlegend = FALSE) %>%
+  layout(title = "Proportion of participants whose households have kids")
+
+kids_prop
 ```
 :::
 
@@ -324,39 +465,201 @@ hhld_prop
 
 1.  Most participants in the city of Engagement are highly educated, with only 8.31% of the participants surveyed having a low level of education.
 
-2.  
+2.  Household sizes of the participants are relatively small, with more than 2/3 of the participants' household sizes being 2 or less.
 
-## 4.1 Education level and joviality?
+3.  This could be attributed to the fact that more than 2/3 of households (70.2%) do not have children.
+
+These insights lead us to the next question: does having a high level of education result in fewer participants having children? We will look into this later on at section 4.2.
+
+### 4.1.4 What do the participants of the City of Engagement spend the most on?
 
 ```{r}
-education <- plot_ly(
-  data = participants,
-  y = ~joviality,
-  color = ~educationLevel,
-  type = "box",
-  showlegend = FALSE,
-  boxmean = TRUE,
-  notched = TRUE) %>% 
-  
-  layout(title = list(text = "Boxplot of joviality by education level"),
-         xaxis = list(title = list(text ='Education Level')),
-         yaxis = list(title = list(text ='Joviality')))
+fin_long <- fin_journal %>%
+  pivot_longer(cols = Education:Shelter, names_to = "Category", values_to = "Amount")
 
-education
+total_spent <- fin_long %>% 
+  group_by(Category) %>%
+  summarize(Total = sum(Amount))
+
+total_fig <- plot_ly(
+  total_spent, 
+  x = ~Category, 
+  y = ~Total,
+  color = ~Category,
+  type = "bar",
+  textposition = "none",
+  hoverinfo = "text",
+  text = ~paste(total_spent$Total, " (", scales::percent(total_spent$Total/sum(total_spent$Total)), ")"),
+  showlegend = FALSE) %>%
+  layout(title = "What do the participants spend the most on?",
+         xaxis = list(title = list(text = "Category")),
+         yaxis = list(title = list(text = "Total Amount Spent")))
+
+total_fig
 ```
 
 **Insights:**
 
-1.  All participants seem to have similar joviality scores, regardless of education level.
+Most of the participants' expenditure is due to Shelter, which accounts for 45.9% of the total spending.
 
-2.  Slight increases in median and mean joviality as education level increases.
+The category that participants spent the least on is Education, accounting for only 0.9% of the total spending.
+
+## 4.2 Confirmatory Data Analysis 
+
+### 4.2.1 Is education level associated with having kids?
+
+In order to find out if there really is an association between education level and having kids, the following hypotheses will be tested at 95% confidence level:
+
+::: callout-note
+-   H~0~: There is no significant association between education level and having kids.
+
+-   H~1~: The association between education level and having kids is statistically significant.
+:::
 
 ```{r}
-ggscatterstats(
+set.seed(123)
+
+# creating a plot
+have_kids <- ggbarstats(
+  participants, 
+  x = haveKids, 
+  y = educationLevel,
+  xlab = "Education level",
+  ylab = "Percentage",
+  type = "np",
+  title = "Is there an association between education level and having kids?")
+
+# looking at the plot
+have_kids
+```
+
+Based on the Pearson's chi-square test results, the p-value of 5.91e-03 is lower than the alpha value of 0.05. Thus, there is sufficient evidence to reject the null hypothesis and conclude that there is a statistically significant association between education level and households with kids.
+
+Visually as seen from the graph, we can observe that as education levels increase, the proportion of participants' households with kids decreases.
+
+### 4.2.2 Does education level affect joviality?
+
+Are people with higher education levels happier, or is there no difference in joviality regardless of education level? To find out, a one-way ANOVA test is done on the following hypotheses at a confidence level of 95%:
+
+::: callout-note
+-   H~0~: There is no difference among group means.
+
+-   H~1~: There is a difference among group means.
+:::
+
+```{r}
+edu_jov <- ggbetweenstats(
+  data = participants,
+  x = educationLevel,
+  y = joviality,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  xlab = "Education level",
+  ylab = "Joviality",
+  title = "Does education level affect joviality?")
+
+edu_jov
+```
+
+As the p-value of 0.70 is higher than the alpha value of 0.05, we accept the null hypothesis as there is sufficient evidence to conclude that the means among the different education levels are the same. Therefore, education level does not really affect joviality.
+
+### 4.2.3 Does interest group affect joviality?
+
+Similarly, we can perform a oneway ANOVA test at 95% confidence level to determine if there is a difference in the mean of joviality value among the different interest groups.
+
+::: callout-note
+-   H~0~: There is no difference among group means.
+
+-   H~1~: There is a difference among group means.
+:::
+
+```{r}
+int_jov <- ggbetweenstats(
+  data = participants,
+  x = interestGroup,
+  y = joviality,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  package = "yarrr",
+  palette = "info2",
+  xlab = "Interest group",
+  ylab = "Joviality",
+  title = "Does interest group affect joviality?")
+
+int_jov
+```
+
+Visually, participants in interest groups C, E and G have the higheest mean joviality values, while participants in interest group H have the lowest mean joviality values.
+
+However, with the p-value of 0.77 being higher than the alpha value of 0.05, the null hypothesis has to be rejected. There is statistically significant evidence that there is no difference in the means among the interest groups. Thus, being in certain interest groups does not affect joviality either.
+
+### 4.2.4 Is age correlated with joviality?
+
+```{r}
+age_jov <- ggscatterstats(
   data = participants,
   x = age,
   y = joviality, 
-  bins = 20) +
-  theme_minimal()
-  
+  xlab = "Age",
+  ylab = "Joviality",
+  title = "Is age correlated with joviality?")
+
+age_jov
 ```
+
+As seen from the scatter plot, there is a very weak negative correlation between joviality and age.
+
+### 4.2.5 Does having kids affect joviality?
+
+```{r}
+kids_jov <- ggbetweenstats(
+  data = participants,
+  x = haveKids,
+  y = joviality,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE,
+  xlab = "Have Kids",
+  ylab = "Joviality",
+  title = "Does having kids affect joviality?")
+
+kids_jov
+```
+
+### Does spending more lead to higher jovality
+
+```{r}
+total <- fin_journal %>% 
+  group_by(participantId) %>%
+  summarise(total_exp = sum(total_expenses), total_earn = sum(total_earnings), total_save = sum(total_savings))
+
+joined <- merge(participants, total, by = "participantId")
+
+spend_jov <- ggscatterstats(
+  data = joined,
+  x = total_exp,
+  y = joviality, 
+  xlab = "Total spendings",
+  ylab = "Joviality",
+  title = "Is amount spent correlated with joviality?")
+
+spend_jov
+```
+
+```{r}
+#Do a boxplot here to see spending
+```
+
+
+Does earning more lead to higher joviality

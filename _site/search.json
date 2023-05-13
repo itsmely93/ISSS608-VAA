@@ -263,7 +263,7 @@
     "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#installing-and-loading-of-r-packages",
     "title": "Take-home Exercise 1",
     "section": "3.1 Installing and loading of R packages",
-    "text": "3.1 Installing and loading of R packages\nIn this exercise, the following R packages will be used:\n\ntidyverse: for data cleaning and manipulation.\nggiraph: for making ggplot2 graphics interactive.\nplotly: for plotting interactive statistical charts.\npatchwork:\nknitr: for generating a simple table using the kable() function\n\nThe code chunk below uses p_load() of the pacman package to check if all the packages are installed. If they are, they will then be loaded into the R environment.\n\n\nClick to show/hide the code\npacman::p_load(ggiraph, plotly, patchwork, DT, tidyverse, skimr, knitr, ggstatsplot, ggdist)"
+    "text": "3.1 Installing and loading of R packages\nIn this exercise, the following R packages will be used:\n\ntidyverse: for data cleaning and manipulation.\nggiraph: for making ggplot2 graphics interactive.\nplotly: for plotting interactive statistical charts.\npatchwork:\nknitr: for generating a simple table using the kable() function\n\nThe code chunk below uses p_load() of the pacman package to check if all the packages are installed. If they are, they will then be loaded into the R environment.\n\n\nClick to show/hide the code\npacman::p_load(ggiraph, plotly, patchwork, DT, tidyverse, skimr, knitr, ggstatsplot, ggridges)"
   },
   {
     "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#importing-the-data-sets",
@@ -417,6 +417,76 @@
     "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#education-level-and-joviality",
     "title": "Take-home Exercise 1",
     "section": "4.1 Education level and joviality?",
-    "text": "4.1 Education level and joviality?\n\n\nClick to show/hide the code\neducation <- plot_ly(\n  data = participants,\n  y = ~joviality,\n  color = ~educationLevel,\n  type = \"box\",\n  showlegend = FALSE,\n  boxmean = TRUE,\n  notched = TRUE) %>% \n  \n  layout(title = list(text = \"Boxplot of joviality by education level\"),\n         xaxis = list(title = list(text ='Education Level')),\n         yaxis = list(title = list(text ='Joviality')))\n\neducation\n\n\n\n\n\n\nInsights:\n\nAll participants seem to have similar joviality scores, regardless of education level.\nSlight increases in median and mean joviality as education level increases.\n\n\n\nClick to show/hide the code\nggscatterstats(\n  data = participants,\n  x = age,\n  y = joviality, \n  bins = 20) +\n  theme_minimal()"
+    "text": "4.1 Education level and joviality?\n\n\nClick to show/hide the code\neducation <- plot_ly(\n  data = participants,\n  y = ~joviality,\n  color = ~educationLevel,\n  type = \"box\",\n  showlegend = FALSE,\n  boxmean = TRUE,\n  notched = TRUE) %>% \n  \n  layout(title = list(text = \"Boxplot of joviality by education level\"),\n         xaxis = list(title = list(text = \"Education Level\")),\n         yaxis = list(title = list(text = \"Joviality\")))\n\neducation\n\n\n\n\n\n\nInsights:\n\nAll participants seem to have similar joviality scores, regardless of education level.\nSlight increases in median and mean joviality as education level increases."
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#exploratory-data-analysis---demographics",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#exploratory-data-analysis---demographics",
+    "title": "Take-home Exercise 1",
+    "section": "4.1 Exploratory Data Analysis - Demographics",
+    "text": "4.1 Exploratory Data Analysis - Demographics\n\n4.1.1 Distribution of participants by age\n\n\nClick to show/hide the code\nage <- plot_ly(participants, x = ~age, type = \"histogram\", nbinsx = 10)\n\nage <- age %>% \n  layout(title = \"Distribution of participants' age\",\n         xaxis = list(title = \"Age\",\n                      zeroline = TRUE,\n                      range = c(15, 65)),\n         yaxis = list(title = \"Count\"))\n\nage\n\n\n\n\n\n\nInsights:\nThere is a relatively even distribution of participants’ ages between 20-59 years old, with the smallest number of participants being those who are 60 years old and above (23 participants) and those aged 15-19 (48 participants). The age group with the highest number of participants is the 30-34 age range, which has 130 participants.\n\n\n4.1.2 Distribution of participants’\n\nInterest groups by ageEducation level by age\n\n\nThe code\n\n\nClick to show/hide the code\nggplot(participants, \n       aes(x = age, \n           y = interestGroup)) +\n  geom_density_ridges(\n    scale = 3,\n    rel_min_height = 0.01,\n    bandwidth = 3.4,\n    fill = alpha(\"#7097BB\", 0.5),\n    color = \"white\") +\n  scale_x_continuous(\n    name = \"Age\",\n    expand = c(0, 0)) +\n  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +\n  theme_ridges()\n\n\nThe plot\n\n\n\n\n\n\n\nThe code\n\n\nClick to show/hide the code\nggplot(participants, \n       aes(x = age, \n           y = educationLevel)) +\n  geom_density_ridges(\n    scale = 3,\n    rel_min_height = 0.01,\n    bandwidth = 3.4,\n    fill = alpha(\"#800020\", 0.5),\n    color = \"white\") +\n  scale_x_continuous(\n    name = \"Age\",\n    expand = c(0, 0)) +\n  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +\n  theme_ridges()\n\n\nThe plot\n\n\n\n\n\n\n\n\n\n\n4.1.3 Proportion of participants\n\nBy education levelBy household sizeHave Kids\n\n\nThe code\n\n\nClick to show/hide the code\nedu_count = count(participants, educationLevel)\n\nedu_prop <- plot_ly(participants, labels = ~edu_count$educationLevel, values = ~edu_count$n, type = \"pie\",\n        textposition = \"inside\",\n        textinfo = \"label+percent\",\n        hoverinfo = \"text\",\n        text = ~paste(edu_count$n, \"participants\"),\n        showlegend = FALSE) %>%\n  layout(title = \"Proportion of participants by education level\")\n\nedu_prop\n\n\nThe plot\n\n\n\n\n\n\n\n\nThe code\n\n\nClick to show/hide the code\nhhld_count = count(participants, householdSize)\n\nhhld_prop <- plot_ly(participants, labels = ~hhld_count$householdSize, values = ~hhld_count$n, type = \"pie\",\n        textposition = \"inside\",\n        textinfo = \"label+percent\",\n        hoverinfo = \"text\",\n        text = ~paste(\"Number of households =\", hhld_count$n),\n        showlegend = FALSE) %>%\n  layout(title = \"Proportion of participants by household size\")\n\nhhld_prop\n\n\nThe plot\n\n\n\n\n\n\n\n\nThe code\n\n\nClick to show/hide the code\nkids_count = count(participants, haveKids)\n\nkids_prop <- plot_ly(participants, labels = ~kids_count$haveKids, values = ~kids_count$n, type = \"pie\",\n        textposition = \"inside\",\n        textinfo = \"label+percent\",\n        hoverinfo = \"text\",\n        text = ~paste(\"Number of households with kids =\", kids_count$n),\n        showlegend = FALSE) %>%\n  layout(title = \"Proportion of participants whose households have kids\")\n\nkids_prop\n\n\nThe plot\n\n\n\n\n\n\n\n\n\nInsights:\n\nMost participants in the city of Engagement are highly educated, with only 8.31% of the participants surveyed having a low level of education.\nHousehold sizes of the participants are relatively small, with more than 2/3 of the participants’ household sizes being 2 or less.\nThis could be attributed to the fact that more than 2/3 of households (70.2%) do not have children.\n\nThese insights lead us to the next question: does having a high level of education result in fewer participants having children?"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#distribution-of-interest-groups-by-age",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#distribution-of-interest-groups-by-age",
+    "title": "Take-home Exercise 1",
+    "section": "Distribution of interest groups by age",
+    "text": "Distribution of interest groups by age\nThe code\n\n\nClick to show/hide the code\nggplot(participants, \n       aes(x = age, \n           y = interestGroup)) +\n  geom_density_ridges(\n    scale = 3,\n    rel_min_height = 0.01,\n    bandwidth = 3.4,\n    fill = alpha(\"#7097BB\", 0.5),\n    color = \"white\") +\n  scale_x_continuous(\n    name = \"Age\",\n    expand = c(0, 0)) +\n  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +\n  theme_ridges()\n\n\nThe plot"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#is-age-correlated-with-joviality",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#is-age-correlated-with-joviality",
+    "title": "Take-home Exercise 1",
+    "section": "Is age correlated with joviality?",
+    "text": "Is age correlated with joviality?\n\n\nClick to show/hide the code\nggscatterstats(\n  data = participants,\n  x = age,\n  y = joviality, \n  bins = 20) +\n  theme_minimal()"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#does-spending-more-on-recreation-make-people-happier",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#does-spending-more-on-recreation-make-people-happier",
+    "title": "Take-home Exercise 1",
+    "section": "Does spending more on recreation make people happier?",
+    "text": "Does spending more on recreation make people happier?"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#does-earning-more-make-people-happier",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#does-earning-more-make-people-happier",
+    "title": "Take-home Exercise 1",
+    "section": "Does earning more make people happier?",
+    "text": "Does earning more make people happier?"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#spending-patterns",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#spending-patterns",
+    "title": "Take-home Exercise 1",
+    "section": "spending patterns",
+    "text": "spending patterns"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#total-spending-over-the-year-and-total-earnings-over-the-year-animated-plot",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#total-spending-over-the-year-and-total-earnings-over-the-year-animated-plot",
+    "title": "Take-home Exercise 1",
+    "section": "total spending over the year and total earnings over the year animated plot",
+    "text": "total spending over the year and total earnings over the year animated plot"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#exploratory-data-analysis---financial",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#exploratory-data-analysis---financial",
+    "title": "Take-home Exercise 1",
+    "section": "4.2 Exploratory Data Analysis - Financial",
+    "text": "4.2 Exploratory Data Analysis - Financial\n\n4.2.1 What do the participants of the City of Engagement spend the most on?\n\n\nClick to show/hide the code\nfin_long <- fin_journal %>%\n  pivot_longer(cols = Education:Shelter, names_to = \"Category\", values_to = \"Amount\")\n\ntotal_spent <- fin_long %>% \n  group_by(Category) %>%\n  summarize(Total = sum(Amount))\n\ntotal_fig <- plot_ly(\n  total_spent, \n  x = ~Category, \n  y = ~Total,\n  color = ~Category,\n  type = \"bar\",\n  textposition = \"none\",\n  hoverinfo = \"text\",\n  text = ~paste(total_spent$Total, \" (\", scales::percent(total_spent$Total/sum(total_spent$Total)), \")\"),\n  showlegend = FALSE) %>%\n  layout(title = \"What do the participants spend the most on?\",\n         xaxis = list(title = list(text = \"Category\")),\n         yaxis = list(title = list(text = \"Total Amount Spent\")))\n\ntotal_fig\n\n\n\n\n\n\nInsights:\n\nMost of the participants’ expenditure is due to Shelter, which accounts for 45.9% of the total spending.\nThe category that participants spent the least on is Education, accounting for only 0.9% of the total spending."
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#distribution-of-education-level-by-age",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#distribution-of-education-level-by-age",
+    "title": "Take-home Exercise 1",
+    "section": "Distribution of education level by age",
+    "text": "Distribution of education level by age\nThe code\n\n\nClick to show/hide the code\nggplot(participants, \n       aes(x = age, \n           y = educationLevel)) +\n  geom_density_ridges(\n    scale = 3,\n    rel_min_height = 0.01,\n    bandwidth = 3.4,\n    fill = alpha(\"#800020\", 0.5),\n    color = \"white\") +\n  scale_x_continuous(\n    name = \"Age\",\n    expand = c(0, 0)) +\n  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +\n  theme_ridges()\n\n\nThe plot\n\n\nClick to show/hide the code\nggplot(participants, \n       aes(x = age, \n           y = educationLevel)) +\n  geom_density_ridges(\n    scale = 3,\n    rel_min_height = 0.01,\n    bandwidth = 3.4,\n    fill = alpha(\"#800020\", 0.5),\n    color = \"white\") +\n  scale_x_continuous(\n    name = \"Age\",\n    expand = c(0, 0)) +\n  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +\n  theme_ridges()"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#confirmatory-data-analysis---demographics",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#confirmatory-data-analysis---demographics",
+    "title": "Take-home Exercise 1",
+    "section": "4.2 Confirmatory Data Analysis - Demographics",
+    "text": "4.2 Confirmatory Data Analysis - Demographics\n\n4.2.1 Is education level associated with having kids?\nIn order to find out if there really is an association between education level and having kids, the following hypotheses will be tested at 95% confidence level:\n\n\n\n\n\n\nNote\n\n\n\n\nH0: There is no significant association between education level and having kids.\nH1: The association between education level and having kids is statistically significant.\n\n\n\n\n\nClick to show/hide the code\nset.seed(123)\n\n# creating a plot\nhave_kids <- ggbarstats(\n  participants, \n  x = haveKids, \n  y = educationLevel,\n  xlab = \"Education level\",\n  ylab = \"Percentage\",\n  type = \"np\",\n  title = \"Is there an association between education level and having kids?\")\n\n# looking at the plot\nhave_kids\n\n\n\n\n\nBased on the Pearson’s chi-square test results, the p-value of 5.91e-03 is lower than the alpha value of 0.05. Thus, there is sufficient evidence to reject the null hypothesis and conclude that there is a statistically significant association between education level and households with kids.\nVisually as seen from the graph, we can observe that as education levels increase, the proportion of participants’ households with kids decreases.\n\n\n4.1.4 Does education level affect joviality?\nAre people with higher education levels happier, or is there no difference in joviality regardless of education level? To find out, a one-way ANOVA test is done on the following hypotheses at a confidence level of 95%:\n\n\n\n\n\n\nNote\n\n\n\n\nH0: There is no difference among group means.\nH1: There is a difference among group means.\n\n\n\n\n\nClick to show/hide the code\nedu_jov <- ggbetweenstats(\n  data = participants,\n  x = educationLevel,\n  y = joviality,\n  type = \"p\",\n  mean.ci = TRUE, \n  pairwise.comparisons = TRUE, \n  pairwise.display = \"s\",\n  p.adjust.method = \"fdr\",\n  messages = FALSE)\n\nedu_jov\n\n\n\n\n\nAs the p-value of 0.70 is higher than the alpha value of 0.05, we accept the null hypothesis as there is sufficient evidence to conclude that the means among the different education levels are the same. Therefore, education level does not really affect joviality.\n\n\n4.1.5 Is age correlated with joviality?\n\n\nClick to show/hide the code\nggscatterstats(\n  data = participants,\n  x = age,\n  y = joviality, \n  bins = 20)\n\n\n\n\n\nInsights:\nThe data points deviate greatly from the best fit line, indicating that there is no correlation between age and joviality.\n\n\nDoes spending more on recreation make people happier?\n\n\nDoes earning more make people happier?\n\n\nspending patterns\n\n\ntotal spending over the year and total earnings over the year animated plot"
   }
 ]
