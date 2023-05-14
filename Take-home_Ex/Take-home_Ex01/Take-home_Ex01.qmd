@@ -48,18 +48,20 @@ In this exercise, the following R packages will be used:
 
 2.  `tidyverse`: for data cleaning and manipulation.
 
-3.  `knitr`: for generating a simple table using the `kable()` function
+3.  `ggiraph`: for customising ggplot2 tooltips
 
-4.  `ggstatsplot`: for creating graphics that include details from statistical tests
+4.  `knitr`: for generating a simple table using the `kable()` function
 
-5.  `ggridges`: for creating ridgeline plots
+5.  `ggstatsplot`: for creating graphics that include details from statistical tests
 
-6.  `ggmosaic`: for creating mosaic plots
+6.  `ggridges`: for creating ridgeline plots
+
+7.  `ggmosaic`: for creating mosaic plots
 
 The code chunk below uses `p_load()` of the `pacman` package to check if all the packages are installed. If they are, they will then be loaded into the R environment.
 
 ```{r}
-pacman::p_load(plotly, tidyverse, knitr, ggstatsplot, ggridges, ggmosaic)
+pacman::p_load(plotly, tidyverse, ggiraph, knitr, ggstatsplot, ggridges, ggmosaic)
 ```
 
 ## 3.2 Importing the data sets
@@ -86,9 +88,11 @@ glimpse(participants)
 
 **Issues:**
 
-1.  The variables *participantID*, *householdSize* and *age* are currently formatted as `<dbl>`. These variables will have to be converted into `<int>` format.
+1.  The variables *participantID* and *age* are currently formatted as `<dbl>`. These variables will have to be converted into `<int>` format.
 
 2.  Likewise, the variable *educationLevel* will need to be converted from `<chr>` to `<fct>` format. The *educationLevel* will then be sorted from the lowest level (*Low*) to the highest level (*Graduate*).
+
+3.  Additionally, *householdSize* will be reformatted from `<dbl>` to `<fct>` format.
 
 The aforementioned variables are reformatted into the correct type, as seen in the code chunk below.
 
@@ -235,7 +239,7 @@ kable(head(fin_journal), align = "c")
 ### 4.1.1 Age distribution of participants
 
 ```{r}
-age <- plot_ly(
+plot_ly(
   participants, 
   x = ~age, 
   type = "histogram", 
@@ -248,15 +252,13 @@ age <- plot_ly(
                       zeroline = FALSE,
                       range = c(15, 65)),
          yaxis = list(title = "Count"))
-
-age
 ```
 
 **Insights:**
 
 There is a relatively even distribution of participants' ages between 20-59 years old, with the smallest number of participants being those who are 60 years old and above (23 participants) and those aged 15-19 (48 participants). The age group with the highest number of participants is the 30-34 age range, which has 130 participants.
 
-### 4.1.2 Distribution of participant's age by interest group/education level 
+### 4.1.2 Distribution of participant's age by interest group/education level
 
 In order to visualise the age distribution of the participants by their interest group or by their level of education, `geom_density_ridges()` function from the *ggridges* package will be used to create ridgeline plots.
 
@@ -357,6 +359,7 @@ The age distribution of participants at the "HighSchoolOrCollege" education leve
 ```{r}
 fig <- plot_ly()
 
+# creating a pie for education level 
 fig <- fig %>% 
   add_pie(data = count(participants, educationLevel), 
           labels = ~educationLevel, 
@@ -364,7 +367,8 @@ fig <- fig %>%
           name = "Education Level",
           title = "Education Level",
           domain = list(row = 0, column = 0))
-                      
+
+# creating a pie of household size                      
 fig <- fig %>% 
   add_pie(data = count(participants, householdSize), 
           labels = ~householdSize, 
@@ -372,7 +376,8 @@ fig <- fig %>%
           name = "Household size", 
           title = "Household size",
           domain = list(row = 0, column = 1))
-                       
+
+# creating a pie for having kids                      
 fig <- fig %>% 
   add_pie(data = count(participants, haveKids), 
           labels = ~haveKids, 
@@ -381,7 +386,7 @@ fig <- fig %>%
           title = "Have kids",
           domain = list(row = 0, column = 2))
 
-
+# modifying plot layout
 fig <- fig %>% layout(title = "Proportion of participants", showlegend = F,
                       grid = list(rows=1, columns=3),
                       xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
@@ -392,17 +397,18 @@ fig
 
 **Insights:**
 
-1.  Most participants in are highly educated, with only 8.31% of the participants surveyed having a "Low" level of education. More than half of the participants (51.9%) have an education level of "HighSchoolOrCollege".
+-   Most participants are highly educated, with only 8.31% of the participants surveyed having a "Low" level of education. More than half of the participants (51.9%) have an education level of "HighSchoolOrCollege".
 
-2.  Household sizes of the participants are relatively small, with more than 2/3 of the participants' (71.2%) household sizes being 2 or less.
+-   Household sizes of the participants are relatively small, with more than 2/3 of the participants' (71.2%) household sizes being 2 or less.
 
-3.  This could be attributed to the fact that more than 2/3 of households (70.2%) do not have children.
+-   This could be attributed to the fact that more than 2/3 of households (70.2%) do not have children.
 
 These insights lead us to the next question: does having a high level of education result in fewer participants having children? We will explore more about this later on in **section 4.2.1**.
 
 ### 4.1.4 What expenditure category do participants spend the most on?
 
 ```{r}
+# manipulating the data set to prepare for data visualisation
 fin_long <- fin_journal %>%
   pivot_longer(cols = Education:Shelter, names_to = "Category", values_to = "Amount")
 
@@ -410,7 +416,8 @@ total_spent <- fin_long %>%
   group_by(Category) %>%
   summarize(Total = sum(Amount))
 
-total_fig <- plot_ly(
+# plotting the chart
+plot_ly(
   total_spent, 
   x = ~Category, 
   y = ~Total,
@@ -418,20 +425,18 @@ total_fig <- plot_ly(
   type = "bar",
   textposition = "none",
   hoverinfo = "text",
-  text = ~paste(total_spent$Total, " (", scales::percent(total_spent$Total/sum(total_spent$Total)),")"),
+  text = ~paste0("Total spent: $", total_spent$Total, "<br> (",scales::percent(total_spent$Total/sum(total_spent$Total)),")"),
   showlegend = FALSE) %>%
   layout(title = "What do the participants spend the most on?",
          xaxis = list(title = list(text = "Category")),
          yaxis = list(title = list(text = "Total Amount Spent ($)")))
-
-total_fig
 ```
 
 **Insights:**
 
-Shelter represents the highest expenditure category for the participants, constituting 45.9% (\~\$6.8M) of their total spending from March 2022 to February 2022.
+-   Shelter represents the highest expenditure category for the participants, constituting 45.9% (\~\$6.8M) of their total spending from March 2022 to February 2022.
 
-Conversely, the category that participants spent the least on is Education, accounting for only 0.9% (\~\$140K) of the total spending in the same time period.
+-   Conversely, the category that participants spent the least on is Education, accounting for only 0.9% (\~\$140K) of the total spending in the same time period.
 
 ### 4.1.5. Interest group by education level
 
@@ -454,51 +459,42 @@ ggplotly(int_edu)
 
 -   Out of all the interest groups, Interest group G has the largest number of "Graduate" education level participants.
 
-### 4.1.6 Average spending, earning and savings by household size
+### 4.1.6 Distribution of education level by household size
 
 ```{r}
-fin_mean <- fin_journal %>% 
-  group_by(participantId) %>%
-  summarise(mean_expenses = mean(total_expenses), mean_earnings = mean(total_earnings), mean_savings = mean(total_savings))
-
-joined <- merge(participants, fin_mean, by = "participantId")
-
-fig2 <- plot_ly(
-  data = joined,
-  x = ~householdSize,
-  y = ~mean_expenses,
-  color = ~householdSize,
-  type = "box",
-  showlegend = FALSE,
-  notched = TRUE) %>%
-  layout(title = "Average monthly spending by household size?",
-         xaxis = list(title = list(text = "Household Size")),
-         yaxis = list(title = list(text = "Average Amount Spent ($)")))
-  
-fig2
+p <- ggplot(participants, aes(x = householdSize, fill = educationLevel)) +
+    geom_bar(position = "fill") +
+    ggtitle("Distribution of education level by household size") +
+    xlab("Household Size") + ylab("Percentage") +
+    scale_y_continuous(labels = scales::percent) +
+    theme(legend.position = "none")
+    
+ggplotly(p)
 ```
+
+**Insights:**
+Households consisting of three members have a greater proportion of participants with educational qualifications at the "HighSchoolOrCollege" level and below, compared to households with one or two members. This observation suggests that smaller households tend to have participants with higher levels of education.
+
+### 4.1.7 Distribution of having kids by household size
 
 ```{r}
-fin_mean <- fin_journal %>% 
-  group_by(participantId) %>%
-  summarise(mean_expenses = mean(total_expenses), mean_earnings = mean(total_earnings), mean_savings = mean(total_savings))
+have_kids <- participants %>%
+  group_by(householdSize) %>%
+  summarise(hhld_kids = sum(haveKids))
 
-joined <- merge(participants, fin_mean, by = "participantId")
+p2 <- ggplot(have_kids, aes(x = householdSize, y = hhld_kids, fill = hhld_kids, text = paste0("Household size: ", householdSize, "<br>Number of households: ", hhld_kids))) +
+    geom_bar(stat = "identity") +
+    ggtitle("Distribution of having kids by household size") +
+    xlab("Household Size") + ylab("Number of households with kids") +
+    theme(legend.position = "none") 
 
-fig3 <- plot_ly(
-  data = joined,
-  x = ~householdSize,
-  y = ~mean_savings,
-  color = ~householdSize,
-  type = "box",
-  showlegend = FALSE,
-  notched = TRUE) %>%
-  layout(title = "Average monthly savings by household size?",
-         xaxis = list(title = list(text = "Household Size")),
-         yaxis = list(title = list(text = "Average Amount Saved ($)")))
-  
-fig3
+ggplotly(p2, tooltip = "text")
+
 ```
+
+**Insights:**
+
+As seen from the bar chart, 100% of the participants who have kids in their household have a household size of 3.
 
 ## 4.2 Confirmatory Data Analysis
 
@@ -513,10 +509,11 @@ In order to find out if there really is an association between education level a
 :::
 
 ```{r}
+# set seed for reproducibility
 set.seed(123)
 
-# creating a plot
-have_kids <- ggbarstats(
+# creating the plot
+ggbarstats(
   participants, 
   x = haveKids, 
   y = educationLevel,
@@ -524,35 +521,38 @@ have_kids <- ggbarstats(
   ylab = "Percentage",
   type = "np",
   title = "Is there an association between education level and having kids?")
-
-# looking at the plot
-have_kids
 ```
 
-Based on the Pearson's chi-square test results, the p-value of 5.91e-03 is lower than the alpha value of 0.05. Thus, there is sufficient evidence to reject the null hypothesis and conclude that there is a statistically significant association between education level and households with kids.
+Based on the Pearson's chi-squared test results, the p-value of 5.91e-03 is lower than the alpha value of 0.05. Thus, there is sufficient evidence to reject the null hypothesis and conclude that there is a statistically significant association between education level and households with kids.
 
 Visually as seen from the graph, we can observe that as education levels increase, the proportion of participants' households with kids decreases.
 
-### 4.2.2 Does having kids affect the average monthly spending, savings and/on earnings?
+### 4.2.2 Does having kids affect the average monthly expenditure, savings and/on earnings?
 
-:::panel-tabset
+To investigate whether the presence of children affects the average monthly expenditure, savings, and/or earnings of participants with different education levels, boxplots will be employed.
 
-## Spending
+Boxplots are an effective visualization tool for quickly identifying patterns in data. It displays the distribution of data and any outliers present, making it easy to compare between different categories or groups.
+
+::: panel-tabset
+## Expenditure
 
 The code
+
 ```{r}
 #| code-fold: true
 #| eval: false
+# manipulating the data set to prep for data visualisation
 total <- fin_journal %>% 
   group_by(participantId) %>%
   summarise(mean_expenses = mean(total_expenses), mean_earnings = mean(total_earnings), mean_savings = mean(total_savings))
 
 joined <- merge(participants, total, by = "participantId")
 
+# plotting the chart
 kids_spend <- ggplot(data = joined, aes(x = educationLevel, y = mean_expenses, fill = educationLevel)) +
   geom_boxplot() +
   ggtitle("Does having kids affect average monthly expenditure?") +
-  xlab("Education Level") + ylab("Average Monthly Spending") +
+  xlab("Education Level") + ylab("Average Monthly Expenditure") +
   theme(legend.position = "none", 
         axis.text.x = element_text(angle = 45, vjust = .5, hjust=1)) +
   stat_summary(fun.y=mean, geom="point", color="red", fill="red") +
@@ -561,6 +561,7 @@ ggplotly(kids_spend)
 ```
 
 The plot
+
 ```{r}
 #| echo: false
 total <- fin_journal %>% 
@@ -572,18 +573,22 @@ joined <- merge(participants, total, by = "participantId")
 kids_spend <- ggplot(data = joined, aes(x = educationLevel, y = mean_expenses, fill = educationLevel)) +
   geom_boxplot() +
   ggtitle("Does having kids affect average monthly expenditure?") +
-  xlab("Education Level") + ylab("Average Monthly Spending") +
+  xlab("Education Level") + ylab("Average Monthly Expenditure") +
   theme(legend.position = "none", 
         axis.text.x = element_text(angle = 45, vjust = .5, hjust=1)) +
   stat_summary(fun=mean, geom="point", color="red", fill="red") +
   facet_grid(. ~haveKids) 
 ggplotly(kids_spend)
 ```
-The presence of children in the household generally leads to increased average monthly spending across all educational levels. Nevertheless, participants with a "Low" education level spend less on average per month when they have kids, compared to those without kids. This finding, however, may be attributed to the influence of outliers.
+
+The presence of children in the household generally leads to increased average monthly expenditure across all educational levels, with the exception of participants with a "Low" education level.
+
+Participants with a "Low" education level spend less on average per month when they have kids, compared to those without kids. This finding, however, may be attributed to the influence of outliers.
 
 ## Savings
 
 The code
+
 ```{r}
 #| code-fold: true
 #| eval: false
@@ -599,6 +604,7 @@ ggplotly(kids_save)
 ```
 
 The plot
+
 ```{r}
 #| echo: false
 kids_save <- ggplot(data = joined, aes(x = educationLevel, y = mean_savings, fill = educationLevel)) +
@@ -611,10 +617,13 @@ kids_save <- ggplot(data = joined, aes(x = educationLevel, y = mean_savings, fil
   facet_grid(. ~haveKids) 
 ggplotly(kids_save)
 ```
+
 Surprisingly, participants who have kids in their household have higher monthly average savings, regardless of education level.
 
 ## Earnings
+
 The code
+
 ```{r}
 #| code-fold: true
 #| eval: false
@@ -630,6 +639,7 @@ ggplotly(kids_earn)
 ```
 
 The plot
+
 ```{r}
 #| echo: false
 kids_earn <- ggplot(data = joined, aes(x = educationLevel, y = mean_earnings, fill = educationLevel)) +
@@ -642,46 +652,44 @@ kids_earn <- ggplot(data = joined, aes(x = educationLevel, y = mean_earnings, fi
   facet_grid(. ~haveKids) 
 ggplotly(kids_earn)
 ```
-Likewise, participants with children in their households exhibit higher average monthly income, irrespective of their educational level.
 
+Likewise, participants with children in their households exhibit higher average monthly income, irrespective of their educational level.
 :::
 
-In summary, participants who have kids earn, spend and save more than partipants who do not have kids.
+In summary, participants with children in their household tend to have higher earnings, expenditures, and savings compared to those without children.
 
-### 4.2.2 Is there a correlation between age and average monthly spending, savings and/or earnings?
+### 4.2.3 Is there a correlation between age and average monthly expenditure, savings and/or earnings?
+
+In order to ascertain whether a correlation between age and average monthly expenditure/savings/earnings exists, scatters plot using the `ggscatterstats()` function of the *ggstatsplot* package are generated.
 
 ::: panel-tabset
-## Spending
+## Expenditure
 
 The code
 
 ```{r}
 #| code-fold: true
 #| eval: false
-spend_age <- ggscatterstats(
+ggscatterstats(
   data = joined,
   x = age,
   y = mean_expenses,
   xlab = "Age",
-  ylab = "Average Monthly Spending ($)",
-  title = "Is age correlated with average monthly spending?")
-
-spend_age
+  ylab = "Average Monthly Expenditure ($)",
+  title = "Is age correlated with average monthly expenditure?")
 ```
 
 The plot
 
 ```{r}
 #| echo: false
-spend_age <- ggscatterstats(
+ggscatterstats(
   data = joined,
   x = age,
   y = mean_expenses,
   xlab = "Age",
-  ylab = "Average Monthly Spending ($)",
-  title = "Is age correlated with average monthly spending?")
-
-spend_age
+  ylab = "Average Monthly Expenditure ($)",
+  title = "Is age correlated with average monthly expenditure?")
 ```
 
 ## Savings
@@ -691,30 +699,26 @@ The code
 ```{r}
 #| code-fold: true
 #| eval: false
-save_age <- ggscatterstats(
+ggscatterstats(
   data = joined,
   x = age,
   y = mean_savings, 
   xlab = "Age",
   ylab = "Average Monthly Savings ($)",
   title = "Is age correlated with average monthly savings?")
-
-spend_age
 ```
 
 The plot
 
 ```{r}
 #| echo: false
-save_age <- ggscatterstats(
+ggscatterstats(
   data = joined,
   x = age,
   y = mean_savings, 
   xlab = "Age",
   ylab = "Average Monthly Savings ($)",
   title = "Is age correlated with average monthly savings?")
-
-save_age
 ```
 
 ## Earnings
@@ -724,38 +728,34 @@ The code
 ```{r}
 #| code-fold: true
 #| eval: false
-earn_age <- ggscatterstats(
+ggscatterstats(
   data = joined,
   x = age,
   y = mean_earnings, 
   xlab = "Age",
   ylab = "Average Monthly Earnings ($)",
   title = "Is age correlated with average monthly earnings?")
-
-earn_age
 ```
 
 The plot
 
 ```{r}
 #| echo: false
-earn_age <- ggscatterstats(
+ggscatterstats(
   data = joined,
   x = age,
   y = mean_earnings, 
   xlab = "Age",
   ylab = "Average Monthly Earnings",
   title = "Is age correlated with average monthly earnings?")
-
-earn_age
 ```
 :::
 
-Based on the three scatter plots generated, there does not appear to be a correlation between age and monthly average spending, saving and earning.
+Based on the three scatter plots generated, there does not appear to be a correlation between age and average monthly spending, saving and earning.
 
-### 4.2.3 Does education level affect average monthly spending, savings and/or earnings?
+### 4.2.4 Does education level affect average monthly expenditure, savings and/or earnings?
 
-To determine if the level of education affects the participants' average monthly spending/savings/earnings, a oneway ANOVA test is conducted on the following hypotheses at a 95% confidence level.
+In order to determine if the level of education affects the participants' average monthly expenditure/savings/earnings, a oneway ANOVA test is conducted on the following hypotheses at a 95% confidence level.
 
 ::: callout-note
 -   H~0~: There is no difference among group means.
@@ -764,7 +764,7 @@ To determine if the level of education affects the participants' average monthly
 :::
 
 ::: panel-tabset
-## Spending
+## Expenditure
 
 The code
 
@@ -772,17 +772,16 @@ The code
 #| code-fold: true
 #| eval: false
 
+# set seed for reproducibility
 set.seed(123)
 
-edu_spend <- ggbetweenstats(
+ggbetweenstats(
   data = joined,
   x = educationLevel,
   y = mean_expenses,
   xlab = "Education Level",
-  ylab = "Average Monthly Spending ($)",
-  title = "Does education level affect average monthly spending?")
-
-edu_spend
+  ylab = "Average Monthly Expenditure ($)",
+  title = "Does education level affect average monthly expenditure?")
 ```
 
 The plot
@@ -791,20 +790,18 @@ The plot
 #| echo: false
 set.seed(123)
 
-edu_spend <- ggbetweenstats(
+ggbetweenstats(
   data = joined,
   x = educationLevel,
   y = mean_expenses,
   xlab = "Education Level",
-  ylab = "Average Monthly Spending ($)",
-  title = "Does education level affect average monthly spending?")
-
-edu_spend
+  ylab = "Average Monthly Expenditure ($)",
+  title = "Does education level affect average monthly expenditure?")
 ```
 
-As the p-value of 5.10e-23 is smaller than the alpha value of 0.05, we can reject the null hypothesis as there is statistical evidence to conclude that there is a difference among the means of the average monthly spending of the different education levels.
+As the p-value of 5.10e-23 is smaller than the alpha value of 0.05, we can reject the null hypothesis as there is statistical evidence to conclude that there is a difference among the means of the average monthly expenditure of the different education levels.
 
-The chart illustrates that as the education level rises, the average monthly expenditure increases as well. Participants who have "low" levels of education tend to spend the least, with an average monthly spending of \$887.47. On the other hand, those with the highest education level ("Graduate"), spend the most each month, spending an average of \$1462.08.
+The chart illustrates that as the education level rises, the average monthly expenditure increases as well. Participants who have "low" levels of education tend to spend the least, with an average monthly expenditure of \$887.47. On the other hand, those with the highest education level ("Graduate"), spend the most each month, spending an average of \$1462.08.
 
 ## Savings
 
@@ -815,15 +812,13 @@ The code
 #| eval: false
 set.seed(123)
 
-edu_save <- ggbetweenstats(
+ggbetweenstats(
   data = joined,
   x = educationLevel,
   y = mean_savings,
   xlab = "Education Level",
   ylab = "Average Monthly Savings ($)",
   title = "Does education level affect average monthly savings?")
-
-edu_save
 ```
 
 The plot
@@ -832,15 +827,13 @@ The plot
 #| echo: false
 set.seed(123)
 
-edu_save <- ggbetweenstats(
+ggbetweenstats(
   data = joined,
   x = educationLevel,
   y = mean_savings,
   xlab = "Education Level",
   ylab = "Average Monthly Savings ($)",
   title = "Does education level affect average monthly savings?")
-
-edu_save
 ```
 
 As the p-value of 8.71e-40 is smaller than the alpha value of 0.05, we can reject the null hypothesis as there is statistical evidence to conclude that there is a difference among the means of the average monthly spending of the different education levels.
@@ -856,15 +849,13 @@ The code
 #| eval: false
 set.seed(123)
 
-edu_earn <- ggbetweenstats(
+ggbetweenstats(
   data = joined,
   x = educationLevel,
   y = mean_earnings,
   xlab = "Education Level",
   ylab = "Average Monthly Earnings ($)",
   title = "Does education level affect average monthly earnings?")
-
-edu_earn
 ```
 
 The plot
@@ -873,15 +864,13 @@ The plot
 #| echo: false
 set.seed(123)
 
-edu_earn <- ggbetweenstats(
+ggbetweenstats(
   data = joined,
   x = educationLevel,
   y = mean_earnings,
   xlab = "Education Level",
   ylab = "Average Monthly Earnings ($)",
   title = "Does education level affect average monthly earnings?")
-
-edu_earn
 ```
 
 As the p-value of 2.30e-56 is smaller than the alpha value of 0.05, we can reject the null hypothesis as there is statistical evidence to conclude that there is a difference among the means of the average monthly earnings of the different education levels.
@@ -889,11 +878,11 @@ As the p-value of 2.30e-56 is smaller than the alpha value of 0.05, we can rejec
 As seen from the chart, the average monthly earnings increase as education level increases. Participants with "Low" level of education earn the least, earning an average of \$2623.10 a month. This is in contrast to participants with "Graduate" education level, who earn on average \$6295.73 a month.
 :::
 
-The three charts above demonstrate that participants with "Low" level of education have the lowest average monthly spending, earnings, and savings compared to other education levels.
+The three charts above demonstrate that participants with "Low" level of education have the lowest average monthly expenditure, earnings, and savings compared to other education levels.
 
-This observation is to be expected as their average monthly earnings are also comparatively lower, which will thus result in lower spending and savings amount. Thus, evaluating their spending and saving patterns based on the average monthly earnings alone may not provide a complete picture. It would be more appropriate to analyze their spending and saving habits in relation to the proportion of their earnings.
+This observation is to be expected as their average monthly earnings are also comparatively lower, which will thus result in lower spending and savings. Thus, evaluating their spending and saving patterns based on the average monthly expenditure and savings alone may not provide a complete picture. It would be more appropriate to analyze their spending and saving habits in relation to the proportion of their earnings.
 
-### 4.2.4 Comparing spending/savings in proportion of earnings
+### 4.2.5 Does education level affect expenditure/savings in proportion of earnings
 
 ```{r}
 # creating the data for plotting
@@ -907,23 +896,21 @@ total_mean <- joined %>%
 plot_ly(data=total_mean,
         x = ~educationLevel,
         y = ~savings_prop,
-        type = 'bar',
-        name = 'Savings',
+        type = "bar",
+        name = "Savings",
         hoverinfo = "text",
         text = ~paste("Savings", savings_prop,"%"), 
         textposition = 'none') %>%
     add_trace(y = ~spending_prop,
-              name = 'Spending',
+              name = "Expenditure",
               hoverinfo = "text",
-              text = ~paste("Spending", spending_prop,"%"),
+              text = ~paste("Expenditure", spending_prop,"%"),
               textposition = 'none') %>%
     layout(title = "Average monthly proportion of earnings that are saved or spent",
            xaxis = list(title = "Education Level"),
            yaxis = list(title = "Percentage of Average Monthly Earnings"),
            showlegend = FALSE,
       barmode = 'stack')
-
-
 ```
 
 The stacked bar chart reveals that participants with a "Graduate" education level, despite having the highest monthly expenditure as indicated in the earlier section, have the lowest spending proportion at 23.22% of their income and the highest savings proportion at 76.78% of their income.
