@@ -899,12 +899,12 @@ plot_ly(data=total_mean,
         type = "bar",
         name = "Savings",
         hoverinfo = "text",
-        text = ~paste("Savings", savings_prop,"%"), 
+        text = ~paste0("Education level: ", educationLevel, "<br>% savings: ", savings_prop,"%"), 
         textposition = 'none') %>%
     add_trace(y = ~spending_prop,
               name = "Expenditure",
               hoverinfo = "text",
-              text = ~paste("Expenditure", spending_prop,"%"),
+              text = ~paste0("Education level: ", educationLevel, "<br>% expenditure: ", spending_prop,"%"),
               textposition = 'none') %>%
     layout(title = "Average monthly proportion of earnings that are saved or spent",
            xaxis = list(title = "Education Level"),
@@ -917,4 +917,4 @@ The stacked bar chart reveals that participants with a "Graduate" education leve
 
 On the other hand, participants with a "HighSchoolOrCollege" have the highest spending proportion and the lowest savings proportion, at 36.01% and 63.99% of their income respectively.
 
-Simply put, "Graduate" participants spend the least and save the most, while "HighSchoolOrCollege" participants spend the most and save the least.
+Simply put, "Graduate" participants spend the least and save the most of their earnings, while "HighSchoolOrCollege" participants spend the most and save the least of their earnings.
