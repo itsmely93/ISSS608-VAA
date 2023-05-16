@@ -480,6 +480,41 @@
     "href": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html",
     "title": "Take Home Exercise 2",
     "section": "",
-    "text": "Click to show/hide the code\npacman::p_load(igraph, tidygraph, ggraph, visNetwork, lubridate, clock, tidyverse, graphlayouts, jsonlite)"
+    "text": "With reference to Mini Challenge 2 of the VAST Challenge 2023, the task is to use visual analytics to identify temporal patterns for individual entities and between entities in the knowledge graph FishEye created from trade records. Categorize the types of business relationship patterns you find."
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#installing-and-loading-of-r-packages",
+    "href": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#installing-and-loading-of-r-packages",
+    "title": "Take Home Exercise 2",
+    "section": "3.1 Installing and loading of R packages",
+    "text": "3.1 Installing and loading of R packages\nIn this exercise, the following R packages will be used:\n\ntidyverse: for data cleaning and manipulation.\nlubridate:\njsonlite: for loading and reading of the .json file.\nvisNetwork: for creating interactive network graphs.\n\nThe code chunk below uses p_load() of the pacman package to check if all the aforementioned packages are installed, and install the packages are yet to be installed. The packages are then loaded into the R environment.\n\n\nClick to show/hide the code\npacman::p_load(igraph, tidygraph, ggraph, visNetwork, lubridate, clock, tidyverse, graphlayouts, jsonlite)"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#importing-and-loading-the-data-set",
+    "href": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#importing-and-loading-the-data-set",
+    "title": "Take Home Exercise 2",
+    "section": "3.2 Importing and loading the data set",
+    "text": "3.2 Importing and loading the data set\nTo import the data “mc2_challenge_graph.json” file into the R environment, fromJSON() of the jsonlite package is used, as seen in the code chunk below.\n\n\nClick to show/hide the code\nMC2 <- jsonlite::fromJSON(\"data/mc2_challenge_graph.json\")\n\n\nThe glimpse() function from the dpylr package is used to see a general overview of the data set.\n\n\nClick to show/hide the code\nglimpse(MC2)\n\n\nList of 5\n $ directed  : logi TRUE\n $ multigraph: logi TRUE\n $ graph     : Named list()\n $ nodes     :'data.frame': 34576 obs. of  4 variables:\n  ..$ shpcountry: chr [1:34576] \"Polarinda\" NA \"Oceanus\" NA ...\n  ..$ rcvcountry: chr [1:34576] \"Oceanus\" NA \"Oceanus\" NA ...\n  ..$ dataset   : chr [1:34576] \"MC2\" \"MC2\" \"MC2\" \"MC2\" ...\n  ..$ id        : chr [1:34576] \"AquaDelight Inc and Son's\" \"BaringoAmerica Marine Ges.m.b.H.\" \"Yu gan  Sea spray GmbH Industrial\" \"FlounderLeska Marine BV\" ...\n $ links     :'data.frame': 5464378 obs. of  9 variables:\n  ..$ arrivaldate     : chr [1:5464378] \"2034-02-12\" \"2034-03-13\" \"2028-02-07\" \"2028-02-23\" ...\n  ..$ hscode          : chr [1:5464378] \"630630\" \"630630\" \"470710\" \"470710\" ...\n  ..$ valueofgoods_omu: num [1:5464378] 141015 141015 NA NA NA ...\n  ..$ volumeteu       : num [1:5464378] 0 0 0 0 0 0 0 0 0 0 ...\n  ..$ weightkg        : int [1:5464378] 4780 6125 10855 11250 11165 11290 9000 19490 6865 19065 ...\n  ..$ dataset         : chr [1:5464378] \"MC2\" \"MC2\" \"MC2\" \"MC2\" ...\n  ..$ source          : chr [1:5464378] \"AquaDelight Inc and Son's\" \"AquaDelight Inc and Son's\" \"AquaDelight Inc and Son's\" \"AquaDelight Inc and Son's\" ...\n  ..$ target          : chr [1:5464378] \"BaringoAmerica Marine Ges.m.b.H.\" \"BaringoAmerica Marine Ges.m.b.H.\" \"-15045\" \"-15045\" ...\n  ..$ valueofgoodsusd : num [1:5464378] NA NA NA NA NA ..."
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#extracting-the-nodes-and-edges",
+    "href": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#extracting-the-nodes-and-edges",
+    "title": "Take Home Exercise 2",
+    "section": "3.3 Extracting the nodes and edges",
+    "text": "3.3 Extracting the nodes and edges\nFrom the MC2 data set, the nodes and edges data frames are coerced into tibbles, using the as_tibble() function from the tibble package.\n\n\nClick to show/hide the code\nMC2_nodes <- as_tibble(MC2$nodes) %>%\n  select(id, rcvcountry, shpcountry)\n\n\n\n\nClick to show/hide the code\nMC2_edges <- as_tibble(MC2$links) %>%\n  select(-dataset)"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#reviewing-the-data",
+    "href": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#reviewing-the-data",
+    "title": "Take Home Exercise 2",
+    "section": "3.4 Reviewing the data",
+    "text": "3.4 Reviewing the data\nUsing glimpse(), the structure of the data is examined.\n\n\nClick to show/hide the code\nglimpse(MC2_nodes)\n\n\nRows: 34,576\nColumns: 3\n$ id         <chr> \"AquaDelight Inc and Son's\", \"BaringoAmerica Marine Ges.m.b…\n$ rcvcountry <chr> \"Oceanus\", NA, \"Oceanus\", NA, \"Oceanus\", \"Utoporiana\", NA, …\n$ shpcountry <chr> \"Polarinda\", NA, \"Oceanus\", NA, \"Oceanus\", \"Kondanovia\", NA…\n\n\n\n\nClick to show/hide the code\nglimpse(MC2_edges)\n\n\nRows: 5,464,378\nColumns: 8\n$ arrivaldate      <chr> \"2034-02-12\", \"2034-03-13\", \"2028-02-07\", \"2028-02-23…\n$ hscode           <chr> \"630630\", \"630630\", \"470710\", \"470710\", \"470710\", \"47…\n$ valueofgoods_omu <dbl> 141015, 141015, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…\n$ volumeteu        <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…\n$ weightkg         <int> 4780, 6125, 10855, 11250, 11165, 11290, 9000, 19490, …\n$ source           <chr> \"AquaDelight Inc and Son's\", \"AquaDelight Inc and Son…\n$ target           <chr> \"BaringoAmerica Marine Ges.m.b.H.\", \"BaringoAmerica M…\n$ valueofgoodsusd  <dbl> NA, NA, NA, NA, NA, NA, 87110, 188140, NA, 221110, 58…"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#data-wrangling",
+    "href": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#data-wrangling",
+    "title": "Take Home Exercise 2",
+    "section": "3.5 Data wrangling",
+    "text": "3.5 Data wrangling"
   }
 ]

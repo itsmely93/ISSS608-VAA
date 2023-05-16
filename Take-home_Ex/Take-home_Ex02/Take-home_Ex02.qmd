@@ -7,6 +7,72 @@ execute:
   warning: false
 ---
 
+# 1 The Task
+
+With reference to [Mini Challenge 2 of the VAST Challenge 2023](https://vast-challenge.github.io/2023/MC2.html), the task is to use visual analytics to identify temporal patterns for individual entities and between entities in the knowledge graph FishEye created from trade records. Categorize the types of business relationship patterns you find.
+
+# 2 The Data
+
+The *"mc2_challenge_graph.json"* data set will be used for the study. It was obtained from the VAST Challenge 2023.
+
+# 3 Data Preparation
+
+## 3.1 Installing and loading of R packages
+
+In this exercise, the following R packages will be used:
+
+1.  `tidyverse`: for data cleaning and manipulation.
+
+2.  `lubridate`:
+
+3.  `jsonlite`: for loading and reading of the *.json* file.
+
+4.  `visNetwork`: for creating interactive network graphs.
+
+The code chunk below uses `p_load()` of the *pacman* package to check if all the aforementioned packages are installed, and install the packages are yet to be installed. The packages are then loaded into the R environment.
+
 ```{r}
 pacman::p_load(igraph, tidygraph, ggraph, visNetwork, lubridate, clock, tidyverse, graphlayouts, jsonlite)
 ```
+
+## 3.2 Importing and loading the data set
+
+To import the data *"mc2_challenge_graph.json"* file into the R environment, `fromJSON()` of the *jsonlite* package is used, as seen in the code chunk below.
+
+```{r}
+MC2 <- jsonlite::fromJSON("data/mc2_challenge_graph.json")
+```
+
+The `glimpse()` function from the *dpylr* package is used to see a general overview of the data set.
+
+```{r}
+glimpse(MC2)
+```
+
+## 3.3 Extracting the nodes and edges
+
+From the MC2 data set, the nodes and edges data frames are coerced into tibbles, using the `as_tibble()` function from the *tibble* package.
+
+```{r}
+MC2_nodes <- as_tibble(MC2$nodes) %>%
+  select(id, rcvcountry, shpcountry)
+```
+
+```{r}
+MC2_edges <- as_tibble(MC2$links) %>%
+  select(-dataset)
+```
+
+## 3.4 Reviewing the data
+
+Using `glimpse()`, the structure of the data is examined.
+
+```{r}
+glimpse(MC2_nodes)
+```
+
+```{r}
+glimpse(MC2_edges)
+```
+
+## 3.5 Data wrangling
