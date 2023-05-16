@@ -1,0 +1,12 @@
+---
+title: "Take Home Exercise 2"
+author: "Lim Li Ying"
+date: "15 May 2023"
+edit: visual
+execute: 
+  warning: false
+---
+
+```{r}
+pacman::p_load(igraph, tidygraph, ggraph, visNetwork, lubridate, clock, tidyverse, graphlayouts, jsonlite)
+```
