@@ -516,5 +516,89 @@
     "title": "Take Home Exercise 2",
     "section": "3.5 Data wrangling",
     "text": "3.5 Data wrangling"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#installing-and-loading-r-packages",
+    "href": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#installing-and-loading-r-packages",
+    "title": "Hands-on Exercise 6",
+    "section": "Installing and loading R packages",
+    "text": "Installing and loading R packages\n\n\nClick to show/hide the code\npacman::p_load(plotly, tidyverse)\n\n\n\n\nClick to show/hide the code\n# require(devtools)\n# install_version(\"ggtern\", version = \"3.4.1\", repos = \"http://cran.us.r-project.org\")\n\n\n\n\nClick to show/hide the code\n# library(ggtern)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#loading-the-data",
+    "href": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#loading-the-data",
+    "title": "Hands-on Exercise 6",
+    "section": "Loading the data",
+    "text": "Loading the data\n\n\nClick to show/hide the code\npop_data <- read_csv(\"data/respopagsex2000to2018_tidy.csv\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#installing-and-loading-r-packages-1",
+    "href": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#installing-and-loading-r-packages-1",
+    "title": "Hands-on Exercise 6",
+    "section": "Installing and loading R packages",
+    "text": "Installing and loading R packages\n\n\nClick to show/hide the code\npacman::p_load(corrplot, ggstatsplot, tidyverse)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#loading-the-data-set",
+    "href": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#loading-the-data-set",
+    "title": "Hands-on Exercise 6",
+    "section": "Loading the data set",
+    "text": "Loading the data set\n\n\nClick to show/hide the code\nwine <- read_csv(\"data/wine_quality.csv\")\n\n\n\n\nClick to show/hide the code\nhead(wine)\n\n\n# A tibble: 6 × 13\n  `fixed acidity` `volatile acidity` `citric acid` `residual sugar` chlorides\n            <dbl>              <dbl>         <dbl>            <dbl>     <dbl>\n1             7.4               0.7           0                 1.9     0.076\n2             7.8               0.88          0                 2.6     0.098\n3             7.8               0.76          0.04              2.3     0.092\n4            11.2               0.28          0.56              1.9     0.075\n5             7.4               0.7           0                 1.9     0.076\n6             7.4               0.66          0                 1.8     0.075\n# ℹ 8 more variables: `free sulfur dioxide` <dbl>,\n#   `total sulfur dioxide` <dbl>, density <dbl>, pH <dbl>, sulphates <dbl>,\n#   alcohol <dbl>, quality <dbl>, type <chr>"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#building-a-basic-correlation-matrix",
+    "href": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#building-a-basic-correlation-matrix",
+    "title": "Hands-on Exercise 6",
+    "section": "Building a basic correlation matrix",
+    "text": "Building a basic correlation matrix\nThe code chunk below plots scatter plots in an 11x11 matrix.\n\n\nClick to show/hide the code\npairs(wine[,2:12])\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n[,2,12] indicates that columns 2 to 12 of the dataframe are used in the creation of the scatter plot correlation matrix."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#plotting-one-half-of-the-correlation-matrix",
+    "href": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#plotting-one-half-of-the-correlation-matrix",
+    "title": "Hands-on Exercise 6",
+    "section": "Plotting one half of the correlation matrix",
+    "text": "Plotting one half of the correlation matrix\nTo plot only the lower half of the correlation matrix, the upper.panel argument will be used, as seen in the code chunk below\n\n\nClick to show/hide the code\npairs(wine[,2:12], upper.panel = NULL)\n\n\n\n\n\nLikewise, you can display only the upper half, this time with the lower.panel argument.\n\n\nClick to show/hide the code\npairs(wine[,2:12], lower.panel = NULL)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#including-correlation-coefficients",
+    "href": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#including-correlation-coefficients",
+    "title": "Hands-on Exercise 6",
+    "section": "Including correlation coefficients",
+    "text": "Including correlation coefficients\n\n\nClick to show/hide the code\npanel.cor <- function(x, y, digits=2, prefix=\"\", cex.cor, ...) {\nusr <- par(\"usr\")\non.exit(par(usr))\npar(usr = c(0, 1, 0, 1))\nr <- abs(cor(x, y, use=\"complete.obs\"))\ntxt <- format(c(r, 0.123456789), digits=digits)[1]\ntxt <- paste(prefix, txt, sep=\"\")\nif(missing(cex.cor)) cex.cor <- 0.8/strwidth(txt)\ntext(0.5, 0.5, txt, cex = cex.cor * (1 + r) / 2)\n}\n\npairs(wine[,2:12], upper.panel = panel.cor)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#the-basic-plot",
+    "href": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#the-basic-plot",
+    "title": "Hands-on Exercise 6",
+    "section": "The basic plot",
+    "text": "The basic plot\n\n\nClick to show/hide the code\nggstatsplot::ggcorrmat(\n  data = wine,\n  cor.vars = 1:11                                                                                                                                                                                                                                 \n)\n\n\n\n\n\n\n\nClick to show/hide the code\nggstatsplot::ggcorrmat(\n  data = wine, \n  cor.vars = 1:11,\n  ggcorrplot.args = list(outline.color = \"black\", \n                         hc.order = TRUE,\n                         tl.cex = 10),\n  title    = \"Correlogram for wine dataset\",\n  subtitle = \"Four pairs are no significant at p < 0.05\"\n)\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nggcorrplot.arg argument provides addition arguments (usually aesthetic) arguments\n\n\nThe following code chunk is a sample that demonstrates controlling of certain components of the correlation matrix, such as changing the font size of the x and y axes labels.\n\n\nClick to show/hide the code\nggplot.component = list(\n    theme(text=element_text(size=5),\n      axis.text.x = element_text(size = 8),\n      axis.text.y = element_text(size = 8)))"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#building-multiple-plots",
+    "href": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#building-multiple-plots",
+    "title": "Hands-on Exercise 6",
+    "section": "Building multiple plots",
+    "text": "Building multiple plots\nFacets can be created using grouped_ggcorrmat() and specifying the grouping.var.\n\n\nClick to show/hide the code\ngrouped_ggcorrmat(\n  data = wine,\n  cor.vars = 1:11,\n  grouping.var = type,\n  type = \"robust\",\n  p.adjust.method = \"holm\",\n  plotgrid.args = list(ncol = 2),\n  ggcorrplot.args = list(outline.color = \"black\", \n                         hc.order = TRUE,\n                         tl.cex = 10),\n  annotation.args = list(\n    tag_levels = \"a\",\n    title = \"Correlogram for wine dataset\",\n    subtitle = \"The measures are: alcohol, sulphates, fixed acidity, citric acid, chlorides, residual sugar, density, free sulfur dioxide and volatile acidity\",\n    caption = \"Dataset: UCI Machine Learning Repository\"\n  )\n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#working-with-visual-geometrics",
+    "href": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#working-with-visual-geometrics",
+    "title": "Hands-on Exercise 6",
+    "section": "Working with visual geometrics",
+    "text": "Working with visual geometrics\nIn corrplot, there are seven visual geometrics that can be used to denote the attribute values, namely: circle, square, ellipse, number, shade, color and pie.\n\n\nClick to show/hide the code\ncorrplot(wine.cor, \n         method = \"ellipse\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#working-with-layout",
+    "href": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#working-with-layout",
+    "title": "Hands-on Exercise 6",
+    "section": "Working with layout",
+    "text": "Working with layout\ncorrplot() supports three layout types, namely: full, upper and lower, with the default being full.\n\n\nClick to show/hide the code\ncorrplot(wine.cor, \n         method = \"ellipse\", \n         type=\"lower\")\n\n\n\n\n\nThe layout can be further customized. In the code chunk below, the axis text label color is changed for red to black using tl.col while the cells with the diagonal line are removed using diag.\n\n\nClick to show/hide the code\ncorrplot(wine.cor, \n         method = \"ellipse\", \n         type=\"lower\",\n         diag = FALSE,\n         tl.col = \"black\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#working-with-mixed-layout",
+    "href": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#working-with-mixed-layout",
+    "title": "Hands-on Exercise 6",
+    "section": "Working with mixed layout",
+    "text": "Working with mixed layout\nUsing corrplot.mixed(), we can create a mixed corrgram whereby the correlation coefficients are at the upper half of the matrix, and the visual matrix at the lower half.\n\n\nClick to show/hide the code\ncorrplot.mixed(wine.cor, \n               lower = \"ellipse\", \n               upper = \"number\",\n               tl.pos = \"lt\",\n               diag = \"l\",\n               tl.col = \"black\")\n\n\n\n\n\n\nCombining corrgram with statistical test\nWe can use cor.mtest() to determine the p-values and confidence intervals for each pair of variables.\n\n\nClick to show/hide the code\nwine.sig = cor.mtest(wine.cor, conf.level= .95)\n\n\nWe can then use the p.mat argument as seen in the code chunk below.\n\n\nClick to show/hide the code\ncorrplot(wine.cor,\n         method = \"number\",\n         type = \"lower\",\n         diag = FALSE,\n         tl.col = \"black\",\n         tl.srt = 45,\n         p.mat = wine.sig$p,\n         sig.level = .05)\n\n\n\n\n\nAs seen from the corrgram, not all correlation pairs are statistically significant (the pairs that are not statistically significant are indicated by a cross).\n\n\nReordering a corrgram\n\n\nClick to show/hide the code\ncorrplot.mixed(wine.cor, \n               lower = \"ellipse\", \n               upper = \"number\",\n               tl.pos = \"lt\",\n               diag = \"l\",\n               order=\"AOE\",\n               tl.col = \"black\")\n\n\n\n\n\n\n\nReordering a corrgram using hclust\nIf using hclust, corrplot() can draw rectangles around the corrgram based on the results of hierarchical clustering.\n\n\nClick to show/hide the code\ncorrplot(wine.cor, \n         method = \"ellipse\", \n         tl.pos = \"lt\",\n         tl.col = \"black\",\n         order=\"hclust\",\n         hclust.method = \"ward.D\",\n         addrect = 3)"
   }
 ]
