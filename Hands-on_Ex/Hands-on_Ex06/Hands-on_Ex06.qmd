@@ -133,7 +133,7 @@ ggplot.component = list(
       axis.text.y = element_text(size = 8)))
 ```
 
-##  Building multiple plots
+## Building multiple plots
 
 Facets can be created using `grouped_ggcorrmat()` and specifying the `grouping.var`.
 
