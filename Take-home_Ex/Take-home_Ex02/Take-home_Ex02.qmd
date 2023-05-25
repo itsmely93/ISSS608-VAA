@@ -34,7 +34,7 @@ In this exercise, the following R packages will be used:
 The code chunk below uses `p_load()` of the *pacman* package to check if all the aforementioned packages are installed, and install the packages are yet to be installed. The packages are then loaded into the R environment.
 
 ```{r}
-pacman::p_load(tidygraph, ggraph, visNetwork, lubridate, tidyverse, graphlayouts, jsonlite)
+pacman::p_load(tidygraph, ggraph, visNetwork, lubridate, tidyverse, graphlayouts, jsonlite, igraph)
 ```
 
 ## 3.2 Importing and loading the data set
@@ -130,6 +130,8 @@ MC2_graph
 
 # 4 Network graph visualization
 
+## 4.1 Static network graph of fishing companies in 2028
+
 ```{r}
 ggraph(MC2_graph, layout = "fr") +
   geom_edge_link(aes(width=Weight), 
@@ -138,31 +140,152 @@ ggraph(MC2_graph, layout = "fr") +
   theme_graph()
 ```
 
-## 4.2
+The static network graph gives us a general overview of the network.
+
+To get a better understanding on the relationships between the various fishing companies, an interactive network graph will be created using *visNetwork*.
+
+## 4.2 Interactive network graph
+
+### 4.2.1 Preparation of the nodes and edges
 
 ```{r}
-MC2_nodes_extracted <- MC2_nodes_extracted %>%
-  mutate(label = id)
+MC2_nodes2 <- MC2_nodes_extracted %>%
+  mutate(label = id) 
+
+# Add degree (number of edges connected to each node) as a new column "value"
+# This will change the size of the nodes according to the value
+MC2_nodes2$value = degree(MC2_graph)
+
+# Use colorRampPalette() function to get a gradient color palette 
+eigScalePal <- colorRampPalette(c('#9fbac9','#003049'))
+
+# Match palette to centrality vector
+# This will change the color of the nodes based on centrality value
+MC2_nodes2$color <- eigScalePal(7)[cut(eigen_centrality(MC2_graph)$vector, breaks = 7)]
+
+MC2_nodes2$title = paste0("Company Name: ", MC2_nodes2$label)
 ```
 
 ```{r}
-MC2_edges_aggregated <- MC2_edges %>%
+MC2_edges2 <- MC2_edges %>%
   rename(from = source) %>%
   rename(to = target) %>%
-  filter(hscode == "306170" & Year == "2028") %>%
-  group_by(from, to) %>%
-  summarise(weight = n()) %>%
+  filter(hscode == "306170") %>%
+  group_by(from, to, Year) %>%
+  summarise(value = n()) %>%
   filter(from!=to) %>%
-  filter(weight > 20) %>%
+  filter(value > 20) %>%
   ungroup()
 ```
 
+### 4.2.2 Interactive network graph of fishing companies
+
+::: panel-tabset
+## 2028
+
 ```{r}
-visNetwork(MC2_nodes_extracted,
-           MC2_edges_aggregated,
-           width = "100%") %>%
+#| code-fold: true
+MC2_edges2028 <- MC2_edges2 %>%
+  filter(Year == "2028")
+
+visNetwork(MC2_nodes2,
+           MC2_edges2028,
+           width = "100%", 
+           main = "Network of fishing companies in 2028") %>%
   visIgraphLayout(layout = "layout_with_fr") %>%
   visEdges(arrows = "to") %>%
-  visOptions(highlightNearest = TRUE) %>%
-  visLayout(randomSeed = 123)
+  visOptions(highlightNearest = list(enabled = T, hover = T),
+             nodesIdSelection = TRUE) %>%
+  visLayout(randomSeed = 123) 
 ```
+
+Insights:
+
+It can be observed that while there is one main network, there are 11 other clusters of fishing companies that are not part of the main network. In these 11 clusters, the target of shipments only receives them from one or two sources, while the sources themselves exclusively send their products to a single target.
+
+The 11 clusters are as seen in the table below:
+
++--------------------------------------+-------------------------------------------------+
+| Source                               | Target                                          |
++======================================+=================================================+
+| Amerigo Dockyard S.p.A. Distribution | Shou gan Limited Liability Company Distribution |
++--------------------------------------+-------------------------------------------------+
+| The Sealion Corporation              | Mar de la Luz Plc                               |
++--------------------------------------+-------------------------------------------------+
+| bi mu yu Sagl Distribution           | -1203                                           |
++--------------------------------------+-------------------------------------------------+
+| Noord Limited Liability Company Line | -1363                                           |
++--------------------------------------+-------------------------------------------------+
+| 1 Ltd. Liability Co Cargo            | Himachal Pradesh BV Holdings                    |
+|                                      |                                                 |
+| Irish Scallop Corportation Transport |                                                 |
++--------------------------------------+-------------------------------------------------+
+| Turkish Sword NV Ocean               | Rybachit Sagl and Son's                         |
+|                                      |                                                 |
+| Neptune's Realm NV Navigation        |                                                 |
++--------------------------------------+-------------------------------------------------+
+| qing yu Ltd. Corporation             | Mar de Plata BV Marine                          |
++--------------------------------------+-------------------------------------------------+
+| Mar de la Costa Sagl                 | 3 Oceanography OAO Marine life                  |
++--------------------------------------+-------------------------------------------------+
+| suo yu GmbH & Co. KG Freight         | Selkie Ltd. Liability Co                        |
++--------------------------------------+-------------------------------------------------+
+| Mar de la Felicidad NV               | Water Wonders AG Transport                      |
++--------------------------------------+-------------------------------------------------+
+| OB River Ltd. Liability Co           | Kilimanjaro fishery Ltd. Corporation Carriers   |
++--------------------------------------+-------------------------------------------------+
+
+## 2030
+
+```{r}
+#| code-fold: true
+MC2_edges2030 <- MC2_edges2 %>%
+  filter(Year == "2030")
+
+visNetwork(MC2_nodes2,
+           MC2_edges2030,
+           width = "100%", 
+           main = "Network of fishing companies in 2030") %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to") %>%
+  visOptions(highlightNearest = list(enabled = T, hover = T),
+             nodesIdSelection = TRUE) %>%
+  visLayout(randomSeed = 123) 
+```
+
+## 2032
+
+```{r}
+#| code-fold: true
+MC2_edges2032 <- MC2_edges2 %>%
+  filter(Year == "2032")
+
+visNetwork(MC2_nodes2,
+           MC2_edges2032,
+           width = "100%", 
+           main = "Network of fishing companies in 2032") %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to") %>%
+  visOptions(highlightNearest = list(enabled = T, hover = T),
+             nodesIdSelection = TRUE) %>%
+  visLayout(randomSeed = 123) 
+```
+
+## 2034
+
+```{r}
+#| code-fold: true
+MC2_edges2034 <- MC2_edges2 %>%
+  filter(Year == "2034")
+
+visNetwork(MC2_nodes2,
+           MC2_edges2034,
+           width = "100%", 
+           main = "Network of fishing companies in 2034") %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to") %>%
+  visOptions(highlightNearest = list(enabled = T, hover = T),
+             nodesIdSelection = TRUE) %>%
+  visLayout(randomSeed = 123) 
+```
+:::
