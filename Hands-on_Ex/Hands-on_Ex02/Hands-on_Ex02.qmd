@@ -1,6 +1,8 @@
 ---
 title: "Hands-on Exercise 2"
 author: "Lim Li Ying"
+execute: 
+  warning: false
 ---
 
 # Getting Started
