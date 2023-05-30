@@ -34,7 +34,7 @@ In this exercise, the following R packages will be used:
 The code chunk below uses `p_load()` of the *pacman* package to check if all the aforementioned packages are installed, and install the packages are yet to be installed. The packages are then loaded into the R environment.
 
 ```{r}
-pacman::p_load(tidygraph, ggraph, visNetwork, lubridate, tidyverse, graphlayouts, jsonlite, igraph)
+pacman::p_load(tidygraph, ggraph, visNetwork, lubridate, tidyverse, graphlayouts, jsonlite, igraph, plotly)
 ```
 
 ## 3.2 Importing and loading the data set
@@ -79,13 +79,17 @@ glimpse(MC2_edges)
 
 -   A new column for the year will need to be created.
 
+The following code chunk addresses the aforementioned issues.
+
 ```{r}
 MC2_edges <- MC2_edges %>%
   mutate(ArrivalDate = ymd(arrivaldate)) %>%
-  mutate(Year = year(ArrivalDate)) 
+  mutate(Year = year(ArrivalDate))
 ```
 
--   Using the `filter()` function, rows whereby the hscode is 306170 and the year is 2028 will be selected.
+Next, the attributes of the edges will need to be aggregated, following the subsequent steps:
+
+-   Using the `filter()` function, rows whereby the hscode is 306170 will be selected.
 -   They will then be aggregated by source, target, hscode and year, using the `group_by()` function.
 -   A new column *Weight* (i.e. the count) will be created using the `summarise()` function.
 -   The `filter()` function is used again to select rows whereby the source is not the same as the target, and the weight is greater than 20.
@@ -93,7 +97,7 @@ MC2_edges <- MC2_edges %>%
 
 ```{r}
 MC2_edges_aggregated <- MC2_edges %>%
-  filter(hscode == "306170" & Year == "2028") %>%
+  filter(hscode == "306170") %>%
   group_by(source, target, hscode, Year) %>%
   summarise(Weight = n()) %>%
   filter(source!=target) %>%
@@ -130,7 +134,7 @@ MC2_graph
 
 # 4 Network graph visualization
 
-## 4.1 Static network graph of fishing companies in 2028
+## 4.1 Static network graph of fishing companies from 2028 to 2034
 
 ```{r}
 ggraph(MC2_graph, layout = "fr") +
@@ -140,38 +144,20 @@ ggraph(MC2_graph, layout = "fr") +
   theme_graph()
 ```
 
-The static network graph gives us a general overview of the network.
+The static network graph gives us a general overview of the network, however, not much information can be included without it looking cluttered.
 
 To get a better understanding on the relationships between the various fishing companies, an interactive network graph will be created using *visNetwork*.
 
 ## 4.2 Interactive network graph
 
-### 4.2.1 Preparation of the nodes and edges
+### 4.2.1 Preparation of the edges
 
 ```{r}
-MC2_nodes2 <- MC2_nodes_extracted %>%
-  mutate(label = id) 
-
-# Add degree (number of edges connected to each node) as a new column "value"
-# This will change the size of the nodes according to the value
-MC2_nodes2$value = degree(MC2_graph)
-
-# Use colorRampPalette() function to get a gradient color palette 
-eigScalePal <- colorRampPalette(c('#9fbac9','#003049'))
-
-# Match palette to centrality vector
-# This will change the color of the nodes based on centrality value
-MC2_nodes2$color <- eigScalePal(7)[cut(eigen_centrality(MC2_graph)$vector, breaks = 7)]
-
-MC2_nodes2$title = paste0("Company Name: ", MC2_nodes2$label)
-```
-
-```{r}
-MC2_edges2 <- MC2_edges %>%
+edges_df <- MC2_edges %>%
   rename(from = source) %>%
   rename(to = target) %>%
   filter(hscode == "306170") %>%
-  group_by(from, to, Year) %>%
+  group_by(from, to, hscode, Year) %>%
   summarise(value = n()) %>%
   filter(from!=to) %>%
   filter(value > 20) %>%
@@ -185,65 +171,121 @@ MC2_edges2 <- MC2_edges %>%
 
 ```{r}
 #| code-fold: true
-MC2_edges2028 <- MC2_edges2 %>%
+# filter edges by the year 2028
+edges_2028 <- edges_df %>%
   filter(Year == "2028")
 
-visNetwork(MC2_nodes2,
-           MC2_edges2028,
-           width = "100%", 
+# extract the nodes for 2028  
+id1 <- edges_2028 %>%
+  select(from) %>%
+  rename(id = from)
+id2 <- edges_2028 %>%
+  select(to) %>%
+  rename(id = to)
+nodes_2028 <- rbind(id1, id2) %>%
+  distinct()
+
+nodes_2028 <- nodes_2028 %>%
+  mutate(label = id) 
+
+# build tidygraph model
+graph_2028 <- tbl_graph(nodes = nodes_2028,
+                        edges = edges_2028,
+                        directed = TRUE)
+
+# Add degree (number of edges connected to each node) as a new column "value"
+# This will change the size of the nodes according to the value
+nodes_2028$value = degree(graph_2028)
+
+# Change the color of the nodes based on centrality value using a gradient color palette
+eigScalePal <- colorRampPalette(c('#9fbac9','#003049'))
+nodes_2028$color <- eigScalePal(7)[cut(eigen_centrality(graph_2028)$vector, breaks = 7)]
+
+# To customize the tooltip
+nodes_2028$title = paste0("Company Name: ", nodes_2028$label)
+
+visNetwork(nodes_2028,
+           edges_2028,
+           width = "100%",
            main = "Network of fishing companies in 2028") %>%
   visIgraphLayout(layout = "layout_with_fr") %>%
   visEdges(arrows = "to") %>%
   visOptions(highlightNearest = list(enabled = T, hover = T),
              nodesIdSelection = TRUE) %>%
-  visLayout(randomSeed = 123) 
+  visLayout(randomSeed = 123)
 ```
 
 Insights:
 
 It can be observed that while there is one main network, there are 11 other clusters of fishing companies that are not part of the main network. In these 11 clusters, the target of shipments only receives them from one or two sources, while the sources themselves exclusively send their products to a single target.
 
-The 11 clusters are as seen in the table below:
+```{r}
+#| code-fold: true
+# preparing the data for plotting
+edges_2028 <- edges_2028 %>%
+  gather(key = "column", value = "combined", from, to) %>%
+  mutate(column_type = ifelse(column == "from", "from", "to")) %>%
+  group_by(combined, column_type) %>%
+  summarise(count = n()) %>%
+  ungroup()
 
-+--------------------------------------+-------------------------------------------------+
-| Source                               | Target                                          |
-+======================================+=================================================+
-| Amerigo Dockyard S.p.A. Distribution | Shou gan Limited Liability Company Distribution |
-+--------------------------------------+-------------------------------------------------+
-| The Sealion Corporation              | Mar de la Luz Plc                               |
-+--------------------------------------+-------------------------------------------------+
-| bi mu yu Sagl Distribution           | -1203                                           |
-+--------------------------------------+-------------------------------------------------+
-| Noord Limited Liability Company Line | -1363                                           |
-+--------------------------------------+-------------------------------------------------+
-| 1 Ltd. Liability Co Cargo            | Himachal Pradesh BV Holdings                    |
-|                                      |                                                 |
-| Irish Scallop Corportation Transport |                                                 |
-+--------------------------------------+-------------------------------------------------+
-| Turkish Sword NV Ocean               | Rybachit Sagl and Son's                         |
-|                                      |                                                 |
-| Neptune's Realm NV Navigation        |                                                 |
-+--------------------------------------+-------------------------------------------------+
-| qing yu Ltd. Corporation             | Mar de Plata BV Marine                          |
-+--------------------------------------+-------------------------------------------------+
-| Mar de la Costa Sagl                 | 3 Oceanography OAO Marine life                  |
-+--------------------------------------+-------------------------------------------------+
-| suo yu GmbH & Co. KG Freight         | Selkie Ltd. Liability Co                        |
-+--------------------------------------+-------------------------------------------------+
-| Mar de la Felicidad NV               | Water Wonders AG Transport                      |
-+--------------------------------------+-------------------------------------------------+
-| OB River Ltd. Liability Co           | Kilimanjaro fishery Ltd. Corporation Carriers   |
-+--------------------------------------+-------------------------------------------------+
+# customizing the tooltip
+text <- paste0("Company: ", edges_2028$combined, "\nCount: ", edges_2028$count)
+
+# plotting the grouped bar chart
+g <- ggplot(edges_2028, aes(x = combined, y = count, fill = column_type, text = text)) +
+  geom_col() +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+ggplotly(g, tooltip = "text") %>%
+  layout(plot_bgcolor='#e5ecf6',   
+         xaxis = list(
+           title='Fishing company',
+           zerolinecolor = '#ffff',
+           zerolinewidth = 2,
+           gridcolor = 'ffff'),
+         yaxis = list(
+           title='Count',
+           zerolinecolor = '#ffff',
+           zerolinewidth = 2,
+           gridcolor = 'ffff'),
+         title = "Distribution of fishing companies in 2028",
+         legend = list(title = list(text = NULL))) 
+```
 
 ## 2030
 
 ```{r}
 #| code-fold: true
-MC2_edges2030 <- MC2_edges2 %>%
+edges_2030 <- edges_df %>%
   filter(Year == "2030")
 
-visNetwork(MC2_nodes2,
-           MC2_edges2030,
+id1 <- edges_2030 %>%
+  select(from) %>%
+  rename(id = from)
+id2 <- edges_2030 %>%
+  select(to) %>%
+  rename(id = to)
+nodes_2030 <- rbind(id1, id2) %>%
+  distinct()
+
+nodes_2030 <- nodes_2030 %>%
+  mutate(label = id) 
+
+graph_2030 <- tbl_graph(nodes = nodes_2030,
+                        edges = edges_2030,
+                        directed = TRUE)
+
+nodes_2030$value = degree(graph_2030)
+eigScalePal <- colorRampPalette(c('#9fbac9','#003049'))
+nodes_2030$color <- eigScalePal(7)[cut(eigen_centrality(graph_2030)$vector, breaks = 7)]
+nodes_2030$title = paste0("Company Name: ", nodes_2030$label)
+
+
+visNetwork(nodes_2030,
+           edges_2030,
            width = "100%", 
            main = "Network of fishing companies in 2030") %>%
   visIgraphLayout(layout = "layout_with_fr") %>%
@@ -253,15 +295,72 @@ visNetwork(MC2_nodes2,
   visLayout(randomSeed = 123) 
 ```
 
+```{r}
+#| code-fold: true
+# preparing the data for plotting
+edges_2030 <- edges_2030 %>%
+  gather(key = "column", value = "combined", from, to) %>%
+  mutate(column_type = ifelse(column == "from", "from", "to")) %>%
+  group_by(combined, column_type) %>%
+  summarise(count = n()) %>%
+  ungroup()
+
+# customizing the tooltip
+text <- paste0("Company: ", edges_2030$combined, "\nCount: ", edges_2030$count)
+
+# plotting the grouped bar chart
+g <- ggplot(edges_2030, aes(x = combined, y = count, fill = column_type, text = text)) +
+  geom_col() +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+ggplotly(g, tooltip = "text") %>%
+  layout(plot_bgcolor='#e5ecf6',   
+         xaxis = list(
+           title='Fishing company',
+           zerolinecolor = '#ffff',
+           zerolinewidth = 2,
+           gridcolor = 'ffff'),
+         yaxis = list(
+           title='Count',
+           zerolinecolor = '#ffff',
+           zerolinewidth = 2,
+           gridcolor = 'ffff'),
+         title = "Distribution of fishing companies in 2030",
+         legend = list(title = list(text = NULL))) 
+```
+
 ## 2032
 
 ```{r}
 #| code-fold: true
-MC2_edges2032 <- MC2_edges2 %>%
+edges_2032 <- edges_df %>%
   filter(Year == "2032")
 
-visNetwork(MC2_nodes2,
-           MC2_edges2032,
+id1 <- edges_2032 %>%
+  select(from) %>%
+  rename(id = from)
+id2 <- edges_2032 %>%
+  select(to) %>%
+  rename(id = to)
+nodes_2032 <- rbind(id1, id2) %>%
+  distinct()
+
+nodes_2032 <- nodes_2032 %>%
+  mutate(label = id) 
+
+graph_2032 <- tbl_graph(nodes = nodes_2032,
+                        edges = edges_2032, 
+                        directed = TRUE)
+
+nodes_2032$value = degree(graph_2032)
+eigScalePal <- colorRampPalette(c('#9fbac9','#003049'))
+nodes_2032$color <- eigScalePal(7)[cut(eigen_centrality(graph_2032)$vector, breaks = 7)]
+nodes_2032$title = paste0("Company Name: ", nodes_2032$label)
+
+visNetwork(nodes_2032,
+           edges_2032,
            width = "100%", 
            main = "Network of fishing companies in 2032") %>%
   visIgraphLayout(layout = "layout_with_fr") %>%
@@ -271,15 +370,72 @@ visNetwork(MC2_nodes2,
   visLayout(randomSeed = 123) 
 ```
 
+```{r}
+#| code-fold: true
+# preparing the data for plotting
+edges_2032 <- edges_2032 %>%
+  gather(key = "column", value = "combined", from, to) %>%
+  mutate(column_type = ifelse(column == "from", "from", "to")) %>%
+  group_by(combined, column_type) %>%
+  summarise(count = n()) %>%
+  ungroup()
+
+# customizing the tooltip
+text <- paste0("Company: ", edges_2032$combined, "\nCount: ", edges_2032$count)
+
+# plotting the grouped bar chart
+g <- ggplot(edges_2032, aes(x = combined, y = count, fill = column_type, text = text)) +
+  geom_col() +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+ggplotly(g, tooltip = "text") %>%
+  layout(plot_bgcolor='#e5ecf6',   
+         xaxis = list(
+           title='Fishing company',
+           zerolinecolor = '#ffff',
+           zerolinewidth = 2,
+           gridcolor = 'ffff'),
+         yaxis = list(
+           title='Count',
+           zerolinecolor = '#ffff',
+           zerolinewidth = 2,
+           gridcolor = 'ffff'),
+         title = "Distribution of fishing companies in 2032",
+         legend = list(title = list(text = NULL))) 
+```
+
 ## 2034
 
 ```{r}
 #| code-fold: true
-MC2_edges2034 <- MC2_edges2 %>%
+edges_2034 <- edges_df %>%
   filter(Year == "2034")
 
-visNetwork(MC2_nodes2,
-           MC2_edges2034,
+id1 <- edges_2034 %>%
+  select(from) %>%
+  rename(id = from)
+id2 <- edges_2034 %>%
+  select(to) %>%
+  rename(id = to)
+nodes_2034 <- rbind(id1, id2) %>%
+  distinct()
+
+nodes_2034 <- nodes_2034 %>%
+  mutate(label = id) 
+
+graph_2034 <- tbl_graph(nodes = nodes_2034,
+                        edges = edges_2034, 
+                        directed = TRUE)
+
+nodes_2034$value = degree(graph_2034)
+eigScalePal <- colorRampPalette(c('#9fbac9','#003049'))
+nodes_2034$color <- eigScalePal(7)[cut(eigen_centrality(graph_2034)$vector, breaks = 7)]
+nodes_2030$title = paste0("Company Name: ", nodes_2030$label)
+
+visNetwork(nodes_2034,
+           edges_2034,
            width = "100%", 
            main = "Network of fishing companies in 2034") %>%
   visIgraphLayout(layout = "layout_with_fr") %>%
@@ -287,5 +443,41 @@ visNetwork(MC2_nodes2,
   visOptions(highlightNearest = list(enabled = T, hover = T),
              nodesIdSelection = TRUE) %>%
   visLayout(randomSeed = 123) 
+```
+
+```{r}
+#| code-fold: true
+# preparing the data for plotting
+edges_2034 <- edges_2034 %>%
+  gather(key = "column", value = "combined", from, to) %>%
+  mutate(column_type = ifelse(column == "from", "from", "to")) %>%
+  group_by(combined, column_type) %>%
+  summarise(count = n()) %>%
+  ungroup()
+
+# customizing the tooltip
+text <- paste0("Company: ", edges_2034$combined, "\nCount: ", edges_2034$count)
+
+# plotting the grouped bar chart
+g <- ggplot(edges_2034, aes(x = combined, y = count, fill = column_type, text = text)) +
+  geom_col() +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+ggplotly(g, tooltip = "text") %>%
+  layout(plot_bgcolor='#e5ecf6',   
+         xaxis = list(
+           title='Fishing company',
+           zerolinecolor = '#ffff',
+           zerolinewidth = 2,
+           gridcolor = 'ffff'),
+         yaxis = list(
+           title='Count',
+           zerolinecolor = '#ffff',
+           zerolinewidth = 2,
+           gridcolor = 'ffff'),
+         title = "Distribution of fishing companies in 2034",
+         legend = list(title = list(text = NULL))) 
 ```
 :::
