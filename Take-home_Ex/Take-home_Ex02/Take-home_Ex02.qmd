@@ -31,10 +31,14 @@ In this exercise, the following R packages will be used:
 
 5.  `ggraph`: an extension of `ggplot2` for the creation of network graphs.
 
+6.  `igraph`: for network analysis and visualisation.
+
+7.  `plotly`: for creating interactive plots.
+
 The code chunk below uses `p_load()` of the *pacman* package to check if all the aforementioned packages are installed, and install the packages are yet to be installed. The packages are then loaded into the R environment.
 
 ```{r}
-pacman::p_load(tidygraph, ggraph, visNetwork, lubridate, tidyverse, graphlayouts, jsonlite, igraph, plotly)
+pacman::p_load(tidygraph, ggraph, visNetwork, lubridate, tidyverse, jsonlite, igraph, plotly)
 ```
 
 ## 3.2 Importing and loading the data set
@@ -77,13 +81,14 @@ glimpse(MC2_edges)
 
 -   *arrivaldate* is currently formatted as `<chr>` data type, and needs to be converted to the `<date>` data type.
 
--   A new column for the year will need to be created.
+-   New columns for the month and year will need to be created.
 
 The following code chunk addresses the aforementioned issues.
 
 ```{r}
 MC2_edges <- MC2_edges %>%
   mutate(ArrivalDate = ymd(arrivaldate)) %>%
+  mutate(Month = month(ArrivalDate, label = TRUE)) %>%
   mutate(Year = year(ArrivalDate))
 ```
 
@@ -132,11 +137,137 @@ MC2_graph <- tbl_graph(nodes = MC2_nodes_extracted,
 MC2_graph
 ```
 
-# 4 Network graph visualization
+# 4 Exploratory Data Analysis
 
-## 4.1 Static network graph of fishing companies from 2028 to 2034
+## 4.1 Distribution of edges by year
 
 ```{r}
+# preparing the data for plotting (deriving the total count per year)
+yearly_edges <- MC2_edges %>%
+  group_by(hscode, Year) %>%
+  filter(hscode == "306170") %>%
+  count(Year)
+
+# plotting the chart
+fig <- plot_ly(x = ~Year, y = ~n, data = yearly_edges, type = "bar",
+               text = paste0("Year: ", yearly_edges$Year, "\nNumber of edges: ",  yearly_edges$n), 
+             hoverinfo = "text",
+             textposition = "none") %>%
+    layout(yaxis = list(title = "Number of edges",
+                      zerolinecolor = '#ffff',
+                      zerolinewidth = 2,
+                      gridcolor = '#ffff'),
+         xaxis = list(title = "Year",
+                      zerolinecolor = '#ffff',
+                      zerolinewidth = 2,
+                      gridcolor = '#ffff'),
+         title = "Total number of edges by year from 2028-2034",
+         plot_bgcolor='#e5ecf6',
+         showlegend = FALSE)
+
+fig
+```
+
+**Insights:**
+
+-   The number of fishing trades demonstrates an upward trend over the years, rising from 15,263 edges in 2028 to nearly doubling at 27,047 edges by 2034.
+
+## 4.2 Distribution of edges by months
+
+```{r}
+# preparing the data for plotting
+monthly_edges <- MC2_edges %>%
+  filter(hscode == "306170") %>%
+  group_by(Month, Year) %>%
+  summarise(avg_count = n()) %>%
+  group_by(Month) %>%
+  summarise(avg_count = round(mean(avg_count), digits = 0))
+
+# plotting the chart  
+fig <- plot_ly(x = ~Month, y = ~avg_count, data = monthly_edges, type = "bar",
+               color= ~Month,
+               text = paste0("Month: ", monthly_edges$Month, "\nAverage number of edges: ", monthly_edges$avg_count),
+               hoverinfo = "text",
+               textposition = "none") %>%
+    layout(yaxis = list(title = "Average number of edges",
+                      zerolinecolor = '#ffff',
+                      zerolinewidth = 2,
+                      gridcolor = '#ffff'),
+         xaxis = list(title = "Month",
+                      zerolinecolor = '#ffff',
+                      zerolinewidth = 2,
+                      gridcolor = '#ffff'),
+         title = "Average number of edges by month from 2028-2034",
+         plot_bgcolor='#e5ecf6',
+         showlegend = FALSE)
+
+fig
+```
+
+**Insights:**
+
+-   Fishing trades occur more frequently in Q3 to Q4 (i.e. July to December), with the highest number of trades occurring in the month of October (2303 edges on average).
+
+-   The lowest number of trades occur in February, with only an average of 1387 edges.
+
+## 4.2.3 Proportion of source and target by year
+
+```{r}
+total_sources <- MC2_edges_aggregated %>%
+  group_by(Year) %>%
+  summarise(total_sources = n_distinct(source))
+
+total_targets <- MC2_edges_aggregated %>%
+  group_by(Year) %>%
+  summarise(total_targets = n_distinct(target))
+
+total <- merge(total_sources, total_targets, by = "Year")
+
+total <- total %>%
+  mutate(total = total_sources + total_targets) %>%
+  mutate(source_prop = round(total_sources/total * 100, digits = 0), target_prop = round(total_targets/total * 100), digits = 0)
+
+fig <- plot_ly(data = total,
+        x = ~Year,
+        y = ~source_prop,
+        type = "bar",
+        name = "Source",
+        hoverinfo = "text",
+        text = ~paste0("Source in ", Year, "<br>Number of distinct sources: ", total_sources, "<br>Proportion: ", source_prop,"%"),
+        textposition = 'none',
+        marker = list(color = "darkseagreen")) %>%
+    add_trace(y = ~target_prop,
+              name = "Target",
+              hoverinfo = "text",
+              text = ~paste0("Target in ", Year, "<br>Number of distinct targets: ", total_targets, "<br>Proportion: ", target_prop,"%"),
+              textposition = 'none',
+              marker = list(color = "salmon")) %>%
+    layout(title = "Yearly proportion of source and target",
+           xaxis = list(title = "Year",
+                        zerolinecolor = '#ffff',
+                        zerolinewidth = 2,
+                        gridcolor = '#ffff'),
+           yaxis = list(title = "Percentage",
+                        zerolinecolor = '#ffff',
+                        zerolinewidth = 2,
+                        gridcolor = '#ffff'),
+           showlegend = FALSE,
+           plot_bgcolor='#e5ecf6',
+           barmode = 'stack')
+
+fig
+```
+
+**Insights**
+
+-   There is a greater proportion of sources than target every year.
+
+# 5 Network graph visualization
+
+## 5.1 Static network graph of fishing companies from 2028 to 2034
+
+```{r}
+# plotting a static network graph
 ggraph(MC2_graph, layout = "fr") +
   geom_edge_link(aes(width=Weight), 
                  alpha=0.2) +
@@ -148,9 +279,9 @@ The static network graph gives us a general overview of the network, however, no
 
 To get a better understanding on the relationships between the various fishing companies, an interactive network graph will be created using *visNetwork*.
 
-## 4.2 Interactive network graph
+## 5.2 Interactive network graph
 
-### 4.2.1 Preparation of the edges
+### 5.2.1 Preparation of the edges
 
 ```{r}
 edges_df <- MC2_edges %>%
@@ -164,7 +295,15 @@ edges_df <- MC2_edges %>%
   ungroup()
 ```
 
-### 4.2.2 Interactive network graph of fishing companies
+::: callout-note
+-   "Source" and "target" have to be renamed as "from" and "to" respectively.
+
+-   Instead of a "weight" column, it has to be named "value" instead.
+
+-   The reason for the aforementioned points is because visNetwork does not recognize the terms "source", "target" and "weight", therefore they have to be renamed into something that is both recognizable by visNetwork and has the same meaning as the original names.
+:::
+
+### 5.2.2 Interactive network graph of fishing companies
 
 ::: panel-tabset
 ## 2028
@@ -175,7 +314,7 @@ edges_df <- MC2_edges %>%
 edges_2028 <- edges_df %>%
   filter(Year == "2028")
 
-# extract the nodes for 2028  
+# extract the nodes for 2028
 id1 <- edges_2028 %>%
   select(from) %>%
   rename(id = from)
@@ -186,7 +325,7 @@ nodes_2028 <- rbind(id1, id2) %>%
   distinct()
 
 nodes_2028 <- nodes_2028 %>%
-  mutate(label = id) 
+  mutate(label = id)
 
 # build tidygraph model
 graph_2028 <- tbl_graph(nodes = nodes_2028,
@@ -197,7 +336,8 @@ graph_2028 <- tbl_graph(nodes = nodes_2028,
 # This will change the size of the nodes according to the value
 nodes_2028$value = degree(graph_2028)
 
-# Change the color of the nodes based on centrality value using a gradient color palette
+# Change the color of the nodes based on eigenvector centrality value 
+# using a gradient color palette
 eigScalePal <- colorRampPalette(c('#9fbac9','#003049'))
 nodes_2028$color <- eigScalePal(7)[cut(eigen_centrality(graph_2028)$vector, breaks = 7)]
 
@@ -215,44 +355,45 @@ visNetwork(nodes_2028,
   visLayout(randomSeed = 123)
 ```
 
-Insights:
-
-It can be observed that while there is one main network, there are 11 other clusters of fishing companies that are not part of the main network. In these 11 clusters, the target of shipments only receives them from one or two sources, while the sources themselves exclusively send their products to a single target.
+## 2029
 
 ```{r}
 #| code-fold: true
-# preparing the data for plotting
-edges_2028 <- edges_2028 %>%
-  gather(key = "column", value = "combined", from, to) %>%
-  mutate(column_type = ifelse(column == "from", "from", "to")) %>%
-  group_by(combined, column_type) %>%
-  summarise(count = n()) %>%
-  ungroup()
+edges_2029 <- edges_df %>%
+  filter(Year == "2029")
 
-# customizing the tooltip
-text <- paste0("Company: ", edges_2028$combined, "\nCount: ", edges_2028$count)
+id1 <- edges_2029 %>%
+  select(from) %>%
+  rename(id = from)
+id2 <- edges_2029 %>%
+  select(to) %>%
+  rename(id = to)
+nodes_2029 <- rbind(id1, id2) %>%
+  distinct()
 
-# plotting the grouped bar chart
-g <- ggplot(edges_2028, aes(x = combined, y = count, fill = column_type, text = text)) +
-  geom_col() +
-  theme(axis.title.x=element_blank(),
-        axis.text.x=element_blank(),
-        axis.ticks.x=element_blank())
+nodes_2029 <- nodes_2029 %>%
+  mutate(label = id)
 
-ggplotly(g, tooltip = "text") %>%
-  layout(plot_bgcolor='#e5ecf6',   
-         xaxis = list(
-           title='Fishing company',
-           zerolinecolor = '#ffff',
-           zerolinewidth = 2,
-           gridcolor = 'ffff'),
-         yaxis = list(
-           title='Count',
-           zerolinecolor = '#ffff',
-           zerolinewidth = 2,
-           gridcolor = 'ffff'),
-         title = "Distribution of fishing companies in 2028",
-         legend = list(title = list(text = NULL))) 
+graph_2029 <- tbl_graph(nodes = nodes_2029,
+                        edges = edges_2029,
+                        directed = TRUE)
+
+nodes_2029$value = degree(graph_2029)
+
+eigScalePal <- colorRampPalette(c('#9fbac9','#003049'))
+nodes_2029$color <- eigScalePal(7)[cut(eigen_centrality(graph_2029)$vector, breaks = 7)]
+
+nodes_2029$title = paste0("Company Name: ", nodes_2029$label)
+
+visNetwork(nodes_2029,
+           edges_2029,
+           width = "100%",
+           main = "Network of fishing companies in 2029") %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to") %>%
+  visOptions(highlightNearest = list(enabled = T, hover = T),
+             nodesIdSelection = TRUE) %>%
+  visLayout(randomSeed = 123)
 ```
 
 ## 2030
@@ -295,40 +436,45 @@ visNetwork(nodes_2030,
   visLayout(randomSeed = 123) 
 ```
 
+## 2031
+
 ```{r}
 #| code-fold: true
-# preparing the data for plotting
-edges_2030 <- edges_2030 %>%
-  gather(key = "column", value = "combined", from, to) %>%
-  mutate(column_type = ifelse(column == "from", "from", "to")) %>%
-  group_by(combined, column_type) %>%
-  summarise(count = n()) %>%
-  ungroup()
+edges_2031 <- edges_df %>%
+  filter(Year == "2031")
 
-# customizing the tooltip
-text <- paste0("Company: ", edges_2030$combined, "\nCount: ", edges_2030$count)
+id1 <- edges_2031 %>%
+  select(from) %>%
+  rename(id = from)
+id2 <- edges_2031 %>%
+  select(to) %>%
+  rename(id = to)
+nodes_2031 <- rbind(id1, id2) %>%
+  distinct()
 
-# plotting the grouped bar chart
-g <- ggplot(edges_2030, aes(x = combined, y = count, fill = column_type, text = text)) +
-  geom_col() +
-  theme(axis.title.x=element_blank(),
-        axis.text.x=element_blank(),
-        axis.ticks.x=element_blank())
+nodes_2031 <- nodes_2031 %>%
+  mutate(label = id)
 
-ggplotly(g, tooltip = "text") %>%
-  layout(plot_bgcolor='#e5ecf6',   
-         xaxis = list(
-           title='Fishing company',
-           zerolinecolor = '#ffff',
-           zerolinewidth = 2,
-           gridcolor = 'ffff'),
-         yaxis = list(
-           title='Count',
-           zerolinecolor = '#ffff',
-           zerolinewidth = 2,
-           gridcolor = 'ffff'),
-         title = "Distribution of fishing companies in 2030",
-         legend = list(title = list(text = NULL))) 
+graph_2031 <- tbl_graph(nodes = nodes_2031,
+                        edges = edges_2031,
+                        directed = TRUE)
+
+nodes_2031$value = degree(graph_2031)
+
+eigScalePal <- colorRampPalette(c('#9fbac9','#003049'))
+nodes_2031$color <- eigScalePal(7)[cut(eigen_centrality(graph_2031)$vector, breaks = 7)]
+
+nodes_2031$title = paste0("Company Name: ", nodes_2031$label)
+
+visNetwork(nodes_2031,
+           edges_2031,
+           width = "100%",
+           main = "Network of fishing companies in 2031") %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to") %>%
+  visOptions(highlightNearest = list(enabled = T, hover = T),
+             nodesIdSelection = TRUE) %>%
+  visLayout(randomSeed = 123)
 ```
 
 ## 2032
@@ -370,40 +516,45 @@ visNetwork(nodes_2032,
   visLayout(randomSeed = 123) 
 ```
 
+## 2033
+
 ```{r}
 #| code-fold: true
-# preparing the data for plotting
-edges_2032 <- edges_2032 %>%
-  gather(key = "column", value = "combined", from, to) %>%
-  mutate(column_type = ifelse(column == "from", "from", "to")) %>%
-  group_by(combined, column_type) %>%
-  summarise(count = n()) %>%
-  ungroup()
+edges_2033 <- edges_df %>%
+  filter(Year == "2033")
 
-# customizing the tooltip
-text <- paste0("Company: ", edges_2032$combined, "\nCount: ", edges_2032$count)
+id1 <- edges_2033 %>%
+  select(from) %>%
+  rename(id = from)
+id2 <- edges_2033 %>%
+  select(to) %>%
+  rename(id = to)
+nodes_2033 <- rbind(id1, id2) %>%
+  distinct()
 
-# plotting the grouped bar chart
-g <- ggplot(edges_2032, aes(x = combined, y = count, fill = column_type, text = text)) +
-  geom_col() +
-  theme(axis.title.x=element_blank(),
-        axis.text.x=element_blank(),
-        axis.ticks.x=element_blank())
+nodes_2033 <- nodes_2033 %>%
+  mutate(label = id)
 
-ggplotly(g, tooltip = "text") %>%
-  layout(plot_bgcolor='#e5ecf6',   
-         xaxis = list(
-           title='Fishing company',
-           zerolinecolor = '#ffff',
-           zerolinewidth = 2,
-           gridcolor = 'ffff'),
-         yaxis = list(
-           title='Count',
-           zerolinecolor = '#ffff',
-           zerolinewidth = 2,
-           gridcolor = 'ffff'),
-         title = "Distribution of fishing companies in 2032",
-         legend = list(title = list(text = NULL))) 
+graph_2033 <- tbl_graph(nodes = nodes_2033,
+                        edges = edges_2033,
+                        directed = TRUE)
+
+nodes_2033$value = degree(graph_2033)
+
+eigScalePal <- colorRampPalette(c('#9fbac9','#003049'))
+nodes_2033$color <- eigScalePal(7)[cut(eigen_centrality(graph_2033)$vector, breaks = 7)]
+
+nodes_2033$title = paste0("Company Name: ", nodes_2033$label)
+
+visNetwork(nodes_2033,
+           edges_2033,
+           width = "100%",
+           main = "Network of fishing companies in 2033") %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to") %>%
+  visOptions(highlightNearest = list(enabled = T, hover = T),
+             nodesIdSelection = TRUE) %>%
+  visLayout(randomSeed = 123)
 ```
 
 ## 2034
@@ -444,40 +595,30 @@ visNetwork(nodes_2034,
              nodesIdSelection = TRUE) %>%
   visLayout(randomSeed = 123) 
 ```
-
-```{r}
-#| code-fold: true
-# preparing the data for plotting
-edges_2034 <- edges_2034 %>%
-  gather(key = "column", value = "combined", from, to) %>%
-  mutate(column_type = ifelse(column == "from", "from", "to")) %>%
-  group_by(combined, column_type) %>%
-  summarise(count = n()) %>%
-  ungroup()
-
-# customizing the tooltip
-text <- paste0("Company: ", edges_2034$combined, "\nCount: ", edges_2034$count)
-
-# plotting the grouped bar chart
-g <- ggplot(edges_2034, aes(x = combined, y = count, fill = column_type, text = text)) +
-  geom_col() +
-  theme(axis.title.x=element_blank(),
-        axis.text.x=element_blank(),
-        axis.ticks.x=element_blank())
-
-ggplotly(g, tooltip = "text") %>%
-  layout(plot_bgcolor='#e5ecf6',   
-         xaxis = list(
-           title='Fishing company',
-           zerolinecolor = '#ffff',
-           zerolinewidth = 2,
-           gridcolor = 'ffff'),
-         yaxis = list(
-           title='Count',
-           zerolinecolor = '#ffff',
-           zerolinewidth = 2,
-           gridcolor = 'ffff'),
-         title = "Distribution of fishing companies in 2034",
-         legend = list(title = list(text = NULL))) 
-```
 :::
+
+::: callout-note
+-   The larger the node, the higher the degree centrality. This means that nodes that are larger in size have a higher number of edges.
+
+-   The darker the color of the node, the higher the eigenvector centrality. A high eigenvector score means that a node is connected to many nodes who themselves have high scores.
+
+-   The thicker the edges, the higher the weight (i.e. there is a higher number of trades between that particular source and target).
+:::
+
+**Insights:**
+
+-   Majority the companies are either recipients are distributors.
+
+-   Only a small minority of companies are both recipients and distributors at the same time (i.e. resellers).
+
+    -   Ltd. Corporation Ltd. Liability Co is a reseller in 2028 and 2029, however it is worth noting that the company ceased to operate since 2030.
+
+-   Most of the fishing companies with high degree and eigenvector centrality tend to be recipients.
+
+    -   This means that there are more recipients with a large number of edges than there are distributors with a large number of edges.
+
+-   Most distributors have relatively low degree and eigenvector centrality.
+
+    -   This means that most distributors usually distribute to a small number of recipients.
+
+-   Throughout the years, there is usually one main network and several clusters of companies that are not part of the main network. In these clusters, the target of shipments only receives them from one or two sources, while the sources themselves exclusively send their products to one or two targets.
