@@ -571,7 +571,7 @@
     "href": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#installing-and-loading-of-r-packages",
     "title": "Take Home Exercise 2",
     "section": "3.1 Installing and loading of R packages",
-    "text": "3.1 Installing and loading of R packages\nIn this exercise, the following R packages will be used:\n\ntidyverse: for data cleaning and manipulation.\nlubridate: for working with dates and time.\njsonlite: for loading and reading of the .json file.\nvisNetwork: for creating interactive network graphs.\nggraph: an extension of ggplot2 for the creation of network graphs.\nigraph: for network analysis and visualisation.\nplotly: for creating interactive plots.\n\nThe code chunk below uses p_load() of the pacman package to check if all the aforementioned packages are installed, and install the packages are yet to be installed. The packages are then loaded into the R environment.\n\n\nClick to show/hide the code\npacman::p_load(tidygraph, ggraph, visNetwork, tidyverse, jsonlite, igraph, plotly)"
+    "text": "3.1 Installing and loading of R packages\nIn this exercise, the following R packages will be used:\n\ntidyverse: for data cleaning and manipulation.\njsonlite: for loading and reading of the .json file.\nvisNetwork: for creating interactive network graphs.\nggraph: an extension of ggplot2 for the creation of network graphs.\nigraph: for network analysis and visualisation.\nplotly: for creating interactive plots.\ntidygraph: for graph/network manipulation.\n\nThe code chunk below uses p_load() of the pacman package to check if all the aforementioned packages are installed, and install the packages are yet to be installed. The packages are then loaded into the R environment.\n\n\nClick to show/hide the code\npacman::p_load(tidygraph, ggraph, visNetwork, tidyverse, jsonlite, igraph, plotly)"
   },
   {
     "objectID": "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html#importing-and-loading-the-data-set",
@@ -684,5 +684,12 @@
     "title": "Take-home Exercise 3",
     "section": "3.3 Extracting the nodes and edges",
     "text": "3.3 Extracting the nodes and edges\n\n\nClick to show/hide the code\nmc3_edges <- as_tibble(mc3$links) %>%\n  distinct() %>%\n  mutate(source = as.character(source),\n         target = as.character(target),\n         type = as.character(type)) %>%\n  group_by(source, target, type) %>%\n  summarise(weights = n()) %>%\n  filter(source != target) %>%\n  ungroup()\n\n\n\n\nClick to show/hide the code\nmc3_nodes <- as_tibble(mc3$nodes) %>%\n  distinct() %>%\n  mutate(country = as.character(country),\n         id = as.character(id),\n         product_services = as.character(product_services),\n         revenue_omu = as.numeric(as.character(revenue_omu)),\n         type = as.character(type)) %>%\n  select(id, country, type, revenue_omu, product_services)\n\n\nin nodes:\nadd character(0) (found in product_services) into stopword library\nor can recode it to NA.\nneed to recode unknown to NA also\nbefore parsing into text sensing"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex07/In-class_Ex07.html",
+    "href": "In-class_Ex/In-class_Ex07/In-class_Ex07.html",
+    "title": "In-class Exercise 7",
+    "section": "",
+    "text": "Click to show/hide the code\npacman::p_load(ggHoriPlot, ggthemes, tidyverse)\n\n\n\n\n\n\n\nClick to show/hide the code\naverp <- read_csv(\"data/AVERP.csv\") %>%\n  mutate(Date = dmy(Date))"
   }
 ]
