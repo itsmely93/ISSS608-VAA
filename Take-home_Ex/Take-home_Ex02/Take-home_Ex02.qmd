@@ -38,7 +38,7 @@ In this exercise, the following R packages will be used:
 The code chunk below uses `p_load()` of the *pacman* package to check if all the aforementioned packages are installed, and install the packages are yet to be installed. The packages are then loaded into the R environment.
 
 ```{r}
-pacman::p_load(tidygraph, ggraph, visNetwork, lubridate, tidyverse, jsonlite, igraph, plotly)
+pacman::p_load(tidygraph, ggraph, visNetwork, tidyverse, jsonlite, igraph, plotly)
 ```
 
 ## 3.2 Importing and loading the data set
@@ -66,8 +66,7 @@ MC2_nodes <- as_tibble(MC2$nodes) %>%
 
 ```{r}
 MC2_edges <- as_tibble(MC2$links) %>%
-  select(source, target, arrivaldate, hscode, valueofgoods_omu, 
-         volumeteu, weightkg, valueofgoodsusd) %>% 
+  select(source, target, arrivaldate, hscode, valueofgoods_omu, volumeteu, weightkg, valueofgoodsusd) %>% 
   distinct()
 ```
 
@@ -83,7 +82,7 @@ glimpse(MC2_edges)
 
 -   New columns for the month and year will need to be created.
 
-The following code chunk addresses the aforementioned issues.
+The following code chunk addresses the aforementioned issues, using the *lubridate* package.
 
 ```{r}
 MC2_edges <- MC2_edges %>%
@@ -213,6 +212,7 @@ fig
 ## 4.2.3 Proportion of source and target by year
 
 ```{r}
+# preparing the data for plotting
 total_sources <- MC2_edges_aggregated %>%
   group_by(Year) %>%
   summarise(total_sources = n_distinct(source))
@@ -227,6 +227,7 @@ total <- total %>%
   mutate(total = total_sources + total_targets) %>%
   mutate(source_prop = round(total_sources/total * 100, digits = 0), target_prop = round(total_targets/total * 100), digits = 0)
 
+# plotting the chart
 fig <- plot_ly(data = total,
         x = ~Year,
         y = ~source_prop,
@@ -260,7 +261,9 @@ fig
 
 **Insights**
 
--   There is a greater proportion of sources than target every year.
+-   There is a greater proportion of sources than target every year (meaning there are more distributors than recipients every year)
+-   However, the proportion of recipients are gradually increasing over the years, with a slight dip in 2033. This means that demand for seafood products are increasing over the years.
+-   Greater demand may lead to greater numbers of illegal, unreported and unregulated (IUU) fishing, as companies who practice IUU fishing will have an incentive to over-fish in order to meet the rising demands so as to generate higher revenues.
 
 # 5 Network graph visualization
 
@@ -336,7 +339,7 @@ graph_2028 <- tbl_graph(nodes = nodes_2028,
 # This will change the size of the nodes according to the value
 nodes_2028$value = degree(graph_2028)
 
-# Change the color of the nodes based on eigenvector centrality value 
+# Change the color of the nodes based on eigenvector centrality value
 # using a gradient color palette
 eigScalePal <- colorRampPalette(c('#9fbac9','#003049'))
 nodes_2028$color <- eigScalePal(7)[cut(eigen_centrality(graph_2028)$vector, breaks = 7)]
@@ -607,18 +610,21 @@ visNetwork(nodes_2034,
 
 **Insights:**
 
--   Majority the companies are either recipients are distributors.
+-   A huge majority of the companies are either recipients or distributors.
 
--   Only a small minority of companies are both recipients and distributors at the same time (i.e. resellers).
+-   Only one company acts as **both** a recipient and a distributor.
 
-    -   Ltd. Corporation Ltd. Liability Co is a reseller in 2028 and 2029, however it is worth noting that the company ceased to operate since 2030.
+    -   Ltd. Corporation Ltd. Liability Co is the only company that is a recipient and a distributor in 2028 and 2029. However it is worth noting that the company ceased to operate since 2030.
 
 -   Most of the fishing companies with high degree and eigenvector centrality tend to be recipients.
 
     -   This means that there are more recipients with a large number of edges than there are distributors with a large number of edges.
+    -   These recipients receive products from numerous distributors.
 
 -   Most distributors have relatively low degree and eigenvector centrality.
 
     -   This means that most distributors usually distribute to a small number of recipients.
 
 -   Throughout the years, there is usually one main network and several clusters of companies that are not part of the main network. In these clusters, the target of shipments only receives them from one or two sources, while the sources themselves exclusively send their products to one or two targets.
+
+    -   It can be observed that for every year, there will be clusters (separate from the main network) formed by new companies that were not present in the previous year.
