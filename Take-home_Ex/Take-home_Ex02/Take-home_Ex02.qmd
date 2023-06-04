@@ -23,17 +23,17 @@ In this exercise, the following R packages will be used:
 
 1.  `tidyverse`: for data cleaning and manipulation.
 
-2.  `lubridate`: for working with dates and time.
+2.  `jsonlite`: for loading and reading of the *.json* file.
 
-3.  `jsonlite`: for loading and reading of the *.json* file.
+3.  `visNetwork`: for creating interactive network graphs.
 
-4.  `visNetwork`: for creating interactive network graphs.
+4.  `ggraph`: an extension of `ggplot2` for the creation of network graphs.
 
-5.  `ggraph`: an extension of `ggplot2` for the creation of network graphs.
+5.  `igraph`: for network analysis and visualisation.
 
-6.  `igraph`: for network analysis and visualisation.
+6.  `plotly`: for creating interactive plots.
 
-7.  `plotly`: for creating interactive plots.
+7.  `tidygraph`: for graph/network manipulation.
 
 The code chunk below uses `p_load()` of the *pacman* package to check if all the aforementioned packages are installed, and install the packages are yet to be installed. The packages are then loaded into the R environment.
 
