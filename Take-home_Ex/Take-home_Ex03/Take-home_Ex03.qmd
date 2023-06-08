@@ -9,12 +9,11 @@ execute:
 
 # 1 The Task
 
-With reference to [Mini Challenge 3 of the VAST Challenge 2023](https://vast-challenge.github.io/2023/MC3.html), the task is to use visual analytics to identify anomalies in the business groups present in the knowledge graph. 
+With reference to [Mini Challenge 3 of the VAST Challenge 2023](https://vast-challenge.github.io/2023/MC3.html), the task is to use visual analytics to identify anomalies in the business groups present in the knowledge graph.
 
 # 2 The Data
 
 The data set used in this exercise *MC3.json* was obtained from the VAST Challenge 2023 website.
-
 
 # 3 Data Preparation
 
@@ -24,16 +23,15 @@ In this exercise, the following R packages will be used:
 
 1.  `tidyverse`: for data cleaning and manipulation.
 
-2.  `lubridate`:
+2.  `jsonlite`: for loading and reading of the *.json* file.
 
-3.  `jsonlite`: for loading and reading of the *.json* file.
-
-4.  `visNetwork`: for creating interactive network graphs.
+3.  `visNetwork`: for creating interactive network graphs.
 
 The code chunk below uses `p_load()` of the *pacman* package to check if all the aforementioned packages are installed, and install the packages are yet to be installed. The packages are then loaded into the R environment.
 
 ```{r}
-pacman::p_load(igraph, tidygraph, ggraph, visNetwork, lubridate, clock, tidyverse, graphlayouts, jsonlite)
+pacman::p_load(jsonlite, tidygraph, ggraph, visNetwork, graphlayouts, ggforce,
+               skimr, tidytext, tidyverse, knitr, plotly)
 ```
 
 ## 3.2 Importing and loading the data set
@@ -41,19 +39,230 @@ pacman::p_load(igraph, tidygraph, ggraph, visNetwork, lubridate, clock, tidyvers
 To import the data *"mc2_challenge_graph.json"* file into the R environment, `fromJSON()` of the *jsonlite* package is used, as seen in the code chunk below.
 
 ```{r}
-MC3 <- jsonlite::fromJSON("data/MC3.json")
+mc3 <- fromJSON("data/MC3.json")
 ```
 
 The `glimpse()` function from the *dpylr* package is used to see a general overview of the data set.
 
+## 3.3 Extracting the nodes and edges
+
 ```{r}
-glimpse(MC3)
+mc3_edges <- as_tibble(mc3$links) %>%
+  distinct() %>%
+  mutate(source = as.character(source),
+         target = as.character(target),
+         type = as.character(type)) %>%
+  group_by(source, target, type) %>%
+  summarise(weights = n()) %>%
+  filter(source != target) %>%
+  ungroup()
 ```
 
 ```{r}
-MC3_edges <- as_tibble(MC3$links)
+mc3_nodes <- as_tibble(mc3$nodes) %>%
+  mutate(country = as.character(country),
+         id = as.character(id),
+         product_services = as.character(product_services),
+         revenue_omu = as.numeric(as.character(revenue_omu)),
+         type = as.character(type)) %>%
+  select(id, country, type, revenue_omu, product_services)
+```
+
+in nodes:
+
+add character(0) (found in product_services) into stopword library
+
+or can recode it to NA.
+
+need to recode unknown to NA also
+
+before parsing into text sensing
+
+# 4 Exploratory Data Analysis
+
+## 4.1 Exploring the edges data frame
+
+In the code chunk below, the `kable()` function of the *knitr* package is used to examine the structure of the *mc3_edges* data frame.
+
+```{r}
+kable(head(mc3_edges))
+```
+
+<br>
+
+Using the `skim()` function of the *skimr* package, the summary statistics of the *mc3_edges* data frame are displayed as seen below.
+
+```{r}
+skim(mc3_edges)
+```
+
+As seen from the report,
+
+-   There are no missing values present in the data frame.
+
+-   All weights are equal to 1, meaning every connection between the source and target happens only once.
+
+-   There are 12,856 unique sources, 21,265 unique targets and 2 unique types.
+
+    <br>
+
+The following plot shows the distribution of each type.
+
+```{r}
+ggplot(data = mc3_edges,
+            aes(x = type, fill = type)) +
+  geom_bar() +
+  geom_text(stat='count', aes(label=..count..), vjust=-0.3) +
+  ggtitle("Distribution of types of edges") +
+  xlab("Type") + 
+  ylab("Count") +
+  theme(legend.position = "none")
+```
+
+## 4.2 Initial network visualisation
+
+```{r}
+id1 <- mc3_edges %>%
+  select(source) %>%
+  rename(id = source)
+id2 <- mc3_edges %>%
+  select(target) %>%
+  rename(id = target)
+mc3_nodes1 <- rbind(id1, id2) %>%
+  distinct() %>%
+  left_join(mc3_nodes,
+            unmatched = "drop")
 ```
 
 ```{r}
-MC3_edges
+mc3_graph <- tbl_graph(nodes = mc3_nodes1,
+                       edges = mc3_edges,
+                       directed = FALSE) %>%
+  mutate(betweenness_centrality = centrality_betweenness(),
+         closeness_centrality = centrality_closeness())
+```
+
+```{r}
+mc3_graph %>%
+  filter(betweenness_centrality >= 100000) %>%
+ggraph(layout = "fr") +
+  geom_edge_link(aes(alpha=0.5)) +
+  geom_node_point(aes(
+    size = betweenness_centrality,
+    color = closeness_centrality,
+    alpha = 0.5)) +
+  scale_size_continuous(range=c(1,10))+
+  theme_graph()
+```
+
+## 4.3 Exploring the nodes data frame
+
+In the code chunk below, the `datatable()` function of the *DT* package is used to examine the *mc3_nodes* data frame.
+
+```{r}
+DT::datatable(mc3_nodes,
+              options = list(scrollY = "400px"))
+```
+
+**Observations:**
+
+-   There are numerous rows of *product_services* that are either *"Unknown"* or "*character(0)".* These rows will need to be recoded to"*NA"* prior to tokenisation.
+
+The code chunk below recodes *Unknown/character(0)* into *NA.*
+
+```{r}
+mc3_nodes$product_services[mc3_nodes$product_services == "Unknown"] <- NA
+mc3_nodes$product_services[mc3_nodes$product_services == "character(0)"] <- NA
+```
+
+```{r}
+kable(tail(mc3_nodes))
+```
+
+<br>
+
+Using the `skim()` function of the *skimr* package, the summary statistics of the *mc3_nodes* data frame are displayed as seen below.
+
+```{r}
+skim(mc3_nodes)
+```
+
+As seen from the report,
+
+-   There are 23,604 and d21,515 missing values from the *product_services* and *revenue_omu* columns. No missing values are present in the other columns.
+
+-   There are 22,929 unique ids, 100 unique countries, 3 unique types and 3,244 unique product services.
+
+<br>
+
+The following plot shows the distribution of each type in *mc3_nodes*.
+
+```{r}
+ggplot(data = mc3_nodes,
+            aes(x = type, fill = type)) +
+  geom_bar() +
+  geom_text(stat='count', aes(label=..count..), vjust=-0.3) +
+  ggtitle("Distribution of types of edges") +
+  xlab("Type") + 
+  ylab("Count") +
+  theme(legend.position = "none") 
+```
+
+# 5 Text sensing with *tidytext*
+
+## 5.1 Word tokenisation
+
+```{r}
+token_nodes <- mc3_nodes %>%
+  unnest_tokens(word, product_services)
+```
+
+```{r}
+glimpse(token_nodes)
+```
+
+```{r}
+token_nodes %>%
+  count(word, sort = TRUE) %>%
+  top_n(15) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(x = word, y = n)) +
+  geom_col() +
+  xlab(NULL) +
+  coord_flip() +
+      labs(x = "Count",
+      y = "Unique words",
+      title = "Count of unique words found in product_services field")
+```
+
+**Observations:**
+
+1.  Most of the word tokens in the list of top 15 tokens are common everyday words that do not add any meaningful information (a.k.a. stop words). These word tokens will need to be filtered out.
+
+2.  Missing values "*NA"* show up as the most common word token. These will also need to be removed.
+
+    <br>
+
+The following code chunk removes rows that contains stop words and *NA*.
+
+```{r}
+stopwords_removed <- token_nodes %>% 
+  # remove stop words
+  anti_join(stop_words) %>%
+  # remove NA
+  filter(!is.na(word)) 
+```
+
+```{r}
+stopwords_removed %>%
+  count(word, sort = TRUE) %>%
+  top_n(15) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(x = word, y = n)) +
+  geom_col() +
+  xlab(NULL) +
+  coord_flip() +
+      labs(x = "Count",
+      y = "Unique words",
+      title = "Count of unique words found in product_services field")
 ```
