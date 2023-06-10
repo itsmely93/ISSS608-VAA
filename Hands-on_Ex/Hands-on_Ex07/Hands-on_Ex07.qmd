@@ -1,0 +1,68 @@
+---
+title: "Hands-on Exercise 7"
+author: "Lim Li Ying"
+date: "2 June 2023"
+edit: visual
+execute: 
+  warning: false
+---
+
+# Getting Started
+
+## Installing and loading R packages
+
+```{r}
+pacman::p_load(scales, viridis, lubridate, ggthemes, gridExtra, readxl, knitr, data.table, CGPfunctions, ggHoriPlot, tidyverse)
+```
+
+## Loading the data
+
+```{r}
+attacks <- read_csv("data/eventlog.csv")
+```
+
+## Examining the data structure
+
+```{r}
+kable(head(attacks))
+```
+
+## Data Preparation
+
+The following code chunk creates the new columns.
+
+```{r}
+make_hr_wkday <- function(ts, sc, tz) {
+  real_times <- ymd_hms(ts, 
+                        tz = tz[1], 
+                        quiet = TRUE)
+  dt <- data.table(source_country = sc,
+                   wkday = weekdays(real_times),
+                   hour = hour(real_times))
+  return(dt)
+  }
+```
+
+```{r}
+wkday_levels <- c('Saturday', 'Friday', 
+                  'Thursday', 'Wednesday', 
+                  'Tuesday', 'Monday', 
+                  'Sunday')
+
+attacks <- attacks %>%
+  group_by(tz) %>%
+  do(make_hr_wkday(.$timestamp, 
+                   .$source_country, 
+                   .$tz)) %>% 
+  ungroup() %>% 
+  mutate(wkday = factor(
+    wkday, levels = wkday_levels),
+    hour  = factor(
+      hour, levels = 0:23))
+```
+
+The table below shows the tidy tibble data after processing.
+
+```{r}
+kable(head(attacks))
+```
