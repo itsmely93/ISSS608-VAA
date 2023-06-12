@@ -25,13 +25,24 @@ In this exercise, the following R packages will be used:
 
 2.  `jsonlite`: for loading and reading of the *.json* file.
 
-3.  `visNetwork`: for creating interactive network graphs.
+3.  `skimr`:
+
+4.  `knitr`:
+
+5.  `ggraph`:
+
+6.  `visNetwork`: for creating interactive network graphs.
+
+7.  `plotly`:
+
+8.  `tidytext`:
+
+9.  `widyr`:
 
 The code chunk below uses `p_load()` of the *pacman* package to check if all the aforementioned packages are installed, and install the packages are yet to be installed. The packages are then loaded into the R environment.
 
 ```{r}
-pacman::p_load(jsonlite, tidygraph, ggraph, visNetwork, graphlayouts, ggforce,
-               skimr, tidytext, tidyverse, knitr, plotly)
+pacman::p_load(jsonlite, tidygraph, ggraph, visNetwork, graphlayouts, ggforce, skimr, tidytext, tidyverse, knitr, plotly, widyr)
 ```
 
 ## 3.2 Importing and loading the data set
@@ -67,16 +78,6 @@ mc3_nodes <- as_tibble(mc3$nodes) %>%
          type = as.character(type)) %>%
   select(id, country, type, revenue_omu, product_services)
 ```
-
-in nodes:
-
-add character(0) (found in product_services) into stopword library
-
-or can recode it to NA.
-
-need to recode unknown to NA also
-
-before parsing into text sensing
 
 # 4 Exploratory Data Analysis
 
@@ -168,7 +169,7 @@ DT::datatable(mc3_nodes,
 
 -   There are numerous rows of *product_services* that are either *"Unknown"* or "*character(0)".* These rows will need to be recoded to"*NA"* prior to tokenisation.
 
-The code chunk below recodes *Unknown/character(0)* into *NA.*
+The code chunk below recodes rows in *product_services* that are *Unknown* or *character(0)* into *NA.*
 
 ```{r}
 mc3_nodes$product_services[mc3_nodes$product_services == "Unknown"] <- NA
@@ -214,14 +215,12 @@ ggplot(data = mc3_nodes,
 
 ```{r}
 token_nodes <- mc3_nodes %>%
-  unnest_tokens(word, product_services)
+  unnest_tokens(word, product_services) %>% # splits text into words
+  filter(!grepl('[0-9]', word)) # removes numbers
 ```
 
 ```{r}
-glimpse(token_nodes)
-```
-
-```{r}
+# plotting the top 15 word tokens
 token_nodes %>%
   count(word, sort = TRUE) %>%
   top_n(15) %>%
@@ -241,20 +240,18 @@ token_nodes %>%
 
 2.  Missing values "*NA"* show up as the most common word token. These will also need to be removed.
 
-    <br>
+## 5.2 Removal of stop words and NA
 
 The following code chunk removes rows that contains stop words and *NA*.
 
 ```{r}
-stopwords_removed <- token_nodes %>% 
-  # remove stop words
+token_cleaned <- token_nodes %>% 
   anti_join(stop_words) %>%
-  # remove NA
-  filter(!is.na(word)) 
+  filter(!is.na(word))
 ```
 
 ```{r}
-stopwords_removed %>%
+token_cleaned  %>%
   count(word, sort = TRUE) %>%
   top_n(15) %>%
   mutate(word = reorder(word, n)) %>%
@@ -265,4 +262,112 @@ stopwords_removed %>%
       labs(x = "Count",
       y = "Unique words",
       title = "Count of unique words found in product_services field")
+```
+
+## 5.3 Grouping businesses
+
+The companies will then be grouped based on similar word tokens.
+
+Firstly, the `pairwise_count()` function
+
+```{r}
+word_count <- token_cleaned %>% 
+  pairwise_count(word, id, sort = TRUE)
+
+word_count
+```
+
+```{r}
+# preparing the data for plotting
+# sort values row-wise, combine words to form word-pairs, then select only unique rows
+word_joined <- data.frame(t(apply(word_count, 1, sort))) %>%
+  unite("items", X2:X3, sep= " + ") %>%
+  rename(n = X1) %>%
+  mutate_at(vars(n), as.integer) %>%
+  distinct() %>%
+  head(15)
+  
+word_joined
+```
+
+```{r}
+# plotting the top 15 word pair counts
+fig <- plot_ly(data = word_joined, x = ~n, y = ~items, color = ~items, type = "bar", orientation = "h") %>%
+  layout(title = "Number of times each pair of items appear together",
+         plot_bgcolor='#e5ecf6',
+         showlegend = FALSE,
+    yaxis = list(categoryorder = "total ascending", title = "Word pairs"),
+    xaxis = list(title = "Count"))
+
+fig
+```
+
+**Insights:**
+
+Most of the word pairs that appear the most frequently tend to be related to fish/seafood products. This means that most of the companies likely belong to the fishing industry.
+
+<br>
+
+Next, we will calculate the correlation coefficient for each word pair. The closer to value is to 1, the higher the correlation is between the word pairs.
+
+```{r}
+word_cors <- token_cleaned %>% 
+  add_count(word) %>% 
+  filter(n >= 40) %>% 
+  select(-n) %>%
+  pairwise_cor(word, id, sort = TRUE)
+
+word_cors
+```
+
+## 5.4 Plotting the business groups in a static network graph
+
+```{r}
+word_cors <- word_cors %>%
+  filter(correlation > 0.3) 
+
+word_graph <- as_tbl_graph(word_cors)
+
+word_graph
+```
+
+```{r}
+ggraph(word_graph, layout = "fr") +
+  geom_edge_link(aes(edge_alpha = correlation), show.legend = FALSE) +
+  geom_node_point(color = "lightblue", size = 2) +
+  geom_node_text(aes(label = name), repel = TRUE) + 
+  theme_graph()
+```
+
+## 5.5 Plotting the business groups with an interactive network graph
+
+### 5.4.1 Extracting nodes from `tbl_graph()`
+
+```{r}
+nodes_df <- word_graph %>%
+  data.frame() %>%
+  mutate(id = row_number()) %>%
+  rename(label = name) %>%
+  select(id, label)
+```
+
+### 5.4.2 Extracting edges from `tbl_graph()`
+
+```{r}
+edges_df <- word_graph %>%
+  activate(edges) %>%
+  data.frame() %>%
+  rename(value = correlation)
+```
+
+### 5.4.3 Plotting interactive network graph with *visNetwork*
+
+```{r}
+visNetwork(nodes_df,
+           edges_df,
+           main = "Business groups") %>%
+  visIgraphLayout(layout = "layout_with_fr")  %>%
+  visOptions(highlightNearest = list(enabled = T, hover = T),
+             nodesIdSelection = TRUE) %>%
+  visLayout(randomSeed = 123)
 ```
