@@ -29,20 +29,24 @@ In this exercise, the following R packages will be used:
 
 4.  `knitr`: for generating tables of the data frames.
 
-5.  `ggraph`: for creation of network graphs.
+5.  `plotly`: for creating interactive charts.
 
-6.  `visNetwork`: for creating interactive network graphs.
+6.  `ggraph`: for creation of network graphs.
 
-7.  `plotly`: for creating interactive charts.
+7.  `visNetwork`: for creating interactive network graphs.
 
-8.  `tidytext`: for text mining.
+8.  `igraph`: for analyzing networks
 
-9.  `widyr`: for counting and correlating word pairs.
+9.  `tidygraph`: for graph/network manipulation.
+
+10. `tidytext`: for text mining.
+
+11. `widyr`: for counting and correlating word pairs.
 
 The code chunk below uses `p_load()` of the *pacman* package to check if all the aforementioned packages are installed, and install the packages are yet to be installed. The packages are then loaded into the R environment.
 
 ```{r}
-pacman::p_load(jsonlite, tidygraph, ggraph, visNetwork, skimr, tidytext, tidyverse, knitr, plotly, widyr, igraph)
+pacman::p_load(jsonlite, tidygraph, ggraph, visNetwork, skimr, tidytext, tidyverse, knitr, widyr, igraph, plotly)
 ```
 
 ## 3.2 Importing and loading the data set
@@ -286,8 +290,6 @@ word_joined <- data.frame(t(apply(word_count, 1, sort))) %>%
   mutate_at(vars(n), as.integer) %>%
   distinct() %>%
   head(15)
-  
-word_joined
 ```
 
 ```{r}
@@ -363,10 +365,13 @@ edges_df <- word_graph %>%
 ### 5.4.3 Plotting interactive network graph with *visNetwork*
 
 ```{r}
+# customizing the tooltip
 nodes_df$title = paste0("Word: ", nodes_df$label)
 
+# change size of nodes based on degree centrality
 nodes_df$value = degree(word_graph)
 
+# plotting the interactive network
 visNetwork(nodes_df,
            edges_df,
            main = "Business groups") %>%
